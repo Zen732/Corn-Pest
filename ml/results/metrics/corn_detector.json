@@ -1,0 +1,59 @@
+{
+  "task": "corn_detector",
+  "best_model": "random_forest",
+  "cv_f1_macro": {
+    "random_forest": 0.9257,
+    "svm": 0.9254,
+    "knn": 0.8883
+  },
+  "test_accuracy": 0.95,
+  "test_f1_macro": 0.9463,
+  "classes": [
+    "no",
+    "yes"
+  ],
+  "n_train_original": 2400,
+  "n_train_augmented": 0,
+  "n_test": 600,
+  "class_counts": {
+    "no": 1142,
+    "yes": 1858
+  },
+  "classification_report": {
+    "no": {
+      "precision": 0.9626168224299065,
+      "recall": 0.9035087719298246,
+      "f1-score": 0.9321266968325792,
+      "support": 228.0
+    },
+    "yes": {
+      "precision": 0.9430051813471503,
+      "recall": 0.978494623655914,
+      "f1-score": 0.9604221635883905,
+      "support": 372.0
+    },
+    "accuracy": 0.95,
+    "macro avg": {
+      "precision": 0.9528110018885284,
+      "recall": 0.9410016977928692,
+      "f1-score": 0.9462744302104849,
+      "support": 600.0
+    },
+    "weighted avg": {
+      "precision": 0.9504576049585977,
+      "recall": 0.95,
+      "f1-score": 0.9496698862211823,
+      "support": 600.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      206,
+      22
+    ],
+    [
+      8,
+      364
+    ]
+  ]
+}

@@ -1,0 +1,443 @@
+source,destination,keep_score,best_match
+corn\fall_armyworm\train_51615_df0070.jpg,rejected\corn\fall_armyworm\train_51615_df0070.jpg,0.002,a green leafhopper
+corn\fall_armyworm\train_72821_4b88b1.jpg,rejected\corn\fall_armyworm\train_72821_4b88b1.jpg,0.002,a green leafhopper
+corn\fall_armyworm\train_52051_215b42.jpg,rejected\corn\fall_armyworm\train_52051_215b42.jpg,0.002,a green leafhopper
+corn\fall_armyworm\train_38868_de1cba.jpg,rejected\corn\fall_armyworm\train_38868_de1cba.jpg,0.002,aphids
+corn\fall_armyworm\train_70425_2ed0c8.jpg,rejected\corn\fall_armyworm\train_70425_2ed0c8.jpg,0.002,a green leafhopper
+corn\fall_armyworm\train_51983_68f551.jpg,rejected\corn\fall_armyworm\train_51983_68f551.jpg,0.003,a green leafhopper
+corn\fall_armyworm\train_53837_bcf7d7.jpg,rejected\corn\fall_armyworm\train_53837_bcf7d7.jpg,0.005,a green leafhopper
+corn\fall_armyworm\train_52286_411c84.jpg,rejected\corn\fall_armyworm\train_52286_411c84.jpg,0.005,a green leafhopper
+corn\fall_armyworm\train_32798_7e1ab7.jpg,rejected\corn\fall_armyworm\train_32798_7e1ab7.jpg,0.006,aphids
+corn\fall_armyworm\train_07531_16b17f.jpg,rejected\corn\fall_armyworm\train_07531_16b17f.jpg,0.008,a green leafhopper
+corn\fall_armyworm\train_37686_1f1300.jpg,rejected\corn\fall_armyworm\train_37686_1f1300.jpg,0.009,a wasp
+corn\fall_armyworm\train_56143_38398b.jpg,rejected\corn\fall_armyworm\train_56143_38398b.jpg,0.012,a grasshopper
+corn\fall_armyworm\train_75087_6562a0.jpg,rejected\corn\fall_armyworm\train_75087_6562a0.jpg,0.013,a green leafhopper
+corn\fall_armyworm\train_74794_09ebf4.jpg,rejected\corn\fall_armyworm\train_74794_09ebf4.jpg,0.013,a green leafhopper
+corn\fall_armyworm\train_25098_6cc846.jpg,rejected\corn\fall_armyworm\train_25098_6cc846.jpg,0.014,a green leafhopper
+corn\fall_armyworm\train_33860_3cd498.jpg,rejected\corn\fall_armyworm\train_33860_3cd498.jpg,0.015,a grasshopper
+corn\fall_armyworm\train_47375_bb78e0.jpg,rejected\corn\fall_armyworm\train_47375_bb78e0.jpg,0.015,a fly
+corn\fall_armyworm\train_19432_066930.jpg,rejected\corn\fall_armyworm\train_19432_066930.jpg,0.017,aphids
+corn\fall_armyworm\train_74814_8f8aeb.jpg,rejected\corn\fall_armyworm\train_74814_8f8aeb.jpg,0.019,a green leafhopper
+corn\fall_armyworm\train_49886_778e3a.jpg,rejected\corn\fall_armyworm\train_49886_778e3a.jpg,0.021,a fly
+corn\fall_armyworm\train_51844_a88fe3.jpg,rejected\corn\fall_armyworm\train_51844_a88fe3.jpg,0.022,a green leafhopper
+corn\fall_armyworm\train_68386_7c10f9.jpg,rejected\corn\fall_armyworm\train_68386_7c10f9.jpg,0.027,a green leafhopper
+corn\fall_armyworm\train_46557_4d76e3.jpg,rejected\corn\fall_armyworm\train_46557_4d76e3.jpg,0.027,a fly
+corn\fall_armyworm\train_45573_b2339a.jpg,rejected\corn\fall_armyworm\train_45573_b2339a.jpg,0.029,a ladybird
+corn\fall_armyworm\train_51710_ce6efc.jpg,rejected\corn\fall_armyworm\train_51710_ce6efc.jpg,0.030,a wasp
+corn\fall_armyworm\train_33716_da6350.jpg,rejected\corn\fall_armyworm\train_33716_da6350.jpg,0.031,a grasshopper
+corn\fall_armyworm\train_48074_555257.jpg,rejected\corn\fall_armyworm\train_48074_555257.jpg,0.032,a pupa
+corn\fall_armyworm\train_32129_ab9222.jpg,rejected\corn\fall_armyworm\train_32129_ab9222.jpg,0.032,a stink bug
+corn\fall_armyworm\train_51209_44d8bb.jpg,rejected\corn\fall_armyworm\train_51209_44d8bb.jpg,0.033,a green leafhopper
+corn\fall_armyworm\train_22706_b18ddf.jpg,rejected\corn\fall_armyworm\train_22706_b18ddf.jpg,0.044,aphids
+corn\fall_armyworm\train_69808_83d1a1.jpg,rejected\corn\fall_armyworm\train_69808_83d1a1.jpg,0.045,a green leafhopper
+corn\fall_armyworm\train_05126_6552d1.jpg,rejected\corn\fall_armyworm\train_05126_6552d1.jpg,0.046,a green leafhopper
+corn\fall_armyworm\train_70047_cab138.jpg,rejected\corn\fall_armyworm\train_70047_cab138.jpg,0.046,a green leafhopper
+corn\fall_armyworm\train_74231_8f5d44.jpg,rejected\corn\fall_armyworm\train_74231_8f5d44.jpg,0.048,a green leafhopper
+corn\fall_armyworm\train_52579_cd3b79.jpg,rejected\corn\fall_armyworm\train_52579_cd3b79.jpg,0.051,a grasshopper
+corn\fall_armyworm\train_39059_ddf026.jpg,rejected\corn\fall_armyworm\train_39059_ddf026.jpg,0.055,a pupa
+corn\fall_armyworm\train_34203_81be8a.jpg,rejected\corn\fall_armyworm\train_34203_81be8a.jpg,0.060,a grasshopper
+corn\fall_armyworm\train_73047_4ae70d.jpg,rejected\corn\fall_armyworm\train_73047_4ae70d.jpg,0.066,a green leafhopper
+corn\fall_armyworm\train_74792_fbd0df.jpg,rejected\corn\fall_armyworm\train_74792_fbd0df.jpg,0.067,a green leafhopper
+corn\fall_armyworm\train_47448_b7278b.jpg,rejected\corn\fall_armyworm\train_47448_b7278b.jpg,0.069,a stink bug
+corn\fall_armyworm\train_54089_d7d538.jpg,rejected\corn\fall_armyworm\train_54089_d7d538.jpg,0.072,a ladybird larva
+corn\fall_armyworm\train_52576_173299.jpg,rejected\corn\fall_armyworm\train_52576_173299.jpg,0.079,a green leafhopper
+corn\fall_armyworm\train_75139_16030a.jpg,rejected\corn\fall_armyworm\train_75139_16030a.jpg,0.082,a pupa
+corn\fall_armyworm\train_05607_4d2a81.jpg,rejected\corn\fall_armyworm\train_05607_4d2a81.jpg,0.082,a grasshopper
+corn\fall_armyworm\train_44938_be0f9a.jpg,rejected\corn\fall_armyworm\train_44938_be0f9a.jpg,0.082,a stink bug
+corn\fall_armyworm\train_73648_486c29.jpg,rejected\corn\fall_armyworm\train_73648_486c29.jpg,0.083,a green leafhopper
+corn\fall_armyworm\train_74473_9803d4.jpg,rejected\corn\fall_armyworm\train_74473_9803d4.jpg,0.088,a green leafhopper
+corn\fall_armyworm\train_73573_e1df7c.jpg,rejected\corn\fall_armyworm\train_73573_e1df7c.jpg,0.089,a fly
+corn\fall_armyworm\train_39226_5da429.jpg,rejected\corn\fall_armyworm\train_39226_5da429.jpg,0.094,a green leafhopper
+corn\fall_armyworm\train_56961_986c2f.jpg,rejected\corn\fall_armyworm\train_56961_986c2f.jpg,0.108,a grasshopper
+corn\fall_armyworm\train_65956_1ec256.jpg,rejected\corn\fall_armyworm\train_65956_1ec256.jpg,0.110,a wasp
+corn\fall_armyworm\train_70091_0a1b45.jpg,rejected\corn\fall_armyworm\train_70091_0a1b45.jpg,0.111,a green leafhopper
+corn\fall_armyworm\train_04835_243564.jpg,rejected\corn\fall_armyworm\train_04835_243564.jpg,0.114,a pupa
+corn\fall_armyworm\train_47728_d1ad7b.jpg,rejected\corn\fall_armyworm\train_47728_d1ad7b.jpg,0.118,a pupa
+corn\fall_armyworm\train_08433_18f0f2.jpg,rejected\corn\fall_armyworm\train_08433_18f0f2.jpg,0.121,a pupa
+corn\fall_armyworm\train_52070_b0355c.jpg,rejected\corn\fall_armyworm\train_52070_b0355c.jpg,0.138,a green leafhopper
+corn\fall_armyworm\train_34119_5cd49a.jpg,rejected\corn\fall_armyworm\train_34119_5cd49a.jpg,0.141,a grasshopper
+corn\fall_armyworm\train_73956_6c0411.jpg,rejected\corn\fall_armyworm\train_73956_6c0411.jpg,0.144,a grasshopper
+corn\fall_armyworm\train_43591_f7d3c0.jpg,rejected\corn\fall_armyworm\train_43591_f7d3c0.jpg,0.145,a pupa
+corn\fall_armyworm\train_70314_7a1106.jpg,rejected\corn\fall_armyworm\train_70314_7a1106.jpg,0.146,a grasshopper
+corn\fall_armyworm\train_12396_4837f5.jpg,rejected\corn\fall_armyworm\train_12396_4837f5.jpg,0.151,a pupa
+corn\fall_armyworm\train_73629_122e4f.jpg,rejected\corn\fall_armyworm\train_73629_122e4f.jpg,0.154,a grasshopper
+corn\fall_armyworm\train_13555_41596e.jpg,rejected\corn\fall_armyworm\train_13555_41596e.jpg,0.161,a pupa
+corn\fall_armyworm\train_51834_732b5f.jpg,rejected\corn\fall_armyworm\train_51834_732b5f.jpg,0.175,a pupa
+corn\fall_armyworm\train_13058_fffe81.jpg,rejected\corn\fall_armyworm\train_13058_fffe81.jpg,0.175,a pupa
+corn\fall_armyworm\train_51626_3d4005.jpg,rejected\corn\fall_armyworm\train_51626_3d4005.jpg,0.177,a green leafhopper
+corn\fall_armyworm\train_74843_3caab0.jpg,rejected\corn\fall_armyworm\train_74843_3caab0.jpg,0.181,a pupa
+corn\fall_armyworm\train_00979_2d063d.jpg,rejected\corn\fall_armyworm\train_00979_2d063d.jpg,0.183,a pupa
+corn\fall_armyworm\train_51548_42008c.jpg,rejected\corn\fall_armyworm\train_51548_42008c.jpg,0.190,a grasshopper
+corn\fall_armyworm\train_04402_c4da20.jpg,rejected\corn\fall_armyworm\train_04402_c4da20.jpg,0.198,a pupa
+corn\fall_armyworm\train_71235_cc527d.jpg,rejected\corn\fall_armyworm\train_71235_cc527d.jpg,0.199,a pupa
+corn\fall_armyworm\train_63233_b280e0.jpg,rejected\corn\fall_armyworm\train_63233_b280e0.jpg,0.202,a grasshopper
+corn\fall_armyworm\train_66157_333fc2.jpg,rejected\corn\fall_armyworm\train_66157_333fc2.jpg,0.215,a green leafhopper
+corn\fall_armyworm\train_67459_d77476.jpg,rejected\corn\fall_armyworm\train_67459_d77476.jpg,0.216,a green leafhopper
+corn\fall_armyworm\train_07650_6b06a8.jpg,rejected\corn\fall_armyworm\train_07650_6b06a8.jpg,0.242,a green leafhopper
+corn\fall_armyworm\train_42308_60fc7a.jpg,rejected\corn\fall_armyworm\train_42308_60fc7a.jpg,0.286,a pupa
+corn\fall_armyworm\train_35073_29ff67.jpg,rejected\corn\fall_armyworm\train_35073_29ff67.jpg,0.291,a grasshopper
+corn\fall_armyworm\train_66026_0aaa3f.jpg,rejected\corn\fall_armyworm\train_66026_0aaa3f.jpg,0.296,aphids
+corn\asian_corn_borer\train_55618_4530df.jpg,rejected\corn\asian_corn_borer\train_55618_4530df.jpg,0.001,a grasshopper
+corn\asian_corn_borer\train_74425_ca2806.jpg,rejected\corn\asian_corn_borer\train_74425_ca2806.jpg,0.002,a green leafhopper
+corn\asian_corn_borer\train_67601_cb6962.jpg,rejected\corn\asian_corn_borer\train_67601_cb6962.jpg,0.002,a green leafhopper
+corn\asian_corn_borer\train_70470_0dc431.jpg,rejected\corn\asian_corn_borer\train_70470_0dc431.jpg,0.002,a green leafhopper
+corn\asian_corn_borer\train_71121_87bb87.jpg,rejected\corn\asian_corn_borer\train_71121_87bb87.jpg,0.004,a green leafhopper
+corn\asian_corn_borer\train_74733_9ff4be.jpg,rejected\corn\asian_corn_borer\train_74733_9ff4be.jpg,0.008,a green leafhopper
+corn\asian_corn_borer\train_57392_f2e31b.jpg,rejected\corn\asian_corn_borer\train_57392_f2e31b.jpg,0.012,a grasshopper
+corn\asian_corn_borer\train_74924_21f9fe.jpg,rejected\corn\asian_corn_borer\train_74924_21f9fe.jpg,0.014,a green leafhopper
+corn\asian_corn_borer\train_44144_2b8f85.jpg,rejected\corn\asian_corn_borer\train_44144_2b8f85.jpg,0.015,a large brown moth on a white background
+corn\asian_corn_borer\train_74901_ec3a72.jpg,rejected\corn\asian_corn_borer\train_74901_ec3a72.jpg,0.017,a green leafhopper
+corn\asian_corn_borer\train_53783_0bfb4b.jpg,rejected\corn\asian_corn_borer\train_53783_0bfb4b.jpg,0.019,a grasshopper
+corn\asian_corn_borer\train_71436_541550.jpg,rejected\corn\asian_corn_borer\train_71436_541550.jpg,0.022,a green leafhopper
+corn\asian_corn_borer\train_40502_6961e1.jpg,rejected\corn\asian_corn_borer\train_40502_6961e1.jpg,0.025,a butterfly
+corn\asian_corn_borer\train_55862_384383.jpg,rejected\corn\asian_corn_borer\train_55862_384383.jpg,0.026,a grasshopper
+corn\asian_corn_borer\train_54577_8baa8f.jpg,rejected\corn\asian_corn_borer\train_54577_8baa8f.jpg,0.028,a grasshopper
+corn\asian_corn_borer\train_74804_441071.jpg,rejected\corn\asian_corn_borer\train_74804_441071.jpg,0.031,a stink bug
+corn\asian_corn_borer\train_44414_244553.jpg,rejected\corn\asian_corn_borer\train_44414_244553.jpg,0.032,a large hawk moth
+corn\asian_corn_borer\train_74409_6f534b.jpg,rejected\corn\asian_corn_borer\train_74409_6f534b.jpg,0.033,a green leafhopper
+corn\asian_corn_borer\train_54094_609750.jpg,rejected\corn\asian_corn_borer\train_54094_609750.jpg,0.037,a green leafhopper
+corn\asian_corn_borer\train_12033_c8a4d7.jpg,rejected\corn\asian_corn_borer\train_12033_c8a4d7.jpg,0.037,a large hawk moth
+corn\asian_corn_borer\train_18881_a5562c.jpg,rejected\corn\asian_corn_borer\train_18881_a5562c.jpg,0.039,aphids
+corn\asian_corn_borer\train_44494_27ea38.jpg,rejected\corn\asian_corn_borer\train_44494_27ea38.jpg,0.045,a large brown moth on a white background
+corn\asian_corn_borer\train_70723_fbe549.jpg,rejected\corn\asian_corn_borer\train_70723_fbe549.jpg,0.047,a green leafhopper
+corn\asian_corn_borer\train_44389_82f694.jpg,rejected\corn\asian_corn_borer\train_44389_82f694.jpg,0.051,a large brown moth on a white background
+corn\asian_corn_borer\train_44421_6a0dfa.jpg,rejected\corn\asian_corn_borer\train_44421_6a0dfa.jpg,0.052,a large hawk moth
+corn\asian_corn_borer\train_54562_b737ff.jpg,rejected\corn\asian_corn_borer\train_54562_b737ff.jpg,0.053,a grasshopper
+corn\asian_corn_borer\train_53899_675154.jpg,rejected\corn\asian_corn_borer\train_53899_675154.jpg,0.055,a grasshopper
+corn\asian_corn_borer\train_47614_7defe5.jpg,rejected\corn\asian_corn_borer\train_47614_7defe5.jpg,0.057,a large hawk moth
+corn\asian_corn_borer\train_44619_0bceb7.jpg,rejected\corn\asian_corn_borer\train_44619_0bceb7.jpg,0.060,a large hawk moth
+corn\asian_corn_borer\train_72901_a2fe5b.jpg,rejected\corn\asian_corn_borer\train_72901_a2fe5b.jpg,0.062,a green leafhopper
+corn\asian_corn_borer\train_44270_6ade4b.jpg,rejected\corn\asian_corn_borer\train_44270_6ade4b.jpg,0.065,a large hawk moth
+corn\asian_corn_borer\train_43874_45faec.jpg,rejected\corn\asian_corn_borer\train_43874_45faec.jpg,0.066,a large hawk moth
+corn\asian_corn_borer\train_40072_fb69f5.jpg,rejected\corn\asian_corn_borer\train_40072_fb69f5.jpg,0.068,a large hawk moth
+corn\asian_corn_borer\train_44439_3bb03c.jpg,rejected\corn\asian_corn_borer\train_44439_3bb03c.jpg,0.068,a large hawk moth
+corn\asian_corn_borer\train_44430_e8d464.jpg,rejected\corn\asian_corn_borer\train_44430_e8d464.jpg,0.070,a large brown moth on a white background
+corn\asian_corn_borer\train_44349_19cf72.jpg,rejected\corn\asian_corn_borer\train_44349_19cf72.jpg,0.073,a large hawk moth
+corn\asian_corn_borer\train_12331_f86c19.jpg,rejected\corn\asian_corn_borer\train_12331_f86c19.jpg,0.073,a large brown moth on a white background
+corn\asian_corn_borer\train_71711_df12ca.jpg,rejected\corn\asian_corn_borer\train_71711_df12ca.jpg,0.074,a green leafhopper
+corn\asian_corn_borer\train_69602_86a16b.jpg,rejected\corn\asian_corn_borer\train_69602_86a16b.jpg,0.087,a green leafhopper
+corn\asian_corn_borer\train_32063_76747a.jpg,rejected\corn\asian_corn_borer\train_32063_76747a.jpg,0.088,a stink bug
+corn\asian_corn_borer\train_44096_98dbff.jpg,rejected\corn\asian_corn_borer\train_44096_98dbff.jpg,0.091,a large brown moth on a white background
+corn\asian_corn_borer\train_72961_2748d1.jpg,rejected\corn\asian_corn_borer\train_72961_2748d1.jpg,0.092,a green leafhopper
+corn\asian_corn_borer\train_13398_5f5ae6.jpg,rejected\corn\asian_corn_borer\train_13398_5f5ae6.jpg,0.092,a large brown moth on a white background
+corn\asian_corn_borer\train_08282_d0fc44.jpg,rejected\corn\asian_corn_borer\train_08282_d0fc44.jpg,0.093,a large brown moth on a white background
+corn\asian_corn_borer\train_55393_654616.jpg,rejected\corn\asian_corn_borer\train_55393_654616.jpg,0.103,a grasshopper
+corn\asian_corn_borer\train_44125_904c39.jpg,rejected\corn\asian_corn_borer\train_44125_904c39.jpg,0.105,a large brown moth on a white background
+corn\asian_corn_borer\train_70135_f9870c.jpg,rejected\corn\asian_corn_borer\train_70135_f9870c.jpg,0.108,a green leafhopper
+corn\asian_corn_borer\train_44615_c3b7f6.jpg,rejected\corn\asian_corn_borer\train_44615_c3b7f6.jpg,0.113,a large hawk moth
+corn\asian_corn_borer\train_73777_a36b4a.jpg,rejected\corn\asian_corn_borer\train_73777_a36b4a.jpg,0.114,a stink bug
+corn\asian_corn_borer\train_70163_6537b1.jpg,rejected\corn\asian_corn_borer\train_70163_6537b1.jpg,0.122,a green leafhopper
+corn\asian_corn_borer\train_12014_56908e.jpg,rejected\corn\asian_corn_borer\train_12014_56908e.jpg,0.127,a large hawk moth
+corn\asian_corn_borer\train_12977_44e956.jpg,rejected\corn\asian_corn_borer\train_12977_44e956.jpg,0.128,a large brown moth on a white background
+corn\asian_corn_borer\train_44351_6116ba.jpg,rejected\corn\asian_corn_borer\train_44351_6116ba.jpg,0.128,a large brown moth on a white background
+corn\asian_corn_borer\train_12209_8b7d29.jpg,rejected\corn\asian_corn_borer\train_12209_8b7d29.jpg,0.136,a large hawk moth
+corn\asian_corn_borer\train_15599_47486d.jpg,rejected\corn\asian_corn_borer\train_15599_47486d.jpg,0.148,a large hawk moth
+corn\asian_corn_borer\train_49350_582d36.jpg,rejected\corn\asian_corn_borer\train_49350_582d36.jpg,0.151,a large hawk moth
+corn\asian_corn_borer\train_73323_f5f2d6.jpg,rejected\corn\asian_corn_borer\train_73323_f5f2d6.jpg,0.156,a grasshopper
+corn\asian_corn_borer\train_64010_f0eef5.jpg,rejected\corn\asian_corn_borer\train_64010_f0eef5.jpg,0.157,a large hawk moth
+corn\asian_corn_borer\train_15220_4b9db4.jpg,rejected\corn\asian_corn_borer\train_15220_4b9db4.jpg,0.159,a grasshopper
+corn\asian_corn_borer\train_18804_976363.jpg,rejected\corn\asian_corn_borer\train_18804_976363.jpg,0.178,aphids
+corn\asian_corn_borer\train_31246_e8d507.jpg,rejected\corn\asian_corn_borer\train_31246_e8d507.jpg,0.184,a large brown moth on a white background
+corn\asian_corn_borer\train_13255_c338e5.jpg,rejected\corn\asian_corn_borer\train_13255_c338e5.jpg,0.204,a large hawk moth
+corn\asian_corn_borer\train_44074_dc0e45.jpg,rejected\corn\asian_corn_borer\train_44074_dc0e45.jpg,0.214,a large hawk moth
+corn\asian_corn_borer\train_44153_e36ac7.jpg,rejected\corn\asian_corn_borer\train_44153_e36ac7.jpg,0.226,a large brown moth on a white background
+corn\asian_corn_borer\train_74313_e801e9.jpg,rejected\corn\asian_corn_borer\train_74313_e801e9.jpg,0.228,a green leafhopper
+corn\asian_corn_borer\train_31060_18ea4b.jpg,rejected\corn\asian_corn_borer\train_31060_18ea4b.jpg,0.230,a large hawk moth
+corn\asian_corn_borer\train_41037_a72c95.jpg,rejected\corn\asian_corn_borer\train_41037_a72c95.jpg,0.232,a grasshopper
+corn\asian_corn_borer\train_14783_c73ecb.jpg,rejected\corn\asian_corn_borer\train_14783_c73ecb.jpg,0.237,a large brown moth on a white background
+corn\asian_corn_borer\train_29000_b64977.jpg,rejected\corn\asian_corn_borer\train_29000_b64977.jpg,0.247,a large brown moth on a white background
+corn\asian_corn_borer\train_27297_5d640e.jpg,rejected\corn\asian_corn_borer\train_27297_5d640e.jpg,0.255,a large hawk moth
+corn\asian_corn_borer\train_70532_8a698e.jpg,rejected\corn\asian_corn_borer\train_70532_8a698e.jpg,0.266,a green leafhopper
+corn\asian_corn_borer\train_49610_2b6766.jpg,rejected\corn\asian_corn_borer\train_49610_2b6766.jpg,0.270,a large brown moth on a white background
+corn\asian_corn_borer\train_70194_f625c9.jpg,rejected\corn\asian_corn_borer\train_70194_f625c9.jpg,0.271,a fly
+corn\asian_corn_borer\train_72244_9ae544.jpg,rejected\corn\asian_corn_borer\train_72244_9ae544.jpg,0.271,a green leafhopper
+corn\asian_corn_borer\train_16276_1c99ec.jpg,rejected\corn\asian_corn_borer\train_16276_1c99ec.jpg,0.274,a large brown moth on a white background
+corn\asian_corn_borer\train_12721_f0bc27.jpg,rejected\corn\asian_corn_borer\train_12721_f0bc27.jpg,0.280,a large hawk moth
+corn\asian_corn_borer\train_44383_1a97f5.jpg,rejected\corn\asian_corn_borer\train_44383_1a97f5.jpg,0.289,a large hawk moth
+corn\asian_corn_borer\train_15118_a2bd81.jpg,rejected\corn\asian_corn_borer\train_15118_a2bd81.jpg,0.304,a large hawk moth
+corn\asian_corn_borer\train_12673_83e48e.jpg,rejected\corn\asian_corn_borer\train_12673_83e48e.jpg,0.306,a large brown moth on a white background
+corn\asian_corn_borer\train_13125_5b1976.jpg,rejected\corn\asian_corn_borer\train_13125_5b1976.jpg,0.312,a large brown moth on a white background
+corn\asian_corn_borer\train_29685_0ea08e.jpg,rejected\corn\asian_corn_borer\train_29685_0ea08e.jpg,0.313,a large hawk moth
+corn\asian_corn_borer\train_47271_7160db.jpg,rejected\corn\asian_corn_borer\train_47271_7160db.jpg,0.315,a grasshopper
+corn\asian_corn_borer\train_27659_a376f5.jpg,rejected\corn\asian_corn_borer\train_27659_a376f5.jpg,0.317,a large brown moth on a white background
+corn\asian_corn_borer\train_64020_99a032.jpg,rejected\corn\asian_corn_borer\train_64020_99a032.jpg,0.318,a large brown moth on a white background
+corn\asian_corn_borer\train_21961_b68b43.jpg,rejected\corn\asian_corn_borer\train_21961_b68b43.jpg,0.339,a large hawk moth
+corn\asian_corn_borer\train_26812_4cb370.jpg,rejected\corn\asian_corn_borer\train_26812_4cb370.jpg,0.347,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_00245_04304c.jpg,rejected\corn\asian_corn_borer\train_00245_04304c.jpg,0.351,a green leafhopper
+corn\asian_corn_borer\train_44238_6af37d.jpg,rejected\corn\asian_corn_borer\train_44238_6af37d.jpg,0.352,a large brown moth on a white background
+corn\asian_corn_borer\train_13227_7a369c.jpg,rejected\corn\asian_corn_borer\train_13227_7a369c.jpg,0.354,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_74681_2fbbbf.jpg,rejected\corn\asian_corn_borer\train_74681_2fbbbf.jpg,0.360,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_27361_930e9f.jpg,rejected\corn\asian_corn_borer\train_27361_930e9f.jpg,0.363,a large hawk moth
+corn\asian_corn_borer\train_14680_4ee078.jpg,rejected\corn\asian_corn_borer\train_14680_4ee078.jpg,0.364,a large brown moth on a white background
+corn\asian_corn_borer\train_01455_f95ae8.jpg,rejected\corn\asian_corn_borer\train_01455_f95ae8.jpg,0.368,a large hawk moth
+corn\asian_corn_borer\train_63888_590b28.jpg,rejected\corn\asian_corn_borer\train_63888_590b28.jpg,0.368,a large brown moth on a white background
+corn\asian_corn_borer\train_31054_df0ecc.jpg,rejected\corn\asian_corn_borer\train_31054_df0ecc.jpg,0.370,a large hawk moth
+corn\asian_corn_borer\train_62939_065b99.jpg,rejected\corn\asian_corn_borer\train_62939_065b99.jpg,0.373,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_34450_1d097f.jpg,rejected\corn\asian_corn_borer\train_34450_1d097f.jpg,0.374,a large hawk moth
+corn\asian_corn_borer\train_39631_a04ee9.jpg,rejected\corn\asian_corn_borer\train_39631_a04ee9.jpg,0.374,aphids
+corn\asian_corn_borer\train_41653_3e923f.jpg,rejected\corn\asian_corn_borer\train_41653_3e923f.jpg,0.379,a large brown moth on a white background
+corn\asian_corn_borer\train_28708_5b70d2.jpg,rejected\corn\asian_corn_borer\train_28708_5b70d2.jpg,0.379,a large brown moth on a white background
+corn\asian_corn_borer\train_68147_ec88be.jpg,rejected\corn\asian_corn_borer\train_68147_ec88be.jpg,0.380,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_13265_7b0d3a.jpg,rejected\corn\asian_corn_borer\train_13265_7b0d3a.jpg,0.382,a large hawk moth
+corn\asian_corn_borer\train_49841_35ae32.jpg,rejected\corn\asian_corn_borer\train_49841_35ae32.jpg,0.390,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_74237_505393.jpg,rejected\corn\asian_corn_borer\train_74237_505393.jpg,0.390,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_44359_510f59.jpg,rejected\corn\asian_corn_borer\train_44359_510f59.jpg,0.390,a large hawk moth
+corn\asian_corn_borer\train_54266_d9559a.jpg,rejected\corn\asian_corn_borer\train_54266_d9559a.jpg,0.390,a grasshopper
+corn\asian_corn_borer\train_26872_9885c5.jpg,rejected\corn\asian_corn_borer\train_26872_9885c5.jpg,0.400,aphids
+corn\asian_corn_borer\train_00503_63f858.jpg,rejected\corn\asian_corn_borer\train_00503_63f858.jpg,0.405,a green leafhopper
+corn\asian_corn_borer\train_40101_fb68aa.jpg,rejected\corn\asian_corn_borer\train_40101_fb68aa.jpg,0.414,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_22415_78e758.jpg,rejected\corn\asian_corn_borer\train_22415_78e758.jpg,0.421,aphids
+corn\asian_corn_borer\train_63787_d74098.jpg,rejected\corn\asian_corn_borer\train_63787_d74098.jpg,0.432,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_13506_ecaab5.jpg,rejected\corn\asian_corn_borer\train_13506_ecaab5.jpg,0.436,a large brown moth on a white background
+corn\asian_corn_borer\train_14967_2bd88a.jpg,rejected\corn\asian_corn_borer\train_14967_2bd88a.jpg,0.444,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_00462_9401fe.jpg,rejected\corn\asian_corn_borer\train_00462_9401fe.jpg,0.450,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_40075_b6c070.jpg,rejected\corn\asian_corn_borer\train_40075_b6c070.jpg,0.453,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_27392_5e2f33.jpg,rejected\corn\asian_corn_borer\train_27392_5e2f33.jpg,0.458,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_29686_cf72c0.jpg,rejected\corn\asian_corn_borer\train_29686_cf72c0.jpg,0.463,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_13288_64d408.jpg,rejected\corn\asian_corn_borer\train_13288_64d408.jpg,0.479,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_15211_874265.jpg,rejected\corn\asian_corn_borer\train_15211_874265.jpg,0.481,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_00691_8519fe.jpg,rejected\corn\asian_corn_borer\train_00691_8519fe.jpg,0.482,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_15914_6550d0.jpg,rejected\corn\asian_corn_borer\train_15914_6550d0.jpg,0.487,a large hawk moth
+corn\asian_corn_borer\train_44195_35ad77.jpg,rejected\corn\asian_corn_borer\train_44195_35ad77.jpg,0.489,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\train_47157_4c2c21.jpg,rejected\corn\asian_corn_borer\train_47157_4c2c21.jpg,0.494,a small yellowish-brown moth with wavy lines
+corn\asian_corn_borer\ip102_15956_96a678.jpg,rejected\corn\asian_corn_borer\ip102_15956_96a678.jpg,0.998,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14894_e78471.jpg,rejected\corn\asian_corn_borer\ip102_14894_e78471.jpg,0.992,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14895_733b5f.jpg,rejected\corn\asian_corn_borer\ip102_14895_733b5f.jpg,0.992,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15909_712ceb.jpg,rejected\corn\asian_corn_borer\ip102_15909_712ceb.jpg,0.992,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15848_5abf47.jpg,rejected\corn\asian_corn_borer\ip102_15848_5abf47.jpg,0.988,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14831_5a50e1.jpg,rejected\corn\asian_corn_borer\ip102_14831_5a50e1.jpg,0.986,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15580_52dd70.jpg,rejected\corn\asian_corn_borer\ip102_15580_52dd70.jpg,0.985,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_16009_b4bf61.jpg,rejected\corn\asian_corn_borer\ip102_16009_b4bf61.jpg,0.982,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14488_026382.jpg,rejected\corn\asian_corn_borer\ip102_14488_026382.jpg,0.981,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15020_5ea24e.jpg,rejected\corn\asian_corn_borer\ip102_15020_5ea24e.jpg,0.975,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14937_44dded.jpg,rejected\corn\asian_corn_borer\ip102_14937_44dded.jpg,0.972,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15034_16f1e6.jpg,rejected\corn\asian_corn_borer\ip102_15034_16f1e6.jpg,0.970,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14989_fcbeef.jpg,rejected\corn\asian_corn_borer\ip102_14989_fcbeef.jpg,0.968,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15002_3ae405.jpg,rejected\corn\asian_corn_borer\ip102_15002_3ae405.jpg,0.966,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15010_8674cc.jpg,rejected\corn\asian_corn_borer\ip102_15010_8674cc.jpg,0.962,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15458_3fe9bd.jpg,rejected\corn\asian_corn_borer\ip102_15458_3fe9bd.jpg,0.961,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15947_3c295b.jpg,rejected\corn\asian_corn_borer\ip102_15947_3c295b.jpg,0.958,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14459_91efa6.jpg,rejected\corn\asian_corn_borer\ip102_14459_91efa6.jpg,0.954,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14556_4c302c.jpg,rejected\corn\asian_corn_borer\ip102_14556_4c302c.jpg,0.954,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15926_395a7f.jpg,rejected\corn\asian_corn_borer\ip102_15926_395a7f.jpg,0.951,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14684_db19a4.jpg,rejected\corn\asian_corn_borer\ip102_14684_db19a4.jpg,0.947,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14506_0f1b1c.jpg,rejected\corn\asian_corn_borer\ip102_14506_0f1b1c.jpg,0.945,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15855_cd46b6.jpg,rejected\corn\asian_corn_borer\ip102_15855_cd46b6.jpg,0.938,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15403_a5344a.jpg,rejected\corn\asian_corn_borer\ip102_15403_a5344a.jpg,0.934,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14326_662ef6.jpg,rejected\corn\asian_corn_borer\ip102_14326_662ef6.jpg,0.923,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15472_016980.jpg,rejected\corn\asian_corn_borer\ip102_15472_016980.jpg,0.918,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14692_408857.jpg,rejected\corn\asian_corn_borer\ip102_14692_408857.jpg,0.917,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_15977_dbe78c.jpg,rejected\corn\asian_corn_borer\ip102_15977_dbe78c.jpg,0.907,diagram/illustration (CLIP)
+corn\asian_corn_borer\ip102_14886_d20158.jpg,rejected\corn\asian_corn_borer\ip102_14886_d20158.jpg,0.901,diagram/illustration (CLIP)
+corn\corn_aphid\ip102_17603_c9f764.jpg,rejected\corn\corn_aphid\ip102_17603_c9f764.jpg,,diagram/illustration (CLIP)
+corn\corn_aphid\ip102_18019_a15030.jpg,rejected\corn\corn_aphid\ip102_18019_a15030.jpg,,diagram/illustration (CLIP)
+corn\corn_aphid\ip102_18587_6243f3.jpg,rejected\corn\corn_aphid\ip102_18587_6243f3.jpg,,diagram/illustration (CLIP)
+corn\corn_aphid\ip102_18789_fc7ae8.jpg,rejected\corn\corn_aphid\ip102_18789_fc7ae8.jpg,,diagram/illustration (CLIP)
+corn\corn_aphid\ip102_18969_0b6ef3.jpg,rejected\corn\corn_aphid\ip102_18969_0b6ef3.jpg,,diagram/illustration (CLIP)
+corn\corn_aphid\ip102_19739_bf47f8.jpg,rejected\corn\corn_aphid\ip102_19739_bf47f8.jpg,,diagram/illustration (CLIP)
+corn\corn_aphid\ip102_19911_9a9f34.jpg,rejected\corn\corn_aphid\ip102_19911_9a9f34.jpg,,diagram/illustration (CLIP)
+corn\corn_aphid\ip102_20407_5c13f9.jpg,rejected\corn\corn_aphid\ip102_20407_5c13f9.jpg,,diagram/illustration (CLIP)
+corn\fall_armyworm\rfFAW_0753A77E-AA09-4A8A-8CC6-07EC0CD96BA8-12-_066ca7.jpg,rejected\corn\fall_armyworm\rfFAW_0753A77E-AA09-4A8A-8CC6-07EC0CD96BA8-12-_066ca7.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_130311C2-2B9A-4ABE-AAC8-5323B0C4C024-12-_6b9e8b.jpg,rejected\corn\fall_armyworm\rfFAW_130311C2-2B9A-4ABE-AAC8-5323B0C4C024-12-_6b9e8b.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1621183745487-jpg-rf-95a610ed8e6e957eaa7_e3c847.jpg,rejected\corn\fall_armyworm\rfFAW_1621183745487-jpg-rf-95a610ed8e6e957eaa7_e3c847.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1621184108807-jpg-rf-585bd95005a7d4eeef5_7cd26c.jpg,rejected\corn\fall_armyworm\rfFAW_1621184108807-jpg-rf-585bd95005a7d4eeef5_7cd26c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1621184160713-jpg-rf-aed1b2016813444679f_c03a94.jpg,rejected\corn\fall_armyworm\rfFAW_1621184160713-jpg-rf-aed1b2016813444679f_c03a94.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1621184339952-jpg-rf-27b4097cd18e46367b9_64d50c.jpg,rejected\corn\fall_armyworm\rfFAW_1621184339952-jpg-rf-27b4097cd18e46367b9_64d50c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1621184339952-jpg-rf-a99fe11672b26192586_11d4ed.jpg,rejected\corn\fall_armyworm\rfFAW_1621184339952-jpg-rf-a99fe11672b26192586_11d4ed.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1621184885542-jpg-rf-fab84b3a50148ad68ff_0731cb.jpg,rejected\corn\fall_armyworm\rfFAW_1621184885542-jpg-rf-fab84b3a50148ad68ff_0731cb.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622194780370-jpg-rf-b53145fbceda2c48547_321ff4.jpg,rejected\corn\fall_armyworm\rfFAW_1622194780370-jpg-rf-b53145fbceda2c48547_321ff4.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622195422084-jpg-rf-f05837ea164f3ae2654_bbd2a1.jpg,rejected\corn\fall_armyworm\rfFAW_1622195422084-jpg-rf-f05837ea164f3ae2654_bbd2a1.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622195947542-jpg-rf-3fb882f7a38075f9f88_9475e9.jpg,rejected\corn\fall_armyworm\rfFAW_1622195947542-jpg-rf-3fb882f7a38075f9f88_9475e9.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622281167387-jpg-rf-291a6cc5c2e4b08e3e2_829b4c.jpg,rejected\corn\fall_armyworm\rfFAW_1622281167387-jpg-rf-291a6cc5c2e4b08e3e2_829b4c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622281715191-jpg-rf-0c861b5273139f81388_04d8af.jpg,rejected\corn\fall_armyworm\rfFAW_1622281715191-jpg-rf-0c861b5273139f81388_04d8af.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622282301135-jpg-rf-006aef37578bb2ec367_b22578.jpg,rejected\corn\fall_armyworm\rfFAW_1622282301135-jpg-rf-006aef37578bb2ec367_b22578.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622342685098-jpg-rf-d85503307917ed63b15_95bc90.jpg,rejected\corn\fall_armyworm\rfFAW_1622342685098-jpg-rf-d85503307917ed63b15_95bc90.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622342942722-jpg-rf-85c1a992f4df3744893_5a2ec8.jpg,rejected\corn\fall_armyworm\rfFAW_1622342942722-jpg-rf-85c1a992f4df3744893_5a2ec8.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622342961480-jpg-rf-a12c00a690e40677369_73f1e3.jpg,rejected\corn\fall_armyworm\rfFAW_1622342961480-jpg-rf-a12c00a690e40677369_73f1e3.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622342992897-jpg-rf-06675657f8ef91e30e3_8b9850.jpg,rejected\corn\fall_armyworm\rfFAW_1622342992897-jpg-rf-06675657f8ef91e30e3_8b9850.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622343172109-jpg-rf-02b8e6f2b1edf7e216b_13d27f.jpg,rejected\corn\fall_armyworm\rfFAW_1622343172109-jpg-rf-02b8e6f2b1edf7e216b_13d27f.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622343517528-jpg-rf-6a5d4f8bef3f51c06c2_9f406e.jpg,rejected\corn\fall_armyworm\rfFAW_1622343517528-jpg-rf-6a5d4f8bef3f51c06c2_9f406e.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622343777793-jpg-rf-e0b07b6e41fec931637_e9c5e4.jpg,rejected\corn\fall_armyworm\rfFAW_1622343777793-jpg-rf-e0b07b6e41fec931637_e9c5e4.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622624602112-jpg-rf-5ea21897238e44ebc1a_57c324.jpg,rejected\corn\fall_armyworm\rfFAW_1622624602112-jpg-rf-5ea21897238e44ebc1a_57c324.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622629546226-jpg-rf-f0bbdf3f08b9e512ff8_d72ed5.jpg,rejected\corn\fall_armyworm\rfFAW_1622629546226-jpg-rf-f0bbdf3f08b9e512ff8_d72ed5.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622629682883-jpg-rf-de8491783dd62dc1d23_6fc97f.jpg,rejected\corn\fall_armyworm\rfFAW_1622629682883-jpg-rf-de8491783dd62dc1d23_6fc97f.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622641530521-jpg-rf-68c060d695082318f95_97b14e.jpg,rejected\corn\fall_armyworm\rfFAW_1622641530521-jpg-rf-68c060d695082318f95_97b14e.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622642673256-jpg-rf-f64894e83348111c587_f7a1dd.jpg,rejected\corn\fall_armyworm\rfFAW_1622642673256-jpg-rf-f64894e83348111c587_f7a1dd.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622642771549-jpg-rf-3bc63cb34283cadb759_363a2a.jpg,rejected\corn\fall_armyworm\rfFAW_1622642771549-jpg-rf-3bc63cb34283cadb759_363a2a.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622643445979-jpg-rf-e44b4a80259d5a36f27_b92362.jpg,rejected\corn\fall_armyworm\rfFAW_1622643445979-jpg-rf-e44b4a80259d5a36f27_b92362.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622645056742-jpg-rf-1223412841cf344f38a_0a21de.jpg,rejected\corn\fall_armyworm\rfFAW_1622645056742-jpg-rf-1223412841cf344f38a_0a21de.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622646558724-jpg-rf-4e2322a7539dbd36cdf_10b5f1.jpg,rejected\corn\fall_armyworm\rfFAW_1622646558724-jpg-rf-4e2322a7539dbd36cdf_10b5f1.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622646558724-jpg-rf-84bf178654cdf373798_9232e1.jpg,rejected\corn\fall_armyworm\rfFAW_1622646558724-jpg-rf-84bf178654cdf373798_9232e1.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622647213117-jpg-rf-7a9dcf4e58ff802ab76_b4bcae.jpg,rejected\corn\fall_armyworm\rfFAW_1622647213117-jpg-rf-7a9dcf4e58ff802ab76_b4bcae.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622648095323-jpg-rf-865fa2d02343ffe4021_c7e0bd.jpg,rejected\corn\fall_armyworm\rfFAW_1622648095323-jpg-rf-865fa2d02343ffe4021_c7e0bd.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622648526522-jpg-rf-16c8813ca37d7b3538f_a4b221.jpg,rejected\corn\fall_armyworm\rfFAW_1622648526522-jpg-rf-16c8813ca37d7b3538f_a4b221.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622648653337-jpg-rf-2cd554c7ace79380e15_a61585.jpg,rejected\corn\fall_armyworm\rfFAW_1622648653337-jpg-rf-2cd554c7ace79380e15_a61585.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622651286313-jpg-rf-ab776e16946ed56e9ce_a8b222.jpg,rejected\corn\fall_armyworm\rfFAW_1622651286313-jpg-rf-ab776e16946ed56e9ce_a8b222.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622652046946-jpg-rf-a54420010b8fdd9907a_7f3498.jpg,rejected\corn\fall_armyworm\rfFAW_1622652046946-jpg-rf-a54420010b8fdd9907a_7f3498.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622653851963-jpg-rf-5c8e8ed717ba56ed65b_89fcb3.jpg,rejected\corn\fall_armyworm\rfFAW_1622653851963-jpg-rf-5c8e8ed717ba56ed65b_89fcb3.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622654111346-jpg-rf-2a5925c882a16a1e2a8_ee2880.jpg,rejected\corn\fall_armyworm\rfFAW_1622654111346-jpg-rf-2a5925c882a16a1e2a8_ee2880.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622820802720-jpg-rf-d4638b201c6e0c3f088_e6e214.jpg,rejected\corn\fall_armyworm\rfFAW_1622820802720-jpg-rf-d4638b201c6e0c3f088_e6e214.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622822222254-jpg-rf-9cebacf478a0f879224_ec60b4.jpg,rejected\corn\fall_armyworm\rfFAW_1622822222254-jpg-rf-9cebacf478a0f879224_ec60b4.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1622822647729-jpg-rf-0ea8b4326ce9ee02c5a_5df29c.jpg,rejected\corn\fall_armyworm\rfFAW_1622822647729-jpg-rf-0ea8b4326ce9ee02c5a_5df29c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623161310177-jpg-rf-cfa5da8b6d96fcd5002_af23f3.jpg,rejected\corn\fall_armyworm\rfFAW_1623161310177-jpg-rf-cfa5da8b6d96fcd5002_af23f3.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623163274656-jpg-rf-f92a51145495cf17073_dbe74d.jpg,rejected\corn\fall_armyworm\rfFAW_1623163274656-jpg-rf-f92a51145495cf17073_dbe74d.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623163299430-jpg-rf-b831c0c0271171971f4_2b9c29.jpg,rejected\corn\fall_armyworm\rfFAW_1623163299430-jpg-rf-b831c0c0271171971f4_2b9c29.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623222024414-jpg-rf-daf35ab2408d13e0ef5_a0e31c.jpg,rejected\corn\fall_armyworm\rfFAW_1623222024414-jpg-rf-daf35ab2408d13e0ef5_a0e31c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623222051244-jpg-rf-fddfeebc345f5bbbcd0_0e5190.jpg,rejected\corn\fall_armyworm\rfFAW_1623222051244-jpg-rf-fddfeebc345f5bbbcd0_0e5190.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623222146669-jpg-rf-d5f7103d9cc18abc8bd_250a65.jpg,rejected\corn\fall_armyworm\rfFAW_1623222146669-jpg-rf-d5f7103d9cc18abc8bd_250a65.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623240063542-jpg-rf-ff01a5010d03dc327d5_6d683c.jpg,rejected\corn\fall_armyworm\rfFAW_1623240063542-jpg-rf-ff01a5010d03dc327d5_6d683c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623240099094-jpg-rf-aec6751d080a2c15d6b_c90434.jpg,rejected\corn\fall_armyworm\rfFAW_1623240099094-jpg-rf-aec6751d080a2c15d6b_c90434.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623240792760-jpg-rf-653a2973e48b9a1adea_ac3f0a.jpg,rejected\corn\fall_armyworm\rfFAW_1623240792760-jpg-rf-653a2973e48b9a1adea_ac3f0a.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623240792760-jpg-rf-7a9d35fed202d9730c7_1837bb.jpg,rejected\corn\fall_armyworm\rfFAW_1623240792760-jpg-rf-7a9d35fed202d9730c7_1837bb.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623240894079-jpg-rf-715f3d126978cb4f537_ba76a3.jpg,rejected\corn\fall_armyworm\rfFAW_1623240894079-jpg-rf-715f3d126978cb4f537_ba76a3.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623270640337-jpg-rf-7cb05f41bde36a099e1_a13498.jpg,rejected\corn\fall_armyworm\rfFAW_1623270640337-jpg-rf-7cb05f41bde36a099e1_a13498.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623271143027-jpg-rf-c5fda7dfa2fd4284d86_90d3fc.jpg,rejected\corn\fall_armyworm\rfFAW_1623271143027-jpg-rf-c5fda7dfa2fd4284d86_90d3fc.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623271475072-jpg-rf-f59459e443d6102cca8_e4efab.jpg,rejected\corn\fall_armyworm\rfFAW_1623271475072-jpg-rf-f59459e443d6102cca8_e4efab.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623271519988-jpg-rf-82ef76bf6d558f22194_77002d.jpg,rejected\corn\fall_armyworm\rfFAW_1623271519988-jpg-rf-82ef76bf6d558f22194_77002d.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623271537057-jpg-rf-de3f59f9865262af24f_46b8b2.jpg,rejected\corn\fall_armyworm\rfFAW_1623271537057-jpg-rf-de3f59f9865262af24f_46b8b2.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623271586859-jpg-rf-7c918837eb6787ef4c7_5a0161.jpg,rejected\corn\fall_armyworm\rfFAW_1623271586859-jpg-rf-7c918837eb6787ef4c7_5a0161.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623271586859-jpg-rf-9ef8da6ab9f538ac2ec_a953ed.jpg,rejected\corn\fall_armyworm\rfFAW_1623271586859-jpg-rf-9ef8da6ab9f538ac2ec_a953ed.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623271757188-jpg-rf-c94f261411efd7f8475_018781.jpg,rejected\corn\fall_armyworm\rfFAW_1623271757188-jpg-rf-c94f261411efd7f8475_018781.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623272052871-jpg-rf-f43944c2436af8899c9_26c78a.jpg,rejected\corn\fall_armyworm\rfFAW_1623272052871-jpg-rf-f43944c2436af8899c9_26c78a.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623272131416-jpg-rf-17be20ad23e4ea51d76_126bff.jpg,rejected\corn\fall_armyworm\rfFAW_1623272131416-jpg-rf-17be20ad23e4ea51d76_126bff.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623272316827-jpg-rf-238eb06e9ed921cfde3_b3e0f3.jpg,rejected\corn\fall_armyworm\rfFAW_1623272316827-jpg-rf-238eb06e9ed921cfde3_b3e0f3.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623272355247-jpg-rf-600896dd01549f92135_5ddf95.jpg,rejected\corn\fall_armyworm\rfFAW_1623272355247-jpg-rf-600896dd01549f92135_5ddf95.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623272815206-jpg-rf-c7dbbbfa51079261184_709aa9.jpg,rejected\corn\fall_armyworm\rfFAW_1623272815206-jpg-rf-c7dbbbfa51079261184_709aa9.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623273340155-jpg-rf-aa180e1538032b2c67e_ec403d.jpg,rejected\corn\fall_armyworm\rfFAW_1623273340155-jpg-rf-aa180e1538032b2c67e_ec403d.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623273555578-jpg-rf-98f5ee724a2215c894a_7c05fc.jpg,rejected\corn\fall_armyworm\rfFAW_1623273555578-jpg-rf-98f5ee724a2215c894a_7c05fc.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623273870611-jpg-rf-613b31bf59b56a4dd8d_e7f6e5.jpg,rejected\corn\fall_armyworm\rfFAW_1623273870611-jpg-rf-613b31bf59b56a4dd8d_e7f6e5.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623273896328-jpg-rf-f3e3aba93235b0888a4_5efa15.jpg,rejected\corn\fall_armyworm\rfFAW_1623273896328-jpg-rf-f3e3aba93235b0888a4_5efa15.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623274031191-jpg-rf-d9d4409a513e70f5e37_abc8e4.jpg,rejected\corn\fall_armyworm\rfFAW_1623274031191-jpg-rf-d9d4409a513e70f5e37_abc8e4.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623274065141-jpg-rf-8f1c9981eeb636b2e7b_a18eff.jpg,rejected\corn\fall_armyworm\rfFAW_1623274065141-jpg-rf-8f1c9981eeb636b2e7b_a18eff.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623274204049-jpg-rf-b71779a4be3e1b118ce_8629f8.jpg,rejected\corn\fall_armyworm\rfFAW_1623274204049-jpg-rf-b71779a4be3e1b118ce_8629f8.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623274288763-jpg-rf-904434087744beff40b_6f62aa.jpg,rejected\corn\fall_armyworm\rfFAW_1623274288763-jpg-rf-904434087744beff40b_6f62aa.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623274386786-jpg-rf-3e19650858f5cc65fdd_66ae98.jpg,rejected\corn\fall_armyworm\rfFAW_1623274386786-jpg-rf-3e19650858f5cc65fdd_66ae98.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623274672491-jpg-rf-6b34404aed0a7396d74_cbb0be.jpg,rejected\corn\fall_armyworm\rfFAW_1623274672491-jpg-rf-6b34404aed0a7396d74_cbb0be.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623310744397-jpg-rf-ea2d54d48919a881699_059920.jpg,rejected\corn\fall_armyworm\rfFAW_1623310744397-jpg-rf-ea2d54d48919a881699_059920.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623310815469-jpg-rf-58f7084cabd7ad7ebfa_ecf0a5.jpg,rejected\corn\fall_armyworm\rfFAW_1623310815469-jpg-rf-58f7084cabd7ad7ebfa_ecf0a5.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623311024076-jpg-rf-5edf1bbc77356a6d5d2_a00710.jpg,rejected\corn\fall_armyworm\rfFAW_1623311024076-jpg-rf-5edf1bbc77356a6d5d2_a00710.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623323165862-jpg-rf-f41753b4be1cc1b1a36_d96232.jpg,rejected\corn\fall_armyworm\rfFAW_1623323165862-jpg-rf-f41753b4be1cc1b1a36_d96232.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623323723497-jpg-rf-9a78643cd204876e15a_cdad09.jpg,rejected\corn\fall_armyworm\rfFAW_1623323723497-jpg-rf-9a78643cd204876e15a_cdad09.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623323750876-jpg-rf-48a4bbcdc8e58e18cf9_a96417.jpg,rejected\corn\fall_armyworm\rfFAW_1623323750876-jpg-rf-48a4bbcdc8e58e18cf9_a96417.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623350322739-jpg-rf-9a9aedf2a7e1f9179ca_40ae39.jpg,rejected\corn\fall_armyworm\rfFAW_1623350322739-jpg-rf-9a9aedf2a7e1f9179ca_40ae39.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623350433411-jpg-rf-b11d207e7a574d35eda_5b4c6d.jpg,rejected\corn\fall_armyworm\rfFAW_1623350433411-jpg-rf-b11d207e7a574d35eda_5b4c6d.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623350921646-jpg-rf-179518b6344f426db21_9b736f.jpg,rejected\corn\fall_armyworm\rfFAW_1623350921646-jpg-rf-179518b6344f426db21_9b736f.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623351406984-jpg-rf-9f2d7f0a731172770c4_22ca90.jpg,rejected\corn\fall_armyworm\rfFAW_1623351406984-jpg-rf-9f2d7f0a731172770c4_22ca90.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623585819297-jpg-rf-0573352bcb0a87b9e8f_6c1c82.jpg,rejected\corn\fall_armyworm\rfFAW_1623585819297-jpg-rf-0573352bcb0a87b9e8f_6c1c82.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623654269006-jpg-rf-730cc4aed88292906b0_5c48af.jpg,rejected\corn\fall_armyworm\rfFAW_1623654269006-jpg-rf-730cc4aed88292906b0_5c48af.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623654330049-jpg-rf-70065745c2e6033bc56_4fd093.jpg,rejected\corn\fall_armyworm\rfFAW_1623654330049-jpg-rf-70065745c2e6033bc56_4fd093.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623654330049-jpg-rf-dd951eabb6f16ddb336_bedd38.jpg,rejected\corn\fall_armyworm\rfFAW_1623654330049-jpg-rf-dd951eabb6f16ddb336_bedd38.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623654349177-jpg-rf-6ed5d875a69fb947f4f_2736b7.jpg,rejected\corn\fall_armyworm\rfFAW_1623654349177-jpg-rf-6ed5d875a69fb947f4f_2736b7.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623654683184-jpg-rf-aada5b5c1123cc35d63_c22128.jpg,rejected\corn\fall_armyworm\rfFAW_1623654683184-jpg-rf-aada5b5c1123cc35d63_c22128.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623654787314-jpg-rf-4c9ea9ea92f73a815ea_fa762a.jpg,rejected\corn\fall_armyworm\rfFAW_1623654787314-jpg-rf-4c9ea9ea92f73a815ea_fa762a.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623654887208-jpg-rf-da4a033ad59bc0e84ec_0a1124.jpg,rejected\corn\fall_armyworm\rfFAW_1623654887208-jpg-rf-da4a033ad59bc0e84ec_0a1124.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623655225145-jpg-rf-971b812da423b5c0b1d_dc4ba2.jpg,rejected\corn\fall_armyworm\rfFAW_1623655225145-jpg-rf-971b812da423b5c0b1d_dc4ba2.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623678475447-jpg-rf-0d6659df04cca20dcbb_af408c.jpg,rejected\corn\fall_armyworm\rfFAW_1623678475447-jpg-rf-0d6659df04cca20dcbb_af408c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623679355163-jpg-rf-0dbdd8d01a670260fac_a1b73b.jpg,rejected\corn\fall_armyworm\rfFAW_1623679355163-jpg-rf-0dbdd8d01a670260fac_a1b73b.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623679435322-jpg-rf-3a23e6efbd2cae5aa09_448c62.jpg,rejected\corn\fall_armyworm\rfFAW_1623679435322-jpg-rf-3a23e6efbd2cae5aa09_448c62.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623680878571-1-jpg-rf-c249722d0ad6b984f_2ea053.jpg,rejected\corn\fall_armyworm\rfFAW_1623680878571-1-jpg-rf-c249722d0ad6b984f_2ea053.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623924691984-jpg-rf-f29ee416b5cba931bf4_9a5f61.jpg,rejected\corn\fall_armyworm\rfFAW_1623924691984-jpg-rf-f29ee416b5cba931bf4_9a5f61.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623924738145-jpg-rf-ffaf53749e0577d20da_b52e10.jpg,rejected\corn\fall_armyworm\rfFAW_1623924738145-jpg-rf-ffaf53749e0577d20da_b52e10.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623924780180-jpg-rf-0aee7104ffd5ed016fb_9308d9.jpg,rejected\corn\fall_armyworm\rfFAW_1623924780180-jpg-rf-0aee7104ffd5ed016fb_9308d9.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623925332362-jpg-rf-72c3a8d225cf646c09c_054103.jpg,rejected\corn\fall_armyworm\rfFAW_1623925332362-jpg-rf-72c3a8d225cf646c09c_054103.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623925599815-jpg-rf-40066f75d85024dccbb_4d52d7.jpg,rejected\corn\fall_armyworm\rfFAW_1623925599815-jpg-rf-40066f75d85024dccbb_4d52d7.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623925653994-jpg-rf-42ce1887f5b92a12dfc_022a79.jpg,rejected\corn\fall_armyworm\rfFAW_1623925653994-jpg-rf-42ce1887f5b92a12dfc_022a79.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623925653994-jpg-rf-e4a634127fe5ac080b2_3664ff.jpg,rejected\corn\fall_armyworm\rfFAW_1623925653994-jpg-rf-e4a634127fe5ac080b2_3664ff.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623925677167-jpg-rf-77f42b9ad0069a5323d_7f1247.jpg,rejected\corn\fall_armyworm\rfFAW_1623925677167-jpg-rf-77f42b9ad0069a5323d_7f1247.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623925765807-jpg-rf-109b14c58c66fa93862_00073f.jpg,rejected\corn\fall_armyworm\rfFAW_1623925765807-jpg-rf-109b14c58c66fa93862_00073f.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623948334407-jpg-rf-a9c0eeebeca4e13b88d_c336c8.jpg,rejected\corn\fall_armyworm\rfFAW_1623948334407-jpg-rf-a9c0eeebeca4e13b88d_c336c8.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623948373754-jpg-rf-5bd2364aaed9c9a9dbd_d09983.jpg,rejected\corn\fall_armyworm\rfFAW_1623948373754-jpg-rf-5bd2364aaed9c9a9dbd_d09983.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623948392842-jpg-rf-3301e95a5ee1d6864fe_15cb7a.jpg,rejected\corn\fall_armyworm\rfFAW_1623948392842-jpg-rf-3301e95a5ee1d6864fe_15cb7a.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623948428263-jpg-rf-8632cfe54e355e0b800_fbb33c.jpg,rejected\corn\fall_armyworm\rfFAW_1623948428263-jpg-rf-8632cfe54e355e0b800_fbb33c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623948840593-jpg-rf-ccadeec8710b1b13555_4834f3.jpg,rejected\corn\fall_armyworm\rfFAW_1623948840593-jpg-rf-ccadeec8710b1b13555_4834f3.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623948948630-jpg-rf-49a8305cb2835f65ef0_0de7c0.jpg,rejected\corn\fall_armyworm\rfFAW_1623948948630-jpg-rf-49a8305cb2835f65ef0_0de7c0.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623948963761-jpg-rf-90fbd3ca4e12eab048f_2dec38.jpg,rejected\corn\fall_armyworm\rfFAW_1623948963761-jpg-rf-90fbd3ca4e12eab048f_2dec38.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1623998049086-jpg-rf-f21040829e32a9dcc81_6b1960.jpg,rejected\corn\fall_armyworm\rfFAW_1623998049086-jpg-rf-f21040829e32a9dcc81_6b1960.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1624024619818-jpg-rf-cd7491453d69a79f0c8_4b72e4.jpg,rejected\corn\fall_armyworm\rfFAW_1624024619818-jpg-rf-cd7491453d69a79f0c8_4b72e4.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1624025086565-jpg-rf-36a3309b17066811c77_b9ebc5.jpg,rejected\corn\fall_armyworm\rfFAW_1624025086565-jpg-rf-36a3309b17066811c77_b9ebc5.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1624025254524-jpg-rf-aad1248347d05fbd899_b17946.jpg,rejected\corn\fall_armyworm\rfFAW_1624025254524-jpg-rf-aad1248347d05fbd899_b17946.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1624217286549-jpg-rf-224532f35dc25f59766_0c32c7.jpg,rejected\corn\fall_armyworm\rfFAW_1624217286549-jpg-rf-224532f35dc25f59766_0c32c7.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1624217626880-1-jpg-rf-529d4a646b1665f1f_a59334.jpg,rejected\corn\fall_armyworm\rfFAW_1624217626880-1-jpg-rf-529d4a646b1665f1f_a59334.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1624272643572-jpg-rf-cadcb550a64325b7c40_e52c4b.jpg,rejected\corn\fall_armyworm\rfFAW_1624272643572-jpg-rf-cadcb550a64325b7c40_e52c4b.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1624272886137-jpg-rf-4c91f0576e33e6c9ae9_214335.jpg,rejected\corn\fall_armyworm\rfFAW_1624272886137-jpg-rf-4c91f0576e33e6c9ae9_214335.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1624376869352-jpg-rf-4c1d3bcc072d1fb6a36_9f9c79.jpg,rejected\corn\fall_armyworm\rfFAW_1624376869352-jpg-rf-4c1d3bcc072d1fb6a36_9f9c79.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1624539513028-jpg-rf-0fdd4a73f73a1e76922_a1a5c1.jpg,rejected\corn\fall_armyworm\rfFAW_1624539513028-jpg-rf-0fdd4a73f73a1e76922_a1a5c1.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1624540200976-jpg-rf-aab55cf7b3d731eb84d_6956ad.jpg,rejected\corn\fall_armyworm\rfFAW_1624540200976-jpg-rf-aab55cf7b3d731eb84d_6956ad.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1624650073986-jpg-rf-35df42388e8d0e0422c_877057.jpg,rejected\corn\fall_armyworm\rfFAW_1624650073986-jpg-rf-35df42388e8d0e0422c_877057.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1624650558898-jpg-rf-44fce48b98f3c270431_d3dd1a.jpg,rejected\corn\fall_armyworm\rfFAW_1624650558898-jpg-rf-44fce48b98f3c270431_d3dd1a.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1625313814984-jpg-rf-4b0320cdf2eba10c9d1_43972a.jpg,rejected\corn\fall_armyworm\rfFAW_1625313814984-jpg-rf-4b0320cdf2eba10c9d1_43972a.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1625314202780-jpg-rf-9055d3fc48365b7837d_8332b9.jpg,rejected\corn\fall_armyworm\rfFAW_1625314202780-jpg-rf-9055d3fc48365b7837d_8332b9.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1625314249811-jpg-rf-db35d7bd32d2bdb1cfb_bca553.jpg,rejected\corn\fall_armyworm\rfFAW_1625314249811-jpg-rf-db35d7bd32d2bdb1cfb_bca553.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1625909634856-jpg-rf-d0ac315a6e6dbf619d1_a9cecf.jpg,rejected\corn\fall_armyworm\rfFAW_1625909634856-jpg-rf-d0ac315a6e6dbf619d1_a9cecf.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1626005415794-jpg-rf-74dd2aa92ba9e36ce8c_5aac6a.jpg,rejected\corn\fall_armyworm\rfFAW_1626005415794-jpg-rf-74dd2aa92ba9e36ce8c_5aac6a.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1627902042512-jpg-rf-7bb2ecb5bc03785852a_e62345.jpg,rejected\corn\fall_armyworm\rfFAW_1627902042512-jpg-rf-7bb2ecb5bc03785852a_e62345.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1630828737086-jpg-rf-8896520c990f2bc83ef_2c7050.jpg,rejected\corn\fall_armyworm\rfFAW_1630828737086-jpg-rf-8896520c990f2bc83ef_2c7050.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1631204364737-jpg-rf-ab083a6a0f5af275a39_ae199b.jpg,rejected\corn\fall_armyworm\rfFAW_1631204364737-jpg-rf-ab083a6a0f5af275a39_ae199b.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1631342532152-jpg-rf-fb62d883b177115a085_d057c4.jpg,rejected\corn\fall_armyworm\rfFAW_1631342532152-jpg-rf-fb62d883b177115a085_d057c4.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1631375285219-jpg-rf-416c042c65ddb3710bb_cc1450.jpg,rejected\corn\fall_armyworm\rfFAW_1631375285219-jpg-rf-416c042c65ddb3710bb_cc1450.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1636093748510-jpg-rf-0782df5863fad9e76b5_bb6a83.jpg,rejected\corn\fall_armyworm\rfFAW_1636093748510-jpg-rf-0782df5863fad9e76b5_bb6a83.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1636094044478-jpg-rf-3631c656e73fd27beb0_d85813.jpg,rejected\corn\fall_armyworm\rfFAW_1636094044478-jpg-rf-3631c656e73fd27beb0_d85813.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1636094365924-jpg-rf-616c27e5ea455daaf57_b4a015.jpg,rejected\corn\fall_armyworm\rfFAW_1636094365924-jpg-rf-616c27e5ea455daaf57_b4a015.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1636094564904-jpg-rf-74d4cd8c898cc18dfbc_9be857.jpg,rejected\corn\fall_armyworm\rfFAW_1636094564904-jpg-rf-74d4cd8c898cc18dfbc_9be857.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1636094807818-jpg-rf-ff7411de5a463725446_514aeb.jpg,rejected\corn\fall_armyworm\rfFAW_1636094807818-jpg-rf-ff7411de5a463725446_514aeb.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1636096097816-jpg-rf-0456495c5c05b22f8ee_648516.jpg,rejected\corn\fall_armyworm\rfFAW_1636096097816-jpg-rf-0456495c5c05b22f8ee_648516.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1636096245512-jpg-rf-c8f9f84e8afd54135b5_465e19.jpg,rejected\corn\fall_armyworm\rfFAW_1636096245512-jpg-rf-c8f9f84e8afd54135b5_465e19.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1636096330183-jpg-rf-53ac1e66bf8d250be19_e8095e.jpg,rejected\corn\fall_armyworm\rfFAW_1636096330183-jpg-rf-53ac1e66bf8d250be19_e8095e.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1636096540358-jpg-rf-e9ce1c74ed6e34564c2_43bbba.jpg,rejected\corn\fall_armyworm\rfFAW_1636096540358-jpg-rf-e9ce1c74ed6e34564c2_43bbba.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1636096888854-jpg-rf-73c59c3ce4cfad0b284_a904a6.jpg,rejected\corn\fall_armyworm\rfFAW_1636096888854-jpg-rf-73c59c3ce4cfad0b284_a904a6.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1636097332288-jpg-rf-7ea2b44403e760e081f_a78688.jpg,rejected\corn\fall_armyworm\rfFAW_1636097332288-jpg-rf-7ea2b44403e760e081f_a78688.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_1636097340073-jpg-rf-a795bd3f754013031c5_b6c949.jpg,rejected\corn\fall_armyworm\rfFAW_1636097340073-jpg-rf-a795bd3f754013031c5_b6c949.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_1636098104401-jpg-rf-368410c512f8547193e_a5a7e6.jpg,rejected\corn\fall_armyworm\rfFAW_1636098104401-jpg-rf-368410c512f8547193e_a5a7e6.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_194-18-31-16-jpeg-jpg-rf-17e189ca77a4586_5c9a27.jpg,rejected\corn\fall_armyworm\rfFAW_194-18-31-16-jpeg-jpg-rf-17e189ca77a4586_5c9a27.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_195-18-31-43-jpeg-jpg-rf-6395655d7f45e95_3ee6d1.jpg,rejected\corn\fall_armyworm\rfFAW_195-18-31-43-jpeg-jpg-rf-6395655d7f45e95_3ee6d1.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_199-18-32-57-jpeg-jpg-rf-076e10c5f432013_f59ab9.jpg,rejected\corn\fall_armyworm\rfFAW_199-18-32-57-jpeg-jpg-rf-076e10c5f432013_f59ab9.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_204-18-35-57-jpeg-jpg-rf-f55d310b736d6ca_9c7697.jpg,rejected\corn\fall_armyworm\rfFAW_204-18-35-57-jpeg-jpg-rf-f55d310b736d6ca_9c7697.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_20721E62-68BD-41BB-BAD9-7E448038EA0B-19-_1ed924.jpg,rejected\corn\fall_armyworm\rfFAW_20721E62-68BD-41BB-BAD9-7E448038EA0B-19-_1ed924.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_216-18-39-54-jpeg-jpg-rf-54447b47ac28acf_0693b6.jpg,rejected\corn\fall_armyworm\rfFAW_216-18-39-54-jpeg-jpg-rf-54447b47ac28acf_0693b6.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_221-18-42-59-jpeg-jpg-rf-1b82eef228327d9_d4ec5b.jpg,rejected\corn\fall_armyworm\rfFAW_221-18-42-59-jpeg-jpg-rf-1b82eef228327d9_d4ec5b.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_221-18-42-59-jpeg-jpg-rf-871fe58659b9b77_2b01da.jpg,rejected\corn\fall_armyworm\rfFAW_221-18-42-59-jpeg-jpg-rf-871fe58659b9b77_2b01da.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_224-18-48-21-jpeg-jpg-rf-16c3e7ea92b8d43_1bbc3f.jpg,rejected\corn\fall_armyworm\rfFAW_224-18-48-21-jpeg-jpg-rf-16c3e7ea92b8d43_1bbc3f.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_236-18-53-12-jpeg-jpg-rf-5484faa2e1cc993_94d4c6.jpg,rejected\corn\fall_armyworm\rfFAW_236-18-53-12-jpeg-jpg-rf-5484faa2e1cc993_94d4c6.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_237-18-53-29-jpeg-jpg-rf-dd43b1cb814da39_3789a9.jpg,rejected\corn\fall_armyworm\rfFAW_237-18-53-29-jpeg-jpg-rf-dd43b1cb814da39_3789a9.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_2387CF78-29C6-434E-9372-7DE00ED867F9-20-_9c1ae9.jpg,rejected\corn\fall_armyworm\rfFAW_2387CF78-29C6-434E-9372-7DE00ED867F9-20-_9c1ae9.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_239-18-54-4-jpeg-jpg-rf-11fb768e3c9306ed_53e53c.jpg,rejected\corn\fall_armyworm\rfFAW_239-18-54-4-jpeg-jpg-rf-11fb768e3c9306ed_53e53c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_250-9-5-47-jpeg-jpg-rf-b864a256e676716dd_ef828b.jpg,rejected\corn\fall_armyworm\rfFAW_250-9-5-47-jpeg-jpg-rf-b864a256e676716dd_ef828b.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_257-9-8-36-jpeg-jpg-rf-c6c8ae8ef5efd217e_a5ef88.jpg,rejected\corn\fall_armyworm\rfFAW_257-9-8-36-jpeg-jpg-rf-c6c8ae8ef5efd217e_a5ef88.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_258-9-9-8-jpeg-jpg-rf-d7cb44c38592805ad6_481981.jpg,rejected\corn\fall_armyworm\rfFAW_258-9-9-8-jpeg-jpg-rf-d7cb44c38592805ad6_481981.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_329-9-51-32-jpeg-jpg-rf-281e756ed0d05e1a_281584.jpg,rejected\corn\fall_armyworm\rfFAW_329-9-51-32-jpeg-jpg-rf-281e756ed0d05e1a_281584.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_331-9-54-55-jpeg-jpg-rf-00e9f7b1bd48d232_3e4c1d.jpg,rejected\corn\fall_armyworm\rfFAW_331-9-54-55-jpeg-jpg-rf-00e9f7b1bd48d232_3e4c1d.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_344A7EA5-68FA-4D48-9291-D5ABD8851F6D-5-2_132392.jpg,rejected\corn\fall_armyworm\rfFAW_344A7EA5-68FA-4D48-9291-D5ABD8851F6D-5-2_132392.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_345-10-2-40-jpeg-jpg-rf-124503db4d858059_2d5d2c.jpg,rejected\corn\fall_armyworm\rfFAW_345-10-2-40-jpeg-jpg-rf-124503db4d858059_2d5d2c.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_384-10-21-55-jpeg-jpg-rf-460c2a6238639f0_50ed19.jpg,rejected\corn\fall_armyworm\rfFAW_384-10-21-55-jpeg-jpg-rf-460c2a6238639f0_50ed19.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_385-10-22-6-jpeg-jpg-rf-0816335b52ccd709_f7fb1e.jpg,rejected\corn\fall_armyworm\rfFAW_385-10-22-6-jpeg-jpg-rf-0816335b52ccd709_f7fb1e.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_500FF89D-C222-4644-AC34-6C52A6AE8666-12-_9b42eb.jpg,rejected\corn\fall_armyworm\rfFAW_500FF89D-C222-4644-AC34-6C52A6AE8666-12-_9b42eb.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_50574897-A59B-47F0-9A50-ABF8C44B2F15-5-4_86b949.jpg,rejected\corn\fall_armyworm\rfFAW_50574897-A59B-47F0-9A50-ABF8C44B2F15-5-4_86b949.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_6183FC7C-B275-4834-97C9-982301FB2A10-19-_a5a501.jpg,rejected\corn\fall_armyworm\rfFAW_6183FC7C-B275-4834-97C9-982301FB2A10-19-_a5a501.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_647B16F2-E75A-4486-825F-2C6631A35971-20-_f0498e.jpg,rejected\corn\fall_armyworm\rfFAW_647B16F2-E75A-4486-825F-2C6631A35971-20-_f0498e.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_6d51ca13-ac97-470a-a478-1ec98947fd3e-JPG_ee863f.jpg,rejected\corn\fall_armyworm\rfFAW_6d51ca13-ac97-470a-a478-1ec98947fd3e-JPG_ee863f.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_70925635-F311-49D6-B665-C1392EEF8D9E-15-_18294f.jpg,rejected\corn\fall_armyworm\rfFAW_70925635-F311-49D6-B665-C1392EEF8D9E-15-_18294f.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_729B5D34-A90A-4FC1-BD08-1043189DCB76-12-_535abd.jpg,rejected\corn\fall_armyworm\rfFAW_729B5D34-A90A-4FC1-BD08-1043189DCB76-12-_535abd.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_73512DA7-AD7C-449D-85E1-06B784721082-10-_def942.jpg,rejected\corn\fall_armyworm\rfFAW_73512DA7-AD7C-449D-85E1-06B784721082-10-_def942.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_762249A9-2DF8-4D04-A2BE-46EE78BC6FA8-12-_7566b2.jpg,rejected\corn\fall_armyworm\rfFAW_762249A9-2DF8-4D04-A2BE-46EE78BC6FA8-12-_7566b2.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_769433E3-A944-4877-8719-597C810D34A9-22-_e91686.jpg,rejected\corn\fall_armyworm\rfFAW_769433E3-A944-4877-8719-597C810D34A9-22-_e91686.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_7869B1E8-F4C6-48BE-BDE7-106204FFC643-10-_2bb612.jpg,rejected\corn\fall_armyworm\rfFAW_7869B1E8-F4C6-48BE-BDE7-106204FFC643-10-_2bb612.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_DCC2D06B-5CD3-4F7A-A6E5-EFE7BEBE5E83-9-5_70cdf5.jpg,rejected\corn\fall_armyworm\rfFAW_DCC2D06B-5CD3-4F7A-A6E5-EFE7BEBE5E83-9-5_70cdf5.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210523-152007-10-9-41-jpg-rf-1545a_c8915a.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210523-152007-10-9-41-jpg-rf-1545a_c8915a.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_IMG-20210523-152019-10-10-12-jpg-rf-5e04_7fa315.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210523-152019-10-10-12-jpg-rf-5e04_7fa315.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_IMG-20210523-170829-10-16-11-jpg-rf-e730_c21581.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210523-170829-10-16-11-jpg-rf-e730_c21581.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210523-171737-10-32-30-jpg-rf-c4d6_3fbda7.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210523-171737-10-32-30-jpg-rf-c4d6_3fbda7.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210610-171519-19-31-4-jpg-rf-8c1a2_a5284b.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210610-171519-19-31-4-jpg-rf-8c1a2_a5284b.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210610-171524-19-31-26-jpg-rf-48bc_b7d0bd.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210610-171524-19-31-26-jpg-rf-48bc_b7d0bd.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210610-172255-20-59-59-jpg-rf-683d_51ab7a.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210610-172255-20-59-59-jpg-rf-683d_51ab7a.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210610-172315-21-2-1-jpg-rf-688e76_03583b.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210610-172315-21-2-1-jpg-rf-688e76_03583b.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210610-172424-21-10-1-jpg-rf-4f8c4_00cd9b.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210610-172424-21-10-1-jpg-rf-4f8c4_00cd9b.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210610-173202-21-39-34-jpg-rf-7ac1_5a2c0f.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210610-173202-21-39-34-jpg-rf-7ac1_5a2c0f.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210610-173646-21-51-29-jpg-rf-8206_d3d6bd.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210610-173646-21-51-29-jpg-rf-8206_d3d6bd.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210618-092056-22-3-4-jpg-rf-93ef48_cb7197.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210618-092056-22-3-4-jpg-rf-93ef48_cb7197.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210618-092107-22-4-5-jpg-rf-b1cb54_b4f8d7.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210618-092107-22-4-5-jpg-rf-b1cb54_b4f8d7.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20210618-092445-22-20-25-jpg-rf-8fb5_47d8bb.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210618-092445-22-20-25-jpg-rf-8fb5_47d8bb.jpg,,tilted copy (black border wedges)
+corn\fall_armyworm\rfFAW_IMG-20210621-150911-21-46-7-jpg-rf-7482a_ec3e73.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20210621-150911-21-46-7-jpg-rf-7482a_ec3e73.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20220526-WA0030-jpg-rf-4393b57629226_955857.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20220526-WA0030-jpg-rf-4393b57629226_955857.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20220618-WA0000-jpg-rf-da0fd381fca0e_3c3a66.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20220618-WA0000-jpg-rf-da0fd381fca0e_3c3a66.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_IMG-20220705-152339-038-jpg-rf-b6ac75c80_b1e20d.jpg,rejected\corn\fall_armyworm\rfFAW_IMG-20220705-152339-038-jpg-rf-b6ac75c80_b1e20d.jpg,,near-duplicate (CLIP > 0.97)
+corn\fall_armyworm\rfFAW_uuid-7a1161d0-d932-49a8-8d54-f51c305d0fb_a50c56.jpg,rejected\corn\fall_armyworm\rfFAW_uuid-7a1161d0-d932-49a8-8d54-f51c305d0fb_a50c56.jpg,,tilted copy (black border wedges)

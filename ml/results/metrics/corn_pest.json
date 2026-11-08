@@ -1,0 +1,74 @@
+{
+  "task": "corn_pest",
+  "best_model": "svm",
+  "cv_f1_macro": {
+    "random_forest": 0.8032,
+    "svm": 0.804,
+    "knn": 0.7562
+  },
+  "test_accuracy": 0.8133,
+  "test_f1_macro": 0.8142,
+  "classes": [
+    "asian_corn_borer",
+    "fall_armyworm",
+    "healthy"
+  ],
+  "n_train_original": 2400,
+  "n_train_augmented": 0,
+  "n_test": 600,
+  "class_counts": {
+    "asian_corn_borer": 1000,
+    "fall_armyworm": 1000,
+    "healthy": 1000
+  },
+  "classification_report": {
+    "asian_corn_borer": {
+      "precision": 0.7238095238095238,
+      "recall": 0.76,
+      "f1-score": 0.7414634146341463,
+      "support": 200.0
+    },
+    "fall_armyworm": {
+      "precision": 0.764102564102564,
+      "recall": 0.745,
+      "f1-score": 0.7544303797468355,
+      "support": 200.0
+    },
+    "healthy": {
+      "precision": 0.958974358974359,
+      "recall": 0.935,
+      "f1-score": 0.9468354430379747,
+      "support": 200.0
+    },
+    "accuracy": 0.8133333333333334,
+    "macro avg": {
+      "precision": 0.8156288156288157,
+      "recall": 0.8133333333333334,
+      "f1-score": 0.8142430791396521,
+      "support": 600.0
+    },
+    "weighted avg": {
+      "precision": 0.8156288156288156,
+      "recall": 0.8133333333333334,
+      "f1-score": 0.8142430791396522,
+      "support": 600.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      152,
+      42,
+      6
+    ],
+    [
+      49,
+      149,
+      2
+    ],
+    [
+      9,
+      4,
+      187
+    ]
+  ]
+}

@@ -1,0 +1,9 @@
+# Install PyTorch first (CUDA 12.4 build):
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+# Then:
+#   pip install -r requirements.txt
+open_clip_torch
+pillow
+numpy
+imagehash
+tqdm
