@@ -3,6 +3,7 @@
 Uses the fixed train / val / test sets made by make_split.py (70 / 15 / 15, ml/dataset/split/).
 Run after make_split.py and extract_all.py, from the project root:
     ml/.venv/Scripts/python.exe ml/src/train.py
+    ml/.venv/Scripts/python.exe ml/src/train.py --only corn_check    (just one model)
 
 For each model:
     train  Random Forest, SVM and KNN, each with a few settings, learn from these photos.
@@ -12,6 +13,9 @@ For each model:
     test   scored once at the end, with the chosen model. Never used for any choice, so the
            test score is an honest estimate for new photos.
 The saved model is the one trained on the training set.
+
+The pest classifier learns only from photos with the insect in view (bug_visible = yes), plus
+healthy; damage-only photos train the detector and the corn check.
 
 Augmented copies (only in split/train/) are used by the pest classifier only. The corn check
 and the detector use real photos: padding the small pest folders would only add more "insect
@@ -24,6 +28,7 @@ Saves:
     ml/results/metrics/<name>.json                full metrics, for evaluate.py
     ml/results/metrics_summary.csv                one row per model
 """
+import argparse
 import json
 import warnings
 from pathlib import Path
@@ -32,6 +37,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.base import clone
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from sklearn.model_selection import GridSearchCV, PredefinedSplit
@@ -41,7 +47,7 @@ from sklearn.svm import SVC
 
 from predict import apply_cutoffs
 
-warnings.filterwarnings("ignore", category=FutureWarning)  # SVC(probability=True) deprecation notice
+warnings.filterwarnings("ignore", category=FutureWarning)  # scikit-learn deprecation notices
 
 RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 METRICS_DIR = RESULTS_DIR / "metrics"
@@ -61,7 +67,9 @@ EXCLUDE_FROM_PEST_TASK = {"unidentified_damage"}
 MODEL_GRID = {
     "random_forest": (RandomForestClassifier(random_state=RANDOM_STATE),
                       {"n_estimators": [200, 400], "max_depth": [None, 20], "class_weight": ["balanced", None]}),
-    "svm": (SVC(kernel="rbf", probability=True, random_state=RANDOM_STATE),
+    # No probability=True here: comparing settings only needs predictions. The winner gets
+    # probabilities in finalize(). cache_size (MB) speeds up kernel computations.
+    "svm": (SVC(kernel="rbf", cache_size=1000, random_state=RANDOM_STATE),
             {"C": [1, 10], "gamma": ["scale"], "class_weight": ["balanced", None]}),
     "knn": (KNeighborsClassifier(), {"n_neighbors": [3, 5, 7, 9]}),
 }
@@ -104,7 +112,19 @@ def select_best_model(X_train, y_train, X_val, y_val):
         if best is None or search.best_score_ > best[2]:
             best = (name, clone(estimator).set_params(**search.best_params_), search.best_score_)
     name, model, _ = best
-    return name, model.fit(X_train, y_train), val_scores
+    return name, finalize(name, model).fit(X_train, y_train), val_scores
+
+
+def finalize(name, model):
+    """The winning model, set up to use every CPU core for its final fit. The SVM gets
+    probabilities by 5-fold Platt scaling (sigmoid) with the folds run in parallel;
+    SVC(probability=True) runs the same 5 folds one after another, which took most of the
+    training time."""
+    if name == "svm":
+        return CalibratedClassifierCV(model, method="sigmoid", cv=5, ensemble=False, n_jobs=-1)
+    if "n_jobs" in model.get_params():
+        model.set_params(n_jobs=-1)
+    return model
 
 
 def tune_cutoffs(proba_val, y_val, classes, candidates):
@@ -157,7 +177,8 @@ def train_task(X, meta, rows, y_col, name, augment, cutoffs_for_short=False):
     metrics = {
         "task": name,
         "best_model": best_name,
-        "best_params": {k: v for k, v in model.get_params().items()
+        "best_params": {k: v for k, v in (model.estimator if isinstance(model, CalibratedClassifierCV)
+                                          else model).get_params().items()
                         if k in ("n_estimators", "max_depth", "class_weight", "C", "n_neighbors")},
         "val_f1_macro": val_scores,
         "cutoffs": cutoffs,
@@ -188,9 +209,6 @@ def save(name, model, scaler, classes, metrics):
         json.dump(metrics, f, indent=2)
     print(f"    saved {MODELS_DIR / (name + '_model.joblib')}  val f1 {metrics['val']['f1_macro']:.3f}, "
           f"test acc {metrics['test_accuracy']:.3f}, test f1 {metrics['test_f1_macro']:.3f}", flush=True)
-    return {"model": name, "best_model": metrics["best_model"], "val_f1_macro": metrics["val"]["f1_macro"],
-            **{k: metrics[k] for k in ("test_accuracy", "test_f1_macro", "n_train_original",
-                                       "n_train_augmented", "n_val", "n_test")}}
 
 
 def background_check(X, meta, train_idx, test_idx, y_pred):
@@ -213,34 +231,53 @@ def background_check(X, meta, train_idx, test_idx, y_pred):
             "chance_accuracy": round(1 / meta["crop"].nunique(), 4)}
 
 
+MODEL_NAMES = ["corn_check", f"{CROP}_pest", f"{CROP}_detector"]
+
+
+def summary_row(metrics):
+    return {"model": metrics["task"], "best_model": metrics["best_model"], "val_f1_macro": metrics["val"]["f1_macro"],
+            **{k: metrics[k] for k in ("test_accuracy", "test_f1_macro", "n_train_original",
+                                       "n_train_augmented", "n_val", "n_test")}}
+
+
 def main():
+    ap = argparse.ArgumentParser(description="Train the corn models (see the top of this file).")
+    ap.add_argument("--only", choices=MODEL_NAMES, help="train just this model; the others keep their saved files")
+    only = ap.parse_args().only
     X, meta = load_data()
-    summary = []
-
-    # Corn check: corn plant photos (healthy, diseased, or damage with no bug in view) against
-    # other plants. Insect close-ups (often on walls or hands) would teach it the wrong thing.
-    print("\n=== corn check (corn vs not corn), plant photos only ===", flush=True)
-    corn_plant = (meta["crop"] == CROP) & (meta["pest_class"].isin(["healthy", "unidentified_damage"])
-                                           | (meta["bug_visible"] == "no"))
-    rows = corn_plant | (meta["crop"] == NOT_CORN)
-    model, scaler, classes, metrics, tr, te, pred = train_task(X, meta, rows, "crop", "corn_check", augment=False)
-    metrics["background_check"] = background_check(X, meta, tr, te, pred)
-    summary.append(save("corn_check", model, scaler, classes, metrics))
-
     in_crop = meta["crop"] == CROP
 
-    print(f"\n=== {CROP}: pest classifier ===", flush=True)
-    rows = in_crop & ~meta["pest_class"].isin(EXCLUDE_FROM_PEST_TASK)
-    model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "pest_class", f"{CROP}_pest", augment=True,
-                                                     cutoffs_for_short=True)
-    summary.append(save(f"{CROP}_pest", model, scaler, classes, metrics))
+    # Corn check: every corn photo (healthy, diseased, damaged, and close-ups of the five pests,
+    # which farmers photograph too) against other plants. Without the pest photos it rejected
+    # three of four pest photos as "not corn" (whole-app test, 11 Nov 2026).
+    if only in (None, "corn_check"):
+        print("\n=== corn check (corn vs not corn), all corn photos incl. pest close-ups ===", flush=True)
+        rows = in_crop | (meta["crop"] == NOT_CORN)
+        model, scaler, classes, metrics, tr, te, pred = train_task(X, meta, rows, "crop", "corn_check", augment=False)
+        metrics["background_check"] = background_check(X, meta, tr, te, pred)
+        save("corn_check", model, scaler, classes, metrics)
 
-    print(f"\n=== {CROP}: bug-visible detector (damaged photos only) ===", flush=True)
-    rows = in_crop & (meta["pest_class"] != "healthy")
-    model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "bug_visible", f"{CROP}_detector", augment=False)
-    summary.append(save(f"{CROP}_detector", model, scaler, classes, metrics))
+    # Only photos with the insect in view, plus healthy (as designed): in the app this model runs
+    # only after the detector says "insect visible". Damage-only photos (mostly fall armyworm
+    # field shots) would teach it "chewed corn field = fall armyworm".
+    if only in (None, f"{CROP}_pest"):
+        print(f"\n=== {CROP}: pest classifier (insect-visible photos + healthy) ===", flush=True)
+        rows = in_crop & ~meta["pest_class"].isin(EXCLUDE_FROM_PEST_TASK) & (
+            (meta["bug_visible"] == "yes") | (meta["pest_class"] == "healthy"))
+        model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "pest_class", f"{CROP}_pest", augment=True,
+                                                         cutoffs_for_short=True)
+        save(f"{CROP}_pest", model, scaler, classes, metrics)
 
-    table = pd.DataFrame(summary)
+    if only in (None, f"{CROP}_detector"):
+        print(f"\n=== {CROP}: bug-visible detector (damaged photos only) ===", flush=True)
+        rows = in_crop & (meta["pest_class"] != "healthy")
+        model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "bug_visible", f"{CROP}_detector",
+                                                         augment=False)
+        save(f"{CROP}_detector", model, scaler, classes, metrics)
+
+    # Summary of every saved model (also those not retrained this run).
+    table = pd.DataFrame([summary_row(json.load(open(METRICS_DIR / f"{n}.json", encoding="utf-8")))
+                          for n in MODEL_NAMES if (METRICS_DIR / f"{n}.json").exists()])
     table.to_csv(RESULTS_DIR / "metrics_summary.csv", index=False)
     print("\n" + table.to_string(index=False))
     print("DONE", flush=True)

@@ -18,8 +18,10 @@ Rules:
 - Photos of one iNaturalist observation (inat_<id>.jpg, inat_<id>_p2.jpg ...), one GBIF record,
   one PlantVillage leaf (its "copy" files are re-shots or warped copies of the same leaf), or
   byte-identical files always land in the same set, so nothing is in both train and test.
-- Only training photos are augmented, so val and test hold real photos only. A corn class
-  with fewer than CLASS_TARGET photos gets copies until its training folder has TRAIN_TARGET.
+- Only training photos are augmented, so val and test hold real photos only. Copies are made
+  only in pest folders and only from photos labeled "insect visible" (the photos the pest
+  classifier learns from): a pest with fewer than CLASS_TARGET insect photos gets copies until
+  its training folder has TRAIN_TARGET insect photos (incl. copies).
 - A photo keeps its set on later runs (read from split.csv); only new photos are placed.
 
 raw/ and not_corn/ are never changed. Copies in split/ whose photo is gone from raw/ (or that
@@ -55,6 +57,7 @@ CLASS_TARGET = 5000
 TRAIN_TARGET = round(CLASS_TARGET * SHARES["train"])  # 3500: training photos per corn class after padding
 SEED = 42
 AUG_PREFIX = "aug-"
+NOT_PESTS = {"healthy", "unidentified_damage"}  # corn folders that are not pests: never padded
 
 
 def _rotate15(rgb):
@@ -183,19 +186,22 @@ def assign(photos, groups, strata):
     return {rel: group_set[groups.find(rel)] for rel in photos}
 
 
-def plan_augmented(split_of):
-    """{train/<folder>/aug-<kind>_<name>: (source rel, kind)} for corn folders with fewer than
-    CLASS_TARGET photos (full folders are never padded, even if grouping leaves train a few short)."""
+def plan_augmented(split_of, labels):
+    """{train/<folder>/aug-<kind>_<name>: (source rel, kind)}, made from the insect-visible
+    training photos of pest folders. A pest within 1% of CLASS_TARGET insect photos is not
+    padded (a few short is not worth copies)."""
     train_by_folder, total = defaultdict(list), Counter()
     for rel, s in split_of.items():
-        if not rel.startswith("not_corn/"):
-            total[rel.rsplit("/", 1)[0]] += 1
-            if s == "train":
-                train_by_folder[rel.rsplit("/", 1)[0]].append(rel)
+        crop, name, _ = rel.split("/")
+        if crop == "not_corn" or name in NOT_PESTS or labels.get(rel) != "yes":
+            continue
+        total[f"{crop}/{name}"] += 1
+        if s == "train":
+            train_by_folder[f"{crop}/{name}"].append(rel)
     plan, notes = {}, {}
     for folder, rels in sorted(train_by_folder.items()):
         n, need = len(rels), TRAIN_TARGET - len(rels)
-        if need <= 0 or total[folder] >= CLASS_TARGET:
+        if need <= 0 or total[folder] >= CLASS_TARGET * 0.99:
             continue
         k = min(len(AUGMENTATIONS), math.ceil(need / n))
         rels = sorted(rels)
@@ -242,7 +248,7 @@ def main():
     print("grouping photos of the same observation / identical files ...", flush=True)
     groups, identical = build_groups(photos)
     split_of = assign(photos, groups, strata)
-    aug_plan, aug_notes = plan_augmented(split_of)
+    aug_plan, aug_notes = plan_augmented(split_of, labels)
 
     wanted = {f"{s}/{rel}" for rel, s in split_of.items()} | set(aug_plan)
     existing = {p.relative_to(SPLIT_DIR).as_posix(): p for p in SPLIT_DIR.rglob("*")
@@ -280,15 +286,19 @@ def main():
             w.writerow({"path": rel, "split": split_of[rel], "group": groups.find(rel), "stratum": strata[rel]})
 
     # Report.
-    per = defaultdict(Counter)
+    per, insect = defaultdict(Counter), defaultdict(Counter)
     for rel, s in split_of.items():
         per[rel.rsplit("/", 1)[0]][s] += 1
-    print(f"\n{'folder':<40}{'train':>7}{'+copies':>9}{'val':>6}{'test':>6}{'total':>7}   train/val/test %")
+        insect[rel.rsplit("/", 1)[0]][s] += labels.get(rel) == "yes"
+    print(f"\n{'folder':<38}{'train':>7}{'val':>6}{'test':>6}{'total':>7}  train/val/test %   "
+          f"insect photos train+copies/val/test")
     for folder in sorted(per):
-        c, extra = per[folder], aug_notes.get(folder, (0, 0))[1]
+        c, i, extra = per[folder], insect[folder], aug_notes.get(folder, (0, 0))[1]
         n = sum(c.values())
-        print(f"{folder:<40}{c['train']:>7}{extra:>9}{c['val']:>6}{c['test']:>6}{n + extra:>7}   "
-              + "/".join(f"{100 * c[s] / n:.1f}" for s in SHARES))
+        pest = not folder.startswith("not_corn/") and folder.split("/")[1] not in NOT_PESTS
+        print(f"{folder:<38}{c['train']:>7}{c['val']:>6}{c['test']:>6}{n:>7}  "
+              + "/".join(f"{100 * c[s] / n:.1f}" for s in SHARES)
+              + (f"   {i['train']}+{extra}={i['train'] + extra}/{i['val']}/{i['test']}" if pest else ""))
     sets_per_group, size = defaultdict(set), Counter()
     for rel, s in split_of.items():
         sets_per_group[groups.find(rel)].add(s)

@@ -17,7 +17,9 @@ stalks work best; corn ears are not supported by the severity measurement yet.
 
 ## How to shoot
 
-- Fill most of the frame with the plant. Soil, mud and straw in the photo count as damage.
+- Get close: fill the frame with one leaf (or the whorl). Soil, weeds, mud and straw around
+  it count as damage; a healthy leaf with soil and weeds around it measures about 10%
+  ("Low") instead of "Healthy" (see docs/severity_thresholds.md).
 - Vary lighting (morning, midday, shade), angle and distance.
 - Keep the subject in focus.
 - One problem per photo; avoid photos with several different pests.

@@ -43,13 +43,41 @@ example the Cabadbaran City Agriculture Office) or field validation.
 Healthy vs damaged was right for 80.5% of these 200 photos. Some "Healthy" grades on
 diseased photos may be genuinely tiny lesions under 5%.
 
+**Validation photos of the current dataset** (11 November 2026, 1,718 corn photos with no
+insect in view; share graded correctly at the 5% cutoff):
+
+| Photos | Healthy read as Healthy | Damaged read as damaged |
+|---|---|---|
+| Close-up single leaves (PlantVillage) | 86% (median 1.2%) | 86% (median 22.4%) |
+| Field photos with soil and weeds around the leaf (Doctor Maiz) | 34% (median 10.4%) | 60% (median 12.0%) |
+| Field photos of fall armyworm damage (AgML, Roboflow) | - | 82-83% (median about 25%) |
+
+On close-up leaves the method works. On field photos the leaf itself is measured correctly,
+but soil, weeds and sunny patches around it are counted as damage, so healthy and damaged
+Doctor Maiz photos both measure about 10%; no cutoff separates them (best: 61% at 15%).
+
+**Two fixes were tried and not kept** (same validation photos, balanced accuracy at 5%):
+
+| Method | Overall | Healthy field photos | Damaged field photos | Healthy close-ups |
+|---|---|---|---|---|
+| Current (kept) | 56% | 34% | 60% | 86% |
+| Measure only the central 60% of the photo | 66% | 64% | 58% | 77% |
+| Cut out the main leaf first (GrabCut) | 66% | 85% | 46% | 62% |
+
+GrabCut removed the background well, but also cut away brown and dead parts of damaged
+leaves (median damage on damaged field photos fell from 12% to 3%) and did worse on
+close-ups. Neither fix clearly helped, so the photo tips ("fill the frame with one leaf")
+are the main defence against background, and this goes in the limitations.
+
 ## Limitations (state these in the paper)
 
 - **Thresholds** are placeholders, and photo-based severity measures *how much of this
   photo is damaged*, not field infestation as DA guidelines do.
 - **Corn ears** are not supported: yellow kernels are healthy but read as damage.
-- **Soil, mud, water and dry straw** in the photo count as damage. The app's photo tips ask
-  users to fill the frame with the plant.
+- **Soil, mud, water, weeds and dry straw** in the photo count as damage. On field photos
+  with background, a healthy leaf typically measures about 10% (graded "Low"). The app's photo
+  tips ask users to fill the frame with one leaf. Leaf segmentation (GrabCut) was tested and
+  not kept, because it also removed real damage (see Results).
 - **Mature plants.** Dry, brown mature leaves read as damage. Photograph green, growing plants.
 - **Lighting and colour casts.** Olive-looking healthy leaves under warm light can be
   partly marked as yellowing. A looser green rule fixed some healthy photos but missed more

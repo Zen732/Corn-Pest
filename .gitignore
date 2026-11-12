@@ -61,7 +61,10 @@ ml/dataset/reserve/*/*/*
 ml/dataset/split/
 ml/dataset/rejected/
 ml/dataset/archive_rice_banana/
-backend/models/archive_3crop/
+backend/models/archive_*/
+ml/results/archive_*/
+ml/results/features.npy
+ml/results/features_meta.csv
 dataset_sorter/audit/
 dataset_sorter/downloads/
 dataset_sorter/*.log

@@ -87,19 +87,37 @@ lists which set each photo is in.
 - **test** (15%): scored once at the end and never used for any choice. These are the scores
   to report.
 
-| Folder | train (real + copies) | val | test | Total |
-|---|---|---|---|---|
-| fall_armyworm | 3,500 | 750 | 750 | 5,000 |
-| common_cutworm | 3,500 | 751 | 749 | 5,000 |
-| corn_aphid | 2,787 + 713 = 3,500 | 597 | 597 | 4,694 |
-| armyworm | 1,443 + 2,057 = 3,500 | 309 | 309 | 4,118 |
-| corn_planthopper | 1,429 + 2,071 = 3,500 | 306 | 306 | 4,112 |
-| healthy | 3,495 | 751 | 754 | 5,000 |
-| unidentified_damage | 3,503 | 750 | 747 | 5,000 |
-| not_corn (10 folders) | 7,000 | 1,503 | 1,497 | 10,000 |
+Real photos per folder (as of 11 Nov 2026, all labeled):
+
+| Folder | Photos | Insect visible / damage only | train | val | test |
+|---|---|---|---|---|---|
+| fall_armyworm | 5,000 | 3,556 / 1,444 | 3,500 | 750 | 750 |
+| common_cutworm | 5,000 | 4,998 / 2 | 3,500 | 751 | 749 |
+| corn_aphid | 3,981 | 3,981 / 0 | 2,787 | 597 | 597 |
+| armyworm | 2,061 | 2,023 / 38 | 1,443 | 309 | 309 |
+| corn_planthopper | 2,041 | 2,041 / 0 | 1,429 | 306 | 306 |
+| healthy | 5,000 | 0 / 5,000 | 3,495 | 751 | 754 |
+| unidentified_damage | 5,000 | 0 / 5,000 | 3,503 | 750 | 747 |
+| not_corn (10 folders) | 10,000 | - | 7,000 | 1,503 | 1,497 |
+| **Total** | **38,083** | | **26,657** | **5,717** | **5,709** |
 
 Healthy and unidentified_damage are a few photos off 3,500 / 750 / 750 because whole
-PlantVillage leaves move together; full classes (5,000 photos) are never padded with copies.
+PlantVillage leaves move together.
+
+What each model uses (augmented copies only in the pest classifier's training set):
+
+| Model | Class | train | val | test |
+|---|---|---|---|---|
+| Corn check | corn (every corn photo, incl. pest close-ups) | 19,657 | 4,214 | 4,212 |
+| | not corn | 7,000 | 1,503 | 1,497 |
+| Pest classifier (insect-visible photos + healthy) | fall_armyworm | 2,490 + 1,010 copies | 533 | 533 |
+| | common_cutworm | 3,499 | 750 | 749 |
+| | corn_aphid | 2,787 + 713 copies | 597 | 597 |
+| | armyworm | 1,413 + 2,087 copies | 304 | 306 |
+| | corn_planthopper | 1,429 + 2,071 copies | 306 | 306 |
+| | healthy | 3,495 | 751 | 754 |
+| Insect detector (all corn photos except healthy) | yes (insect visible) | 11,618 | 2,490 | 2,491 |
+| | no (damage only) | 4,544 | 973 | 967 |
 
 Order to run: `make_split.py` → `extract_all.py` → `train.py` → `evaluate.py`. Rerun
 `make_split.py` whenever photos are added to or removed from `raw/` or `not_corn/`.
@@ -157,13 +175,15 @@ commercial app. The "not corn" sources stay cited because their photos are still
 - **Planthoppers at lights.** Most corn planthopper photos show adults on walls or screens
   near house lights, often small in the frame, not on corn plants.
 - **Small classes.** Armyworm (2,061, over half adult moths) and corn planthopper (2,041) are
-  below the other pests. Their training folders, and corn aphid's, are padded to 3,500 (70%
-  of 5,000, the same as the full classes) with augmented copies (flips, rotations, brighter):
-  about 1 copy per aphid photo and 2 per armyworm and planthopper photo
+  below the other pests. The pest classifier learns from insect-visible photos only, so
+  fall armyworm (3,556 insect photos) and corn aphid are short too. Their training sets are
+  padded to 3,500 insect photos (70% of 5,000) with augmented copies (flips, rotations,
+  brighter): fall armyworm 1,010, corn aphid 713, armyworm 2,087, corn planthopper 2,071
   (`TRAIN_TARGET` in `make_split.py`). Copies are made only from training photos, so
   validation and test hold real photos only. Only the pest classifier uses them. They add
   variety but not new insects, so these classes still have fewer truly different photos
-  than the others, and fewer validation and test photos (about 300 instead of 750).
+  than the others, and fewer validation and test photos (armyworm and planthopper about 300,
+  fall armyworm 533, corn aphid 597, instead of 750).
 - **Planthopper look-alikes.** Every photo of the corn planthopper found online is used (924).
   To reach 2,041, 1,117 photos of three rice planthoppers from the same family were added;
   they look nearly the same in photos. The class therefore means "planthopper" in general.

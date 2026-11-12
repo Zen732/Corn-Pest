@@ -1,59 +1,81 @@
 {
   "task": "corn_detector",
-  "best_model": "random_forest",
-  "cv_f1_macro": {
-    "random_forest": 0.9257,
-    "svm": 0.9254,
-    "knn": 0.8883
+  "best_model": "svm",
+  "best_params": {
+    "C": 1,
+    "class_weight": null
   },
-  "test_accuracy": 0.95,
-  "test_f1_macro": 0.9463,
+  "val_f1_macro": {
+    "random_forest": 0.9333,
+    "svm": 0.9439,
+    "knn": 0.909
+  },
+  "cutoffs": {},
+  "val": {
+    "accuracy": 0.9544,
+    "f1_macro": 0.9432
+  },
+  "without_cutoffs": {
+    "test_accuracy": 0.9511,
+    "test_f1_macro": 0.9392
+  },
+  "test_accuracy": 0.9511,
+  "test_f1_macro": 0.9392,
   "classes": [
     "no",
     "yes"
   ],
-  "n_train_original": 2400,
+  "n_train_original": 16162,
   "n_train_augmented": 0,
-  "n_test": 600,
+  "n_val": 3463,
+  "n_test": 3458,
   "class_counts": {
-    "no": 1142,
-    "yes": 1858
+    "no": {
+      "train": 4544,
+      "val": 973,
+      "test": 967
+    },
+    "yes": {
+      "train": 11618,
+      "val": 2490,
+      "test": 2491
+    }
   },
   "classification_report": {
     "no": {
-      "precision": 0.9626168224299065,
-      "recall": 0.9035087719298246,
-      "f1-score": 0.9321266968325792,
-      "support": 228.0
+      "precision": 0.9164926931106472,
+      "recall": 0.9079627714581179,
+      "f1-score": 0.9122077922077922,
+      "support": 967.0
     },
     "yes": {
-      "precision": 0.9430051813471503,
-      "recall": 0.978494623655914,
-      "f1-score": 0.9604221635883905,
-      "support": 372.0
+      "precision": 0.9644,
+      "recall": 0.9678843837816138,
+      "f1-score": 0.9661390502905229,
+      "support": 2491.0
     },
-    "accuracy": 0.95,
+    "accuracy": 0.9511278195488722,
     "macro avg": {
-      "precision": 0.9528110018885284,
-      "recall": 0.9410016977928692,
-      "f1-score": 0.9462744302104849,
-      "support": 600.0
+      "precision": 0.9404463465553237,
+      "recall": 0.9379235776198658,
+      "f1-score": 0.9391734212491576,
+      "support": 3458.0
     },
     "weighted avg": {
-      "precision": 0.9504576049585977,
-      "recall": 0.95,
-      "f1-score": 0.9496698862211823,
-      "support": 600.0
+      "precision": 0.9510031330936946,
+      "recall": 0.9511278195488722,
+      "f1-score": 0.9510576371713787,
+      "support": 3458.0
     }
   },
   "confusion_matrix": [
     [
-      206,
-      22
+      878,
+      89
     ],
     [
-      8,
-      364
+      80,
+      2411
     ]
   ]
 }

@@ -25,9 +25,9 @@ Login -> Photo tips -> Take/pick photo
            - No / unsure  -> Message ("doesn't look like a corn plant"), stop
            - Yes          -> continue
       -> Result:
-           - Healthy                              (no damage detected)
-           - Severity only (Low/Moderate/High)     (damage, no insect visible in photo)
-           - Pest name + Severity                  (damage, insect visible in photo)
+           - Pest name + Severity                  (insect visible in photo)
+           - Healthy                              (no insect, damage under 5%)
+           - Severity only (Low/Moderate/High)     (no insect, damage 5% or more)
       -> Saved to History
 ```
 
@@ -47,5 +47,6 @@ No field questions and no recommendations. Severity is computed from the photo a
 10. Testing with photos from Cabadbaran corn fields
 
 Rice and banana were removed from the project on 15 October 2026. Their photos are kept in
-`ml/dataset/archive_rice_banana/` (not used, can be deleted), except 2,000 rice and banana
-leaf photos in `ml/dataset/not_corn/`, which teach the corn check what is not corn.
+`ml/dataset/archive_rice_banana/` (not used). `ml/dataset/not_corn/` holds 10,000 photos of
+other plants (rice, banana, tomato, cassava, cashew) that teach the corn check what is not
+corn; see [docs/dataset_sources.md](docs/dataset_sources.md).

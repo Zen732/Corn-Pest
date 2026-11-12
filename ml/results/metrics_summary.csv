@@ -1,0 +1,4 @@
+model,best_model,val_f1_macro,test_accuracy,test_f1_macro,n_train_original,n_train_augmented,n_val,n_test
+corn_check,svm,0.9416,0.9618,0.95,26657,0,5717,5709
+corn_pest,svm,0.6699,0.7032,0.6683,15113,5881,3241,3245
+corn_detector,svm,0.9432,0.9511,0.9392,16162,0,3463,3458

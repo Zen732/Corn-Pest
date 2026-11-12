@@ -1,0 +1,111 @@
+{
+  "task": "corn_check",
+  "best_model": "svm",
+  "best_params": {
+    "C": 10,
+    "class_weight": "balanced"
+  },
+  "val_f1_macro": {
+    "random_forest": 0.9286,
+    "svm": 0.9438,
+    "knn": 0.9082
+  },
+  "cutoffs": {},
+  "val": {
+    "accuracy": 0.9557,
+    "f1_macro": 0.9416
+  },
+  "without_cutoffs": {
+    "test_accuracy": 0.9618,
+    "test_f1_macro": 0.95
+  },
+  "test_accuracy": 0.9618,
+  "test_f1_macro": 0.95,
+  "classes": [
+    "corn",
+    "not_corn"
+  ],
+  "n_train_original": 26657,
+  "n_train_augmented": 0,
+  "n_val": 5717,
+  "n_test": 5709,
+  "class_counts": {
+    "corn": {
+      "train": 19657,
+      "val": 4214,
+      "test": 4212
+    },
+    "not_corn": {
+      "train": 7000,
+      "val": 1503,
+      "test": 1497
+    }
+  },
+  "classification_report": {
+    "corn": {
+      "precision": 0.9676814988290399,
+      "recall": 0.9810066476733144,
+      "f1-score": 0.9742985145012969,
+      "support": 4212.0
+    },
+    "not_corn": {
+      "precision": 0.9444058373870744,
+      "recall": 0.9078156312625251,
+      "f1-score": 0.9257493188010899,
+      "support": 1497.0
+    },
+    "accuracy": 0.9618146785776843,
+    "macro avg": {
+      "precision": 0.9560436681080571,
+      "recall": 0.9444111394679198,
+      "f1-score": 0.9500239166511935,
+      "support": 5709.0
+    },
+    "weighted avg": {
+      "precision": 0.9615782118823553,
+      "recall": 0.9618146785776843,
+      "f1-score": 0.961568063290365,
+      "support": 5709.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      4132,
+      80
+    ],
+    [
+      138,
+      1359
+    ]
+  ],
+  "background_check": {
+    "accuracy_by_background": {
+      "black": {
+        "n": 107,
+        "accuracy": 1.0
+      },
+      "natural": {
+        "n": 4833,
+        "accuracy": 0.9563
+      },
+      "white": {
+        "n": 769,
+        "accuracy": 0.9909
+      }
+    },
+    "background_share_per_crop": {
+      "corn": {
+        "black": 0.024,
+        "natural": 0.912,
+        "white": 0.064
+      },
+      "not_corn": {
+        "black": 0.0,
+        "natural": 0.653,
+        "white": 0.346
+      }
+    },
+    "border_colour_only_accuracy": 0.7996,
+    "chance_accuracy": 0.5
+  }
+}
