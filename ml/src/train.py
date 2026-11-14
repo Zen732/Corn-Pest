@@ -1,4 +1,5 @@
-"""Train the three corn models: the corn check, the pest classifier and the bug-visible detector.
+"""Train the four corn models: the corn check, the pest classifier, the bug-visible detector,
+and the healthy-vs-damaged model (for photos with no insect in view).
 
 Uses the fixed train / val / test sets made by make_split.py (70 / 15 / 15, ml/dataset/split/).
 Run after make_split.py and extract_all.py, from the project root:
@@ -25,10 +26,12 @@ Saves:
     backend/models/corn_check_model.joblib       {"model", "scaler", "classes", "cutoffs"}
     backend/models/corn_pest_model.joblib
     backend/models/corn_detector_model.joblib
+    backend/models/corn_health_model.joblib
     ml/results/metrics/<name>.json                full metrics, for evaluate.py
     ml/results/metrics_summary.csv                one row per model
 """
 import argparse
+import csv
 import json
 import warnings
 from pathlib import Path
@@ -39,16 +42,17 @@ import pandas as pd
 from sklearn.base import clone
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix, f1_score
+from sklearn.metrics import classification_report, confusion_matrix, f1_score, make_scorer
 from sklearn.model_selection import GridSearchCV, PredefinedSplit
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from predict import apply_cutoffs
+from predict import apply_cutoffs, merge_proba
 
 warnings.filterwarnings("ignore", category=FutureWarning)  # scikit-learn deprecation notices
 
+DATASET_DIR = Path(__file__).resolve().parents[1] / "dataset"
 RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 METRICS_DIR = RESULTS_DIR / "metrics"
 MODELS_DIR = Path(__file__).resolve().parents[2] / "backend" / "models"
@@ -87,7 +91,27 @@ def load_data():
     leaks = int((meta.groupby(group)["split"].nunique() > 1).sum())
     if leaks:
         raise SystemExit(f"{leaks} photo group(s) are in more than one set - rerun make_split.py")
+    meta["health"] = np.where(meta["pest_class"] == "healthy", "healthy", "damaged")
+    # Caterpillar pests are about half adult moths, which look nothing like their caterpillars:
+    # the pest classifier learns them as separate sub-classes (fall_armyworm_moth, ...) and adds
+    # them back up when it answers. +1.3 points macro F1 on validation (14 Nov 2026).
+    meta["pest_sub"] = np.where(meta["path"].isin(adult_moth_paths()), meta["pest_class"] + "_moth",
+                                meta["pest_class"])
     return X, meta
+
+
+def adult_moth_paths():
+    """Adult moth photos in the caterpillar-pest folders ("corn/<class>/<file>"): iNaturalist
+    photos credited as adults, and moths moved back from the reserve (add_moths.py, filter_moths.py)."""
+    paths = set()
+    with open(DATASET_DIR / "inaturalist_credits.csv", newline="", encoding="utf-8") as f:
+        paths |= {r["file"].replace("\\", "/") for r in csv.DictReader(f) if "adult" in r.get("species", "")}
+    with open(DATASET_DIR / "reserve" / "corn" / "moth_moves.csv", newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            moved_to = r["moved_to"].replace("\\", "/")
+            if "/raw/" in f"/{moved_to}/" and "reserve" not in moved_to:
+                paths.add(f"corn/{r['class']}/{r['file']}")
+    return paths
 
 
 def sets(meta, rows, augment):
@@ -97,30 +121,41 @@ def sets(meta, rows, augment):
     return pick("train", augment), pick("val"), pick("test")
 
 
-def select_best_model(X_train, y_train, X_val, y_val):
-    """Every model and setting is trained on the training set and scored (macro F1) on the
-    validation set; the best one is retrained on the training set and returned."""
+def _merged_f1(y_true, y_pred, merge):
+    """Macro F1 after mapping sub-classes to their class (fall_armyworm_moth -> fall_armyworm)."""
+    to_class = np.vectorize(lambda v: merge.get(v, v), otypes=[object])
+    return f1_score(to_class(y_true), to_class(y_pred), average="macro")
+
+
+def select_best_model(X_train, y_train, X_val, y_val, merge=None):
+    """Every model and setting is trained on the training set and scored (macro F1, on the
+    final classes when the labels are sub-classes) on the validation set; the best one is
+    retrained on the training set and returned."""
     X_both = np.vstack([X_train, X_val])
     y_both = np.concatenate([y_train, y_val])
     fold = PredefinedSplit(np.r_[np.full(len(X_train), -1), np.zeros(len(X_val), dtype=int)])
+    scoring = make_scorer(_merged_f1, merge=merge) if merge else "f1_macro"
     best, val_scores = None, {}
     for name, (estimator, grid) in MODEL_GRID.items():
-        search = GridSearchCV(estimator, grid, cv=fold, scoring="f1_macro", n_jobs=-1, refit=False)
+        search = GridSearchCV(estimator, grid, cv=fold, scoring=scoring, n_jobs=-1, refit=False)
         search.fit(X_both, y_both)
         val_scores[name] = round(float(search.best_score_), 4)
         print(f"      {name:<14} val f1_macro={search.best_score_:.4f}  params={search.best_params_}", flush=True)
         if best is None or search.best_score_ > best[2]:
             best = (name, clone(estimator).set_params(**search.best_params_), search.best_score_)
     name, model, _ = best
-    return name, finalize(name, model).fit(X_train, y_train), val_scores
+    return name, finalize(name, model, len(np.unique(y_train))).fit(X_train, y_train), val_scores
 
 
-def finalize(name, model):
-    """The winning model, set up to use every CPU core for its final fit. The SVM gets
-    probabilities by 5-fold Platt scaling (sigmoid) with the folds run in parallel;
-    SVC(probability=True) runs the same 5 folds one after another, which took most of the
-    training time."""
+def finalize(name, model, n_classes):
+    """The winning model, set up for its final fit. The SVM needs probabilities:
+    - yes/no models: 5-fold Platt scaling (sigmoid) with the folds run in parallel, fast;
+    - models with more classes (the pest classifier): SVC(probability=True), whose pairwise
+      method is slower (one core) but more accurate there: the parallel one-vs-rest
+      calibration lowered the pest classifier's validation F1 from 0.669 to 0.657 (14 Nov 2026)."""
     if name == "svm":
+        if n_classes > 2:
+            return model.set_params(probability=True)
         return CalibratedClassifierCV(model, method="sigmoid", cv=5, ensemble=False, n_jobs=-1)
     if "n_jobs" in model.get_params():
         model.set_params(n_jobs=-1)
@@ -149,18 +184,24 @@ def scores(y_true, y_pred):
             "f1_macro": round(float(f1_score(y_true, y_pred, average="macro")), 4)}
 
 
-def train_task(X, meta, rows, y_col, name, augment, cutoffs_for_short=False):
+def train_task(X, meta, rows, y_col, name, augment, cutoffs_for_short=False, sub_col=None):
+    """sub_col: a column of finer labels to train on (e.g. pest_sub: fall_armyworm and
+    fall_armyworm_moth); predictions are added back up into y_col's classes."""
     train_idx, val_idx, test_idx = sets(meta, rows, augment)
     y_train, y_val, y_test = (meta.loc[i, y_col].to_numpy() for i in (train_idx, val_idx, test_idx))
+    fit_col = sub_col or y_col
+    merge = {s: c for s, c in zip(meta.loc[rows, fit_col], meta.loc[rows, y_col]) if s != c}
     n_aug = int((meta.loc[train_idx, "aug"] != "").sum())
-    print(f"    train {len(train_idx)} (incl. {n_aug} augmented copies), val {len(val_idx)}, test {len(test_idx)}",
-          flush=True)
+    print(f"    train {len(train_idx)} (incl. {n_aug} augmented copies), val {len(val_idx)}, test {len(test_idx)}"
+          + (f"; sub-classes {sorted(merge)}" if merge else ""), flush=True)
 
     scaler = StandardScaler().fit(X[train_idx])
     X_train, X_val, X_test = (scaler.transform(X[i]) for i in (train_idx, val_idx, test_idx))
-    best_name, model, val_scores = select_best_model(X_train, y_train, X_val, y_val)
-    classes = [str(c) for c in model.classes_]
-    proba_val, proba_test = model.predict_proba(X_val), model.predict_proba(X_test)
+    best_name, model, val_scores = select_best_model(
+        X_train, meta.loc[train_idx, fit_col].to_numpy(), X_val, meta.loc[val_idx, fit_col].to_numpy(), merge)
+    classes = sorted({merge.get(str(c), str(c)) for c in model.classes_})
+    proba_val, proba_test = (merge_proba(model.predict_proba(x), model.classes_, classes, merge)
+                             for x in (X_val, X_test))
 
     cutoffs = {}
     if cutoffs_for_short and n_aug:
@@ -182,6 +223,8 @@ def train_task(X, meta, rows, y_col, name, augment, cutoffs_for_short=False):
                         if k in ("n_estimators", "max_depth", "class_weight", "C", "n_neighbors")},
         "val_f1_macro": val_scores,
         "cutoffs": cutoffs,
+        "merge": merge,
+        "trained_on": [str(c) for c in model.classes_],
         "val": scores(y_val, apply_cutoffs(proba_val, classes, cutoffs)),
         "without_cutoffs": {"test_accuracy": scores(y_test, y_plain)["accuracy"],
                             "test_f1_macro": scores(y_test, y_plain)["f1_macro"]},
@@ -203,7 +246,8 @@ def train_task(X, meta, rows, y_col, name, augment, cutoffs_for_short=False):
 def save(name, model, scaler, classes, metrics):
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
     METRICS_DIR.mkdir(parents=True, exist_ok=True)
-    joblib.dump({"model": model, "scaler": scaler, "classes": classes, "cutoffs": metrics["cutoffs"]},
+    joblib.dump({"model": model, "scaler": scaler, "classes": classes, "cutoffs": metrics["cutoffs"],
+                 "merge": metrics.get("merge") or {}},
                 MODELS_DIR / f"{name}_model.joblib")
     with open(METRICS_DIR / f"{name}.json", "w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2)
@@ -231,7 +275,7 @@ def background_check(X, meta, train_idx, test_idx, y_pred):
             "chance_accuracy": round(1 / meta["crop"].nunique(), 4)}
 
 
-MODEL_NAMES = ["corn_check", f"{CROP}_pest", f"{CROP}_detector"]
+MODEL_NAMES = ["corn_check", f"{CROP}_pest", f"{CROP}_detector", f"{CROP}_health"]
 
 
 def summary_row(metrics):
@@ -265,7 +309,7 @@ def main():
         rows = in_crop & ~meta["pest_class"].isin(EXCLUDE_FROM_PEST_TASK) & (
             (meta["bug_visible"] == "yes") | (meta["pest_class"] == "healthy"))
         model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "pest_class", f"{CROP}_pest", augment=True,
-                                                         cutoffs_for_short=True)
+                                                         cutoffs_for_short=True, sub_col="pest_sub")
         save(f"{CROP}_pest", model, scaler, classes, metrics)
 
     if only in (None, f"{CROP}_detector"):
@@ -274,6 +318,15 @@ def main():
         model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "bug_visible", f"{CROP}_detector",
                                                          augment=False)
         save(f"{CROP}_detector", model, scaler, classes, metrics)
+
+    # Healthy vs damaged, for photos with no insect in view. Replaced "damage % under 5% =
+    # healthy": on field photos the damage % counts soil and weeds, and that rule got 56% of
+    # validation photos right; this model got 91% (14 Nov 2026). K-Means still grades the damage.
+    if only in (None, f"{CROP}_health"):
+        print(f"\n=== {CROP}: healthy vs damaged (photos with no insect in view) ===", flush=True)
+        rows = in_crop & (meta["pest_class"].isin(["healthy", "unidentified_damage"]) | (meta["bug_visible"] == "no"))
+        model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "health", f"{CROP}_health", augment=False)
+        save(f"{CROP}_health", model, scaler, classes, metrics)
 
     # Summary of every saved model (also those not retrained this run).
     table = pd.DataFrame([summary_row(json.load(open(METRICS_DIR / f"{n}.json", encoding="utf-8")))

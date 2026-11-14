@@ -3,29 +3,40 @@
   "best_model": "svm",
   "best_params": {
     "C": 10,
-    "class_weight": "balanced"
+    "class_weight": null
   },
   "val_f1_macro": {
-    "random_forest": 0.61,
-    "svm": 0.6537,
-    "knn": 0.5591
+    "random_forest": 0.6188,
+    "svm": 0.6691,
+    "knn": 0.5573
   },
-  "cutoffs": {
-    "armyworm": 0.4,
-    "corn_aphid": 0.25,
-    "corn_planthopper": 0.4,
-    "fall_armyworm": 0.25
+  "cutoffs": {},
+  "merge": {
+    "armyworm_moth": "armyworm",
+    "common_cutworm_moth": "common_cutworm",
+    "fall_armyworm_moth": "fall_armyworm"
   },
+  "trained_on": [
+    "armyworm",
+    "armyworm_moth",
+    "common_cutworm",
+    "common_cutworm_moth",
+    "corn_aphid",
+    "corn_planthopper",
+    "fall_armyworm",
+    "fall_armyworm_moth",
+    "healthy"
+  ],
   "val": {
-    "accuracy": 0.7047,
-    "f1_macro": 0.6699
+    "accuracy": 0.7093,
+    "f1_macro": 0.676
   },
   "without_cutoffs": {
-    "test_accuracy": 0.7005,
-    "test_f1_macro": 0.6665
+    "test_accuracy": 0.7039,
+    "test_f1_macro": 0.6681
   },
-  "test_accuracy": 0.7032,
-  "test_f1_macro": 0.6683,
+  "test_accuracy": 0.7039,
+  "test_f1_macro": 0.6681,
   "classes": [
     "armyworm",
     "common_cutworm",
@@ -72,103 +83,103 @@
   },
   "classification_report": {
     "armyworm": {
-      "precision": 0.4982698961937716,
-      "recall": 0.47058823529411764,
-      "f1-score": 0.48403361344537815,
+      "precision": 0.4694533762057878,
+      "recall": 0.477124183006536,
+      "f1-score": 0.473257698541329,
       "support": 306.0
     },
     "common_cutworm": {
-      "precision": 0.6137281292059219,
-      "recall": 0.6088117489986649,
-      "f1-score": 0.6112600536193029,
+      "precision": 0.641726618705036,
+      "recall": 0.595460614152203,
+      "f1-score": 0.6177285318559557,
       "support": 749.0
     },
     "corn_aphid": {
-      "precision": 0.7678275290215588,
-      "recall": 0.7755443886097152,
-      "f1-score": 0.7716666666666666,
+      "precision": 0.7524590163934426,
+      "recall": 0.7688442211055276,
+      "f1-score": 0.7605633802816901,
       "support": 597.0
     },
     "corn_planthopper": {
-      "precision": 0.6178343949044586,
-      "recall": 0.6339869281045751,
-      "f1-score": 0.6258064516129033,
+      "precision": 0.5621761658031088,
+      "recall": 0.7091503267973857,
+      "f1-score": 0.6271676300578035,
       "support": 306.0
     },
     "fall_armyworm": {
-      "precision": 0.5665399239543726,
-      "recall": 0.5590994371482176,
-      "f1-score": 0.562795089707271,
+      "precision": 0.6041666666666666,
+      "recall": 0.5440900562851783,
+      "f1-score": 0.5725567620927937,
       "support": 533.0
     },
     "healthy": {
-      "precision": 0.9441558441558442,
-      "recall": 0.9641909814323607,
-      "f1-score": 0.9540682414698163,
+      "precision": 0.9515072083879423,
+      "recall": 0.9628647214854111,
+      "f1-score": 0.9571522742254449,
       "support": 754.0
     },
-    "accuracy": 0.7032357473035439,
+    "accuracy": 0.7038520801232666,
     "macro avg": {
-      "precision": 0.6680592862393212,
-      "recall": 0.6687036199312751,
-      "f1-score": 0.6682716860868897,
+      "precision": 0.663581508693664,
+      "recall": 0.6762556871387071,
+      "f1-score": 0.6680710461758362,
       "support": 3245.0
     },
     "weighted avg": {
-      "precision": 0.700604808209045,
-      "recall": 0.7032357473035439,
-      "f1-score": 0.7018388526813278,
+      "precision": 0.7041624587086353,
+      "recall": 0.7038520801232666,
+      "f1-score": 0.7027213337137315,
       "support": 3245.0
     }
   },
   "confusion_matrix": [
     [
-      144,
+      146,
+      57,
+      30,
+      21,
+      46,
+      6
+    ],
+    [
+      71,
+      446,
+      68,
       65,
-      26,
-      16,
-      47,
-      8
-    ],
-    [
-      62,
-      456,
-      61,
-      45,
-      121,
-      4
-    ],
-    [
-      22,
-      51,
-      463,
-      34,
-      20,
-      7
-    ],
-    [
-      12,
-      43,
-      25,
-      194,
-      29,
+      96,
       3
     ],
     [
-      47,
-      123,
-      23,
-      21,
-      298,
-      21
+      27,
+      45,
+      459,
+      44,
+      17,
+      5
     ],
     [
-      2,
+      12,
+      28,
+      24,
+      217,
+      21,
+      4
+    ],
+    [
+      54,
+      114,
+      24,
+      32,
+      290,
+      19
+    ],
+    [
+      1,
       5,
       5,
-      4,
-      11,
-      727
+      7,
+      10,
+      726
     ]
   ]
 }

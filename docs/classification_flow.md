@@ -30,8 +30,8 @@ no treatment advice, no product names, no "what to do" text, anywhere in the app
 
 | Outcome | When | What the app shows |
 |---|---|---|
-| **Healthy** | No insect visible and damage under 5% | "Healthy" |
-| **Severity only** | Damage of 5% or more, but no insect visible in the photo | Severity: Low / Moderate / High (+ damage %) |
+| **Healthy** | No insect visible, and the healthy-vs-damaged model says healthy | "Healthy" |
+| **Severity only** | No insect visible, and the model says damaged | Severity: Low / Moderate / High (+ damage %) |
 | **Pest + Severity** | An insect is visible in the photo (any damage level) | Pest name + confidence + Severity (at least "Low") |
 
 ## Pipeline (per scan)
@@ -49,11 +49,23 @@ photo -> features.py -> corn_check model
                      -> a pest  ---> outcome = Pest name + Severity (step 2), stop
                      -> healthy ---> the detector was probably wrong: treat as "no insect"
 
-  2. Severity module (K-Means damage %)
-       -> plant not found                    ---> outcome = Unclear (ask for a clearer photo)
-       -> damage % under the "healthy" cutoff ---> outcome = Healthy
-       -> otherwise                           ---> outcome = Severity only (Low/Moderate/High)
+  2. Healthy-vs-damaged model (binary classifier, same features)
+       -> healthy ---> outcome = Healthy
+       -> damaged ---> step 3
+
+  3. Severity module (K-Means damage %)
+       -> plant not found ---> outcome = Unclear (ask for a clearer photo)
+       -> otherwise       ---> outcome = Severity only (Low/Moderate/High, at least Low)
 ```
+
+**Healthy vs damaged is decided by a trained model, not by the damage %** (changed 14 November
+2026). The first rule was "damage under 5% = Healthy", but the K-Means damage % counts soil,
+weeds and sunny patches around the leaf as damage, so on field photos healthy and diseased
+leaves both measured about 10%. On the validation photos the 5% rule was right for 56% and the
+model for 91% (92% of healthy and 87% of diseased Doctor Maiz field photos). The model is trained
+like the others (Random Forest, SVM and KNN compared on the validation set) on the corn photos
+with no insect in view: `healthy/` against `unidentified_damage/` and pest-folder photos labeled
+"damage only". K-Means still measures how much is damaged, for the Low / Moderate / High grade.
 
 The insect check comes **before** the healthy cutoff (changed 11 November 2026). The first
 version decided "Healthy" first, so a pest on a barely damaged plant was never named: in the
@@ -75,35 +87,61 @@ folders (1,484, mostly fall armyworm field photos from AgML and Roboflow) are le
 Otherwise it could learn "chewed corn field = fall armyworm" and pull other pests toward
 that answer. They still train the detector (as "no") and the corn check.
 
+## Caterpillars and moths are learned separately
+
+About half of each caterpillar pest's photos are adult moths (fall armyworm 2,000, common
+cutworm 2,142, armyworm 1,182), which look nothing like the caterpillars. The pest classifier
+learns them as separate sub-classes (`fall_armyworm_moth`, ...) and adds the two back up when
+it answers, so the app still says "Fall armyworm". On the validation photos this raised macro
+F1 from 0.670 to 0.676; on the test set it scored the same as before (0.668), so the gain is
+small.
+
+**Tried and not kept (validation photos, 14 November 2026):**
+
+| Pest classifier change | Validation macro F1 | Caterpillar pests right |
+|---|---|---|
+| None (current features, SVM) | 0.667 | 54.8% |
+| Stronger SVM settings (C = 30 or 100) | 0.645-0.646 | 51.9% |
+| Add dense-SIFT "bag of visual words" (256 words, 1x1 + 2x2 grid) | 0.653 | 53.1% |
+| Dense-SIFT visual words alone | 0.541 | 39.9% |
+
+SIFT patches of caterpillar skin, moth wings and leaf look alike across the three caterpillar
+species, so counting them did not separate the pests. Telling these caterpillars apart reliably
+probably needs a deep-learning model or a photo where the head and tail markings are visible;
+this is stated as a limitation.
+
 ## Whole-app test
 
 `ml/src/evaluate_flow.py` runs every test photo (5,709, never used for any choice) through
 the full decision in `flow.py` and checks what the app would show. Results are in
 `ml/results/flow_test.csv` and `flow_summary.csv`.
 
-| Kind of test photo | Should show | First version (11 Nov) | Now (12 Nov) |
-|---|---|---|---|
-| Fall armyworm (insect in view) | fall armyworm | 12.2% | 50.5% |
-| Common cutworm | common cutworm | 11.1% | 59.4% |
-| Corn aphid | corn aphid | 12.4% | 75.5% |
-| Armyworm | armyworm | 11.8% | 45.4% |
-| Corn planthopper | corn planthopper | 3.9% | 63.1% |
-| Damaged corn, no insect | Severity only | 59.6% | 60.2% |
-| Healthy corn | Healthy | 41.8% | 41.5% |
-| Other plants | Not corn | 96.4% | 90.8% |
-| **All test photos** | | **45.6%** | **65.7%** |
+| Kind of test photo | Should show | 11 Nov (first) | 12 Nov | 14 Nov (now) |
+|---|---|---|---|---|
+| Fall armyworm (insect in view) | fall armyworm | 12.2% | 50.5% | 49.0% |
+| Common cutworm | common cutworm | 11.1% | 59.4% | 58.1% |
+| Corn aphid | corn aphid | 12.4% | 75.5% | 74.9% |
+| Armyworm | armyworm | 11.8% | 45.4% | 46.1% |
+| Corn planthopper | corn planthopper | 3.9% | 63.1% | 69.9% |
+| Damaged corn, no insect | Severity only | 59.6% | 60.2% | 84.9% |
+| Healthy corn | Healthy | 41.8% | 41.5% | 83.0% |
+| Other plants | Not corn | 96.4% | 90.8% | 90.8% |
+| **All test photos** | | **45.6%** | **65.7%** | **75.4%** |
 
-What changed: the insect check now comes before "Healthy", and the corn check also learned
-from pest close-ups (it had rejected three of four pest photos as "not corn").
-The cost: the corn check now lets through 9% of other plants (was 4%), most of which are
-then named as a pest or given a severity.
+What changed:
+- 12 Nov: the insect check comes before "Healthy", and the corn check also learned from pest
+  close-ups (it had rejected three of four pest photos as "not corn"). The cost: the corn
+  check now lets through 9% of other plants (was 4%), most of which are then named as a pest
+  or given a severity.
+- 14 Nov: "Healthy" is decided by the healthy-vs-damaged model instead of "damage under 5%",
+  and the pest classifier learns caterpillars and moths separately.
 
 Remaining weak spots, for the paper:
-- **Pest names** (45-76%): the three caterpillar pests are confused with each other most.
-- **Healthy corn** (42%): 55% are shown as "Severity only", because severity counts soil
-  and weeds around the leaf as damage (see [severity_thresholds.md](severity_thresholds.md)).
-- **Damaged corn with no insect** (60%): 30% are shown as "Healthy"; many Doctor Maiz
-  disease photos have faint symptoms that measure under 5%.
+- **Caterpillar pest names** (46-58%): fall armyworm, common cutworm and armyworm are confused
+  with each other most. Stronger SVM settings and SIFT features were tried and did not help
+  (see "Caterpillars and moths are learned separately").
+- **Other plants let through** (9%): the price of accepting pest close-ups as corn.
+- **Healthy corn shown as damaged** (13%) and **damaged shown as healthy** (6%).
 
 ## Severity is photo-only
 

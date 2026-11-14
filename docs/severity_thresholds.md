@@ -24,8 +24,10 @@ Severity is measured from the photo alone; nothing is trained. For each corn pho
 | < 5% | 5-20% | 21-40% | > 40% |
 
 These bands are **placeholders**: no photo-based severity standard for corn was found.
-The 5% "Healthy" cutoff is a project choice: below it, small marks from lighting or dirt
-are not reported as damage. Final bands should be justified with expert input (for
+Since 14 November 2026 the app no longer uses the 5% cutoff to decide "Healthy": a trained
+healthy-vs-damaged model does (91% right on validation photos, against 56% for the cutoff;
+see [classification_flow.md](classification_flow.md)). When the model says damaged, the
+damage % only sets the grade, and anything under 20% is "Low". Final bands should be justified with expert input (for
 example the Cabadbaran City Agriculture Office) or field validation.
 
 ## Results

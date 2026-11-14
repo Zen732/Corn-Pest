@@ -118,6 +118,8 @@ What each model uses (augmented copies only in the pest classifier's training se
 | | healthy | 3,495 | 751 | 754 |
 | Insect detector (all corn photos except healthy) | yes (insect visible) | 11,618 | 2,490 | 2,491 |
 | | no (damage only) | 4,544 | 973 | 967 |
+| Healthy vs damaged (corn photos with no insect in view) | healthy | 3,495 | 751 | 754 |
+| | damaged (unidentified_damage + damage-only pest photos) | 4,544 | 973 | 967 |
 
 Order to run: `make_split.py` → `extract_all.py` → `train.py` → `evaluate.py`. Rerun
 `make_split.py` whenever photos are added to or removed from `raw/` or `not_corn/`.

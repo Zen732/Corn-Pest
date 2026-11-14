@@ -11,7 +11,7 @@ See [docs/classification_flow.md](docs/classification_flow.md) for the full deci
 | Folder | Purpose |
 |--------|---------|
 | `lib/`, `android/`, `ios/`, ... | Flutter mobile app |
-| `ml/` | Dataset, training code (feature extraction, corn check, insect detector, pest classifier, severity) |
+| `ml/` | Dataset, training code (feature extraction, corn check, insect detector, pest classifier, healthy-vs-damaged model, severity, whole-app test) |
 | `dataset_sorter/` | Tools that collected and checked the training photos |
 | `backend/` | FastAPI server exposing `POST /predict` |
 | `database/` | Supabase `schema.sql` and `seed_data.sql` (scans and results only, no recommendations) |
@@ -26,8 +26,8 @@ Login -> Photo tips -> Take/pick photo
            - Yes          -> continue
       -> Result:
            - Pest name + Severity                  (insect visible in photo)
-           - Healthy                              (no insect, damage under 5%)
-           - Severity only (Low/Moderate/High)     (no insect, damage 5% or more)
+           - Healthy                              (no insect, healthy-vs-damaged model says healthy)
+           - Severity only (Low/Moderate/High)     (no insect, damaged; K-Means damage %)
       -> Saved to History
 ```
 
