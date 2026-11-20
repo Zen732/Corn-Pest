@@ -4,4 +4,7 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Test builds only: lets the app reach the backend on your PC over plain http://
+         (BACKEND_URL in env.json). Release builds stay https-only. -->
+    <application android:usesCleartextTraffic="true"/>
 </manifest>

@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Take a photo of a corn plant to check it for pests and damage.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Choose a photo of a corn plant to check it for pests and damage.</string>
 </dict>
 </plist>

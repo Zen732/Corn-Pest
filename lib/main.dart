@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'config.dart';
 import 'screens/home_screen.dart';
 import 'screens/sign_in_screen.dart';
+import 'services/app_services.dart';
 import 'services/auth_service.dart';
+import 'services/scan_service.dart';
 import 'strings.dart';
 
 /// Corn Pest Assessment (Cabadbaran). Run with:
@@ -16,7 +19,15 @@ Future<void> main() async {
     return;
   }
   await Supabase.initialize(url: Config.supabaseUrl, publishableKey: Config.supabaseKey.trim());
-  runApp(CornPestApp(auth: SupabaseAuthService()));
+  runApp(CornPestApp(
+    services: AppServices(
+      auth: SupabaseAuthService(),
+      api: BackendScanApi(),
+      store: SupabaseScanStore(),
+      photos: ImagePickerSource(),
+      tips: TipsPrefs(await SharedPreferences.getInstance()),
+    ),
+  ));
 }
 
 ThemeData buildTheme() {
@@ -35,8 +46,8 @@ ThemeData buildTheme() {
 }
 
 class CornPestApp extends StatelessWidget {
-  const CornPestApp({super.key, required this.auth});
-  final AuthService auth;
+  const CornPestApp({super.key, required this.services});
+  final AppServices services;
 
   @override
   Widget build(BuildContext context) {
@@ -44,23 +55,26 @@ class CornPestApp extends StatelessWidget {
       title: S.appName,
       theme: buildTheme(),
       debugShowCheckedModeBanner: false,
-      home: AuthGate(auth: auth),
+      home: AuthGate(services: services),
     );
   }
 }
 
 /// Shows Sign in or Home, and switches by itself when the user signs in or out.
 class AuthGate extends StatelessWidget {
-  const AuthGate({super.key, required this.auth});
-  final AuthService auth;
+  const AuthGate({super.key, required this.services});
+  final AppServices services;
+
+  AuthService get auth => services.auth;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
       stream: auth.signedInChanges,
       initialData: auth.isSignedIn,
-      builder: (context, snap) =>
-          (snap.data ?? false) ? HomeScreen(key: const ValueKey('home'), auth: auth) : SignInScreen(auth: auth),
+      builder: (context, snap) => (snap.data ?? false)
+          ? HomeScreen(key: const ValueKey('home'), services: services)
+          : SignInScreen(auth: auth),
     );
   }
 }

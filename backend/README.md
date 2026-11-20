@@ -34,7 +34,7 @@ Example answer from `/predict`:
 |---|---|---|
 | `healthy` | Healthy corn | Yes |
 | `severity_only` | Damage, no insect in the photo. Show `severity` and `damage_percent` | Yes |
-| `pest` | Show `pest` and `severity` | Yes |
+| `pest` | Show `pest` and `severity`. `severity` is `Unclear` (and `damage_percent` empty) when the photo has almost no plant in it, e.g. an insect on a hand: "not measured" | Yes |
 | `not_corn` | Show "This doesn't look like a corn plant" | No |
 | `unclear` | Ask for a clearer photo | No |
 

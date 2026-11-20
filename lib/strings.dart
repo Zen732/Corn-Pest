@@ -45,6 +45,55 @@ class S {
   static const cancel = 'Cancel';
   static const comingSoon = 'Coming in the next update.';
 
+  // Scan: photo tips and taking the photo
+  static const photoTips = 'Photo tips';
+  static const tips = [
+    'Get close: fill the photo with one leaf, the whorl or the stalk.',
+    'If you see an insect, put it in the middle of the photo.',
+    'Use daylight or shade. Avoid very dark or very bright photos.',
+    'Keep the phone still so the photo is sharp.',
+  ];
+  static const dontShowTips = 'Don\'t show these tips again';
+  static const showTips = 'Show photo tips';
+  static const takePhoto = 'Take a photo';
+  static const chooseFromGallery = 'Choose from gallery';
+
+  // Checking the photo
+  static const checking = 'Checking your photo...';
+  static const backendMissing = 'The app has no checking server address (BACKEND_URL in env.json).';
+  static const serverUnreachable =
+      'Can\'t reach the checking server. Make sure it is running and your phone is on the same Wi-Fi.';
+  static const serverTooSlow = 'The checking server took too long. Try again.';
+  static const checkFailed = 'The photo couldn\'t be checked. Try again.';
+
+  // Result
+  static const healthyTitle = 'Healthy';
+  static const healthyBody = 'No insect or damage found on this plant.';
+  static const damageTitle = 'Damage found';
+  static const noInsectSeen = 'No insect seen in this photo.';
+  static const notCornTitle = 'This doesn\'t look like a corn plant';
+  static const notCornBody = 'Take a photo of a corn leaf, whorl or stalk.';
+  static const unclearTitle = 'The plant isn\'t clear in this photo';
+  static const unclearBody = 'Get closer and fill the photo with one leaf.';
+  static String howSure(double c) => 'How sure: ${(c * 100).round()}%';
+  static String severityLine(String level, double? percent) =>
+      percent == null ? 'Severity: $level' : 'Severity: $level (${percent.round()}% of the plant damaged)';
+  static const severityNotMeasured = 'Severity: not measured. Take a photo of the damaged leaf to measure it.';
+  static const pests = {
+    'fall_armyworm': ('Fall armyworm', 'Spodoptera frugiperda'),
+    'common_cutworm': ('Common cutworm', 'Spodoptera litura'),
+    'armyworm': ('Armyworm', 'Mythimna separata'),
+    'corn_planthopper': ('Corn planthopper', 'Peregrinus maidis'),
+    'corn_aphid': ('Corn aphid', 'Rhopalosiphum maidis'),
+  };
+  static const saving = 'Saving to History...';
+  static const saved = 'Saved to History';
+  static const saveFailed = 'Couldn\'t save this result. Check your internet.';
+  static const retakePhoto = 'Retake photo';
+  static const scanAnother = 'Scan another plant';
+  static const done = 'Done';
+  static const back = 'Back';
+
   // Settings missing (env.json not passed when building)
   static const setupMissingTitle = 'App settings missing';
   static const setupMissingBody =

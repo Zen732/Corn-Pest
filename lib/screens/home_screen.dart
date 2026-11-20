@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../services/app_services.dart';
 import '../services/auth_service.dart';
 import '../strings.dart';
+import 'scan_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, required this.auth});
-  final AuthService auth;
+  const HomeScreen({super.key, required this.services});
+  final AppServices services;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -17,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _profile = widget.auth.profile();
+    _profile = widget.services.auth.profile();
   }
 
   Future<void> _signOut() async {
@@ -33,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     if (yes == true) {
       try {
-        await widget.auth.signOut();
+        await widget.services.auth.signOut();
       } on AuthFailure catch (e) {
         if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
       }
@@ -75,7 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 120,
               child: FilledButton.icon(
-                onPressed: _comingSoon,
+                onPressed: () => Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => ScanScreen(services: widget.services))),
                 icon: const Icon(Icons.photo_camera, size: 36),
                 label: const Text(S.scanPlant, style: TextStyle(fontSize: 22)),
               ),

@@ -102,7 +102,8 @@ def assess(rgb, seed=0):
     total = plant.size
     if plant.sum() < MIN_PLANT_SHARE * total:
         return {"damage_percent": None, "level": "Unclear",
-                "reason": "could not find the plant in the photo", "plant_share": float(plant.mean())}
+                "reason": "could not find the plant in the photo", "plant_share": float(plant.mean()),
+                "green_share": 0.0}
 
     lab = _lab(rgb)
     pixels = lab[plant]
@@ -130,6 +131,9 @@ def assess(rgb, seed=0):
         "damage_percent": round(float(pct), 1),
         "level": grade(pct),
         "plant_share": round(float(plant_area / total), 3),
+        # Share of the whole photo that is healthy green tissue. Corn plant photos almost never
+        # have under 5%; insects photographed on a hand, wall or light usually do (flow.py).
+        "green_share": round(float((plant & ~damaged).sum() / total), 3),
         "hole_percent": round(float(100.0 * holes.sum() / plant_area), 1),
         "clusters": [{"lab": [round(float(x), 1) for x in c], "healthy": bool(hc),
                       "share": round(float((cluster == i).mean()), 3)}

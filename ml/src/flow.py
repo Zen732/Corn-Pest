@@ -5,7 +5,8 @@ predict.py (backend/app/services/flow.py must be an exact copy), so the whole-ap
     photo -> corn check -> insect detector -> healthy-vs-damaged model -> severity -> outcome
 
     not corn                                       -> "not_corn"       "doesn't look like a corn plant"
-    corn, insect visible                           -> "pest"           pest name + severity
+    corn, insect visible                           -> "pest"           pest name + severity ("Unclear"
+                                                                       if no plant is in view)
     corn, no insect, health model says healthy     -> "healthy"
     corn, no insect, damaged                       -> "severity_only"  Low / Moderate / High
     corn, no insect, damaged, plant not found      -> "unclear"        ask for a clearer photo
@@ -28,6 +29,12 @@ import joblib
 from features import extract_features
 from predict import predict_one
 from severity import assess
+
+# With a pest in view but less healthy green leaf than this share of the photo, there is no plant
+# to measure (an insect on a hand, wall or light): severity is "Unclear" instead of a misleading
+# "High, 100%". Under 5%: 0.2-0.5% of corn plant validation photos, 53-64% of caterpillar and
+# planthopper photos (20 Nov 2026).
+NO_PLANT_BELOW = 0.05
 
 MODEL_FILES = {"corn_check": "corn_check_model.joblib",
                "detector": "corn_detector_model.joblib",
@@ -77,12 +84,14 @@ def assess_photo(rgb, models, features=None):
         result.update(healthy=healthy, health_confidence=round(health_conf, 3))
 
     sev = assess(rgb)
-    level = sev["level"]
+    level, damage = sev["level"], sev["damage_percent"]
     if healthy:
         level = "Healthy"
     elif level == "Healthy":
         level = "Low"  # damaged or a pest present: never graded "Healthy"
+    if insect_visible and sev.get("green_share", 1.0) < NO_PLANT_BELOW:
+        level, damage = "Unclear", None  # no plant in the photo to measure
     result.update(outcome=decide(True, insect_visible, healthy, sev["damage_percent"]),
                   insect_visible=insect_visible, insect_confidence=round(insect_conf, 3),
-                  damage_percent=sev["damage_percent"], severity=level)
+                  damage_percent=damage, severity=level)
     return result

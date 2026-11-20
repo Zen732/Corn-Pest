@@ -72,6 +72,15 @@ version decided "Healthy" first, so a pest on a barely damaged plant was never n
 whole-app test, 7-19% of pest photos (aphids the most) stopped at "Healthy". With a pest
 present the severity is shown as at least "Low", never "Healthy".
 
+**Severity "not measured" for insects with no plant in view** (added 20 November 2026). A
+close-up of a caterpillar on a hand, or a moth on a wall, has almost no leaf in it, and the
+damage % then counts the hand or wall as damage ("High, 100%"). So when a pest is named but
+less than 5% of the photo is healthy green tissue (`NO_PLANT_BELOW` in `flow.py`), the severity
+is `Unclear` and the app says "Severity: not measured. Take a photo of the damaged leaf".
+On the validation photos, under 5% green covered 0.2-0.5% of corn plant photos but 53-64% of
+caterpillar and planthopper photos (20% of aphid photos). In the whole-app test 1,253 of 2,539
+pest results (49%) became "not measured"; outcomes and pest names are unchanged (75.4%).
+
 ## Why a detector, not just classifier confidence
 
 We could have skipped a separate model and used "low confidence in the pest

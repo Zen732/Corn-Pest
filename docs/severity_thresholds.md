@@ -76,6 +76,9 @@ are the main defence against background, and this goes in the limitations.
 - **Thresholds** are placeholders, and photo-based severity measures *how much of this
   photo is damaged*, not field infestation as DA guidelines do.
 - **Corn ears** are not supported: yellow kernels are healthy but read as damage.
+- **Insect close-ups** (a caterpillar on a hand, a moth on a wall) contain almost no plant. When
+  a pest is named and under 5% of the photo is healthy green tissue, severity is reported as
+  "not measured" instead of a misleading number (see classification_flow.md).
 - **Soil, mud, water, weeds and dry straw** in the photo count as damage. On field photos
   with background, a healthy leaf typically measures about 10% (graded "Low"). The app's photo
   tips ask users to fill the frame with one leaf. Leaf segmentation (GrabCut) was tested and
