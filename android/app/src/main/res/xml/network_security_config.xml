@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plain http:// is allowed only to the backend on the developer's PC while testing:
+     192.168.137.1 = the PC's Windows Mobile hotspot, 127.0.0.1 = USB forwarding (adb reverse).
+     Everything else (Supabase, a future online backend) must use https. -->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">192.168.137.1</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+    </domain-config>
+</network-security-config>
