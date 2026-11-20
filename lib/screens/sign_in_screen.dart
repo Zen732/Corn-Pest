@@ -87,6 +87,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       labelText: S.password,
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
+                        tooltip: _showPassword ? S.hidePassword : S.showPassword,
                         icon: Icon(_showPassword ? Icons.visibility_off : Icons.visibility),
                         onPressed: () => setState(() => _showPassword = !_showPassword),
                       ),

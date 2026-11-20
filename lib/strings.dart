@@ -13,6 +13,8 @@ class S {
   static const enterEmail = 'Enter your email';
   static const invalidEmail = 'This doesn\'t look like an email address';
   static const enterPassword = 'Enter your password';
+  static const showPassword = 'Show password';
+  static const hidePassword = 'Hide password';
   static const wrongLogin = 'Wrong email or password.';
   static const emailNotConfirmed = 'Please confirm your email first: open the link we sent you, then sign in.';
   static const couldNotConnect = 'Can\'t connect. Check your internet and try again.';

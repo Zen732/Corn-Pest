@@ -129,6 +129,33 @@ void main() {
     expect(find.text(S.hello('Juan Dela Cruz')), findsOneWidget);
   });
 
+  testWidgets('eye icons show and hide the typed passwords', (tester) async {
+    bool hidden(String key) => tester
+        .widget<EditableText>(find.descendant(of: find.byKey(Key(key)), matching: find.byType(EditableText)))
+        .obscureText;
+
+    await pumpApp(tester, FakeAuth());
+    expect(hidden('password'), isTrue);
+    await tester.tap(find.byTooltip(S.showPassword));
+    await tester.pump();
+    expect(hidden('password'), isFalse);
+
+    await tester.tap(find.text(S.createAccount));
+    await tester.pumpAndSettle();
+    expect(hidden('password'), isTrue);
+    expect(hidden('repeat'), isTrue);
+    await tester.tap(find.byKey(const Key('showPassword')));
+    await tester.pump();
+    expect(hidden('password'), isFalse);
+    expect(hidden('repeat'), isTrue); // each box has its own eye
+    await tester.tap(find.byKey(const Key('showRepeat')));
+    await tester.pump();
+    expect(hidden('repeat'), isFalse);
+    await tester.tap(find.byKey(const Key('showRepeat')));
+    await tester.pump();
+    expect(hidden('repeat'), isTrue);
+  });
+
   testWidgets('create account checks the form', (tester) async {
     await pumpApp(tester, FakeAuth());
     await tester.tap(find.text(S.createAccount));

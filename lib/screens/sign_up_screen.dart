@@ -4,6 +4,20 @@ import '../services/auth_service.dart';
 import '../strings.dart';
 import 'sign_in_screen.dart' show validateEmail;
 
+/// The eye icon that shows or hides a password.
+class _EyeButton extends StatelessWidget {
+  const _EyeButton({super.key, required this.visible, required this.onPressed});
+  final bool visible;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) => IconButton(
+        tooltip: visible ? S.hidePassword : S.showPassword,
+        icon: Icon(visible ? Icons.visibility_off : Icons.visibility),
+        onPressed: onPressed,
+      );
+}
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key, required this.auth});
   final AuthService auth;
@@ -20,6 +34,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _repeat = TextEditingController();
   late Future<List<Barangay>> _barangays;
   int? _barangayId;
+  bool _showPassword = false;
+  bool _showRepeat = false;
   bool _busy = false;
   String? _error;
 
@@ -135,16 +151,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 TextFormField(
                   key: const Key('password'),
                   controller: _password,
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: S.password, prefixIcon: Icon(Icons.lock_outline)),
+                  obscureText: !_showPassword,
+                  decoration: InputDecoration(
+                    labelText: S.password,
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    suffixIcon: _EyeButton(
+                        key: const Key('showPassword'),
+                        visible: _showPassword,
+                        onPressed: () => setState(() => _showPassword = !_showPassword)),
+                  ),
                   validator: (v) => (v == null || v.length < 6) ? S.passwordTooShort : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   key: const Key('repeat'),
                   controller: _repeat,
-                  obscureText: true,
-                  decoration: const InputDecoration(labelText: S.confirmPassword, prefixIcon: Icon(Icons.lock_outline)),
+                  obscureText: !_showRepeat,
+                  decoration: InputDecoration(
+                    labelText: S.confirmPassword,
+                    prefixIcon: const Icon(Icons.lock_outline),
+                    suffixIcon: _EyeButton(
+                        key: const Key('showRepeat'),
+                        visible: _showRepeat,
+                        onPressed: () => setState(() => _showRepeat = !_showRepeat)),
+                  ),
                   validator: (v) => v != _password.text ? S.passwordsDiffer : null,
                 ),
                 if (_error != null) ...[
