@@ -19,10 +19,12 @@ Future<void> main() async {
     return;
   }
   await Supabase.initialize(url: Config.supabaseUrl, publishableKey: Config.supabaseKey.trim());
+  // Photos are checked on the phone (works offline); start loading the models right away.
+  final api = OfflineScanApi()..load().ignore();
   runApp(CornPestApp(
     services: AppServices(
       auth: SupabaseAuthService(),
-      api: BackendScanApi(),
+      api: api,
       store: SupabaseScanStore(),
       photos: ImagePickerSource(),
       tips: TipsPrefs(await SharedPreferences.getInstance()),

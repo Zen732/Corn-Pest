@@ -9,8 +9,11 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pest_assessment/offline/decode.dart';
 import 'package:pest_assessment/offline/features.dart';
+import 'package:pest_assessment/offline/flow.dart';
 import 'package:pest_assessment/offline/image_ops.dart';
+import 'package:pest_assessment/offline/severity.dart';
 import 'package:pest_assessment/offline/svm_model.dart';
+import 'package:pest_assessment/services/scan_service.dart';
 
 final parity = Directory('build/parity');
 final modelsDir = Directory('assets/models');
@@ -105,4 +108,66 @@ void main() {
     }
     expect(maxProbFromPy, lessThan(1e-6));
   }, skip: skip, timeout: const Timeout(Duration(minutes: 30)));
+
+  test('the app\'s offline checker (models from the app bundle) gives Python\'s answers', () async {
+    final refs = (jsonDecode(File('${parity.path}/e2e.json').readAsStringSync()) as List).cast<Map<String, dynamic>>();
+    final api = OfflineScanApi();
+    for (final r in refs.take(20)) {
+      final result = await api.check(File(r['path'] as String).readAsBytesSync());
+      final py = r['flow'] as Map<String, dynamic>;
+      expect(result.outcome, py['outcome'], reason: r['path'] as String);
+      expect(result.pest, py['pest'], reason: r['path'] as String);
+      expect(result.modelVersion, isNotEmpty);
+    }
+  }, skip: skip, timeout: const Timeout(Duration(minutes: 10)));
+
+  test('whole app on the phone (incl. severity) vs Python', () async {
+    final refs = (jsonDecode(File('${parity.path}/e2e.json').readAsStringSync()) as List).cast<Map<String, dynamic>>();
+    final models = OfflineModels(
+        cornCheck: loadModel('corn_check'), detector: loadModel('detector'), pest: loadModel('pest'),
+        health: loadModel('health'), version: 'test');
+    var sameOutcome = 0, samePest = 0, sameLevel = 0, levelCompared = 0, samePlantShare = 0;
+    final damageDiffs = <double>[];
+    final levelMisses = <String>[];
+    final timer = Stopwatch()..start();
+    for (final r in refs) {
+      final img = await decodePhoto(File(r['path'] as String).readAsBytesSync());
+      final py = r['flow'] as Map<String, dynamic>, pySev = r['severity'] as Map<String, dynamic>;
+      final ours = assessPhoto(img, models);
+      final sev = assessSeverity(img);
+      if (ours['outcome'] == py['outcome']) sameOutcome++;
+      if (ours['pest'] == py['pest']) samePest++;
+      if ((sev.plantShare - ((pySev['plant_share'] as num?)?.toDouble() ?? -1)).abs() < 1e-9 ||
+          (sev.damagePercent == null && pySev['damage_percent'] == null)) {
+        samePlantShare++;
+      } else {
+        // ignore: avoid_print
+        print('plant area differs: ${r['path']} ${img.width}x${img.height} phone ${sev.plantShare} '
+            '(damage ${sev.damagePercent}) python ${pySev['plant_share']} (damage ${pySev['damage_percent']})');
+      }
+      if (py['severity'] != null && ours['outcome'] == py['outcome']) {
+        levelCompared++;
+        if (ours['severity'] == py['severity']) {
+          sameLevel++;
+        } else if (levelMisses.length < 8) {
+          levelMisses.add('${py['severity']}->${ours['severity']} (${py['damage_percent']} vs ${ours['damage_percent']})');
+        }
+      }
+      if (sev.damagePercent != null && pySev['damage_percent'] != null) {
+        damageDiffs.add((sev.damagePercent! - (pySev['damage_percent'] as num).toDouble()).abs());
+      }
+    }
+    final n = refs.length;
+    damageDiffs.sort();
+    double q(double p) => damageDiffs[((damageDiffs.length - 1) * p).round()];
+    String pct(int k, int of) => '${(100 * k / of).toStringAsFixed(1)}% ($k/$of)';
+    // ignore: avoid_print
+    print('$n photos, ${(timer.elapsedMilliseconds / n).toStringAsFixed(0)} ms per photo here.\n'
+        'same outcome ${pct(sameOutcome, n)}, same pest ${pct(samePest, n)}, '
+        'same plant area (no K-Means involved) ${pct(samePlantShare, n)}\n'
+        'same severity grade ${pct(sameLevel, levelCompared)}; damage % difference: median ${q(0.5)}, '
+        '90% under ${q(0.9)}, largest ${damageDiffs.last}\n'
+        'grade differences (Python -> phone): $levelMisses');
+    expect(samePlantShare, n, reason: 'background and holes must match Python exactly');
+  }, skip: skip, timeout: const Timeout(Duration(minutes: 60)));
 }

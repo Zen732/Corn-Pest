@@ -38,9 +38,15 @@ class SvmModel {
     final nSupport = (m['n_support'] as List).cast<int>();
     final nSv = nSupport.fold<int>(0, (a, b) => a + b);
     final k = nSupport.length;
-    final sv = Float32List(nSv * dims);
-    for (var i = 0; i < sv.length; i++) {
-      sv[i] = bin.getFloat32(i * 4, Endian.little);
+    // Phones are little-endian like the file, so the support vectors can be used in place.
+    final Float32List sv;
+    if (Endian.host == Endian.little && bin.offsetInBytes % 4 == 0) {
+      sv = bin.buffer.asFloat32List(bin.offsetInBytes, nSv * dims);
+    } else {
+      sv = Float32List(nSv * dims);
+      for (var i = 0; i < sv.length; i++) {
+        sv[i] = bin.getFloat32(i * 4, Endian.little);
+      }
     }
     final coefOffset = sv.length * 4;
     final dual = Float64List((k - 1) * nSv);

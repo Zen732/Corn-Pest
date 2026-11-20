@@ -1,14 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:isolate';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../config.dart';
+import '../offline/decode.dart';
+import '../offline/flow.dart';
+import '../offline/image_ops.dart';
+import '../offline/svm_model.dart';
 import '../strings.dart';
 
 /// The backend's answer for one photo (backend/app/routers/predict.py, ml/src/flow.py).
@@ -113,6 +119,53 @@ class BackendScanApi implements ScanApi {
       detail = (jsonDecode(res.body) as Map<String, dynamic>)['detail'] as String?;
     } catch (_) {}
     throw ScanFailure(detail ?? S.checkFailed);
+  }
+}
+
+/// Checks the photo on the phone itself (no internet, no server): the same models and decision
+/// as the backend, ported to Dart in lib/offline/ and checked against Python on 903 test photos.
+class OfflineScanApi implements ScanApi {
+  OfflineScanApi({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
+  final AssetBundle _bundle;
+  Future<OfflineModels>? _models;
+
+  /// Loads the models (about 50 MB) once; call early so the first scan doesn't wait.
+  Future<OfflineModels> load() => _models ??= _load();
+
+  Future<OfflineModels> _load() async {
+    Future<SvmModel> one(String name) async => SvmModel.fromBytes(
+        await _bundle.loadString('assets/models/$name.json', cache: false),
+        await _bundle.load('assets/models/$name.bin'));
+    return OfflineModels(
+      cornCheck: await one('corn_check'),
+      detector: await one('detector'),
+      pest: await one('pest'),
+      health: await one('health'),
+      version: (await _bundle.loadString('assets/models/model_version.txt', cache: false)).trim(),
+    );
+  }
+
+  @override
+  Future<ScanResult> check(Uint8List photo) async {
+    final OfflineModels models;
+    try {
+      models = await load();
+    } catch (_) {
+      _models = null;
+      throw const ScanFailure(S.modelsMissing);
+    }
+    final Img img;
+    try {
+      img = await decodePhoto(photo);
+    } catch (_) {
+      throw const ScanFailure(S.photoUnreadable);
+    }
+    try {
+      // In a background isolate, so the screen keeps moving while it works.
+      return ScanResult.fromJson(await Isolate.run(() => assessPhoto(img, models)));
+    } catch (_) {
+      throw const ScanFailure(S.checkFailed);
+    }
   }
 }
 

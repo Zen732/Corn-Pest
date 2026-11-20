@@ -65,6 +65,8 @@ class S {
       'Can\'t reach the checking server. Make sure it is running and your phone is on the same Wi-Fi.';
   static const serverTooSlow = 'The checking server took too long. Try again.';
   static const checkFailed = 'The photo couldn\'t be checked. Try again.';
+  static const photoUnreadable = 'This photo couldn\'t be opened. Try another photo.';
+  static const modelsMissing = 'The checking models are missing from this copy of the app.';
 
   // Result
   static const healthyTitle = 'Healthy';

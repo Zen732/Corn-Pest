@@ -18,14 +18,31 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
 
 from features import decode_image, extract_features
+from flow import assess_photo, load_models
+from severity import assess
 from make_split import SPLIT_DIR
 from predict import predict_proba
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "build" / "parity"
 MODELS = {"corn_check": "corn_check", "detector": "corn_detector", "health": "corn_health", "pest": "corn_pest"}
+
+
+_models = {}
+
+
+def _flow_and_severity(path, features):
+    """Python's full app answer and raw severity for one photo (in a worker process)."""
+    if not _models:
+        _models.update(load_models(ROOT / "backend" / "models"))
+    rgb = decode_image(np.fromfile(path, dtype=np.uint8).tobytes())
+    result = assess_photo(rgb, _models, features)
+    sev = assess(rgb)
+    keep = ("damage_percent", "level", "plant_share", "green_share")
+    return result, {k: sev.get(k) for k in keep}
 
 
 def group(row):
@@ -48,6 +65,8 @@ def main():
     picks = np.array(sorted(picks))
     bundles = {k: joblib.load(ROOT / "backend/models" / f"{v}_model.joblib") for k, v in MODELS.items()}
     probs = {k: predict_proba(b, X[picks]) for k, b in bundles.items()}
+    full = Parallel(n_jobs=-1)(delayed(_flow_and_severity)(str(SPLIT_DIR / "test" / meta.loc[i, "path"]), X[i])
+                               for i in picks)
 
     OUT.mkdir(parents=True, exist_ok=True)
     rows = []
@@ -58,6 +77,8 @@ def main():
             "features": [float(v) for v in X[i]],
             "probs": {k: [float(v) for v in probs[k][n]] for k in MODELS},
             "classes": {k: list(b["classes"]) for k, b in bundles.items()},
+            "flow": full[n][0],
+            "severity": full[n][1],
         })
     (OUT / "e2e.json").write_text(json.dumps(rows), encoding="utf-8")
 

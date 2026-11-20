@@ -61,6 +61,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # The four trained models, for checking photos on the phone (offline). Made by
+  # ml/src/export_models.py; see assets/models/README.md.
+  assets:
+    - assets/models/
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

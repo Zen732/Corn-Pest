@@ -83,4 +83,5 @@ dataset_sorter/roboflow_key.txt
 kaggle.json
 
 # Models exported for the app (50 MB, made by ml/src/export_models.py; not on GitHub)
-assets/models/
+assets/models/*
+!assets/models/README.md
