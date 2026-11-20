@@ -27,12 +27,14 @@ Saves:
     backend/models/corn_pest_model.joblib
     backend/models/corn_detector_model.joblib
     backend/models/corn_health_model.joblib
+    backend/models/model_version.txt              training date, returned by the backend with each result
     ml/results/metrics/<name>.json                full metrics, for evaluate.py
     ml/results/metrics_summary.csv                one row per model
 """
 import argparse
 import csv
 import json
+from datetime import date
 import warnings
 from pathlib import Path
 
@@ -250,6 +252,9 @@ def save(name, model, scaler, classes, metrics):
     joblib.dump({"model": model, "scaler": scaler, "classes": classes, "cutoffs": metrics["cutoffs"],
                  "merge": metrics.get("merge") or {}},
                 MODELS_DIR / f"{name}_model.joblib")
+    # The backend returns this with every result and the app stores it with each scan, so
+    # saved results show which models made them.
+    (MODELS_DIR / "model_version.txt").write_text(date.today().isoformat() + "\n", encoding="utf-8")
     with open(METRICS_DIR / f"{name}.json", "w", encoding="utf-8") as f:
         json.dump(metrics, f, indent=2)
     print(f"    saved {MODELS_DIR / (name + '_model.joblib')}  val f1 {metrics['val']['f1_macro']:.3f}, "

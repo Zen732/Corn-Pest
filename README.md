@@ -43,7 +43,7 @@ No field questions and no recommendations. Severity is computed from the photo a
 5. Train the corn check, insect detector and pest classifier; compare models
 6. Severity (K-Means damage %), healthy/damage cutoff
 7. Database schema and seed data (scans + results, no recommendations)
-8. Backend `/predict` (corn check -> severity -> detector -> pest classifier)
+8. Backend `/predict` (corn check -> insect detector -> pest classifier or healthy-vs-damaged -> severity); see [backend/README.md](backend/README.md)
 9. Flutter screens
 10. Testing with photos from Cabadbaran corn fields
 
