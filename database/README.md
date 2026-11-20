@@ -112,7 +112,10 @@ order by 1, 3 desc;
 ## How this was tested
 
 Both files were run (twice each) on PostgreSQL 18, with a small stand-in for Supabase's login
-and storage. Checks that passed:
+and storage. Like newer Supabase projects, the stand-in gives the app's roles no table rights
+of its own, so the `grant` lines in `schema.sql` alone must be enough. (They were missing at
+first, which showed as "permission denied for table barangays" on a real project, 20 Nov 2026.)
+Checks that passed:
 
 - **Sign-up and profiles.** Sign-up creates the profile with the chosen barangay, and an
   unknown barangay is left empty.

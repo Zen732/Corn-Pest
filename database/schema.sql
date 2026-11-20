@@ -171,6 +171,19 @@ create policy "delete own scans" on public.scans
 
 
 -- ---------------------------------------------------------------------------------------------
+-- Table rights for the app's two roles: anon (not logged in) and authenticated (logged in).
+-- Newer Supabase projects don't grant these automatically ("permission denied for table ...");
+-- the row level security rules above still decide which rows each user may touch.
+-- ---------------------------------------------------------------------------------------------
+
+grant usage on schema public to anon, authenticated;
+grant usage on type public.scan_outcome, public.severity_level to anon, authenticated;
+grant select on public.pests, public.barangays to anon, authenticated;
+grant select, update on public.profiles to authenticated;
+grant select, insert, delete on public.scans to authenticated;
+
+
+-- ---------------------------------------------------------------------------------------------
 -- Photo storage: a private bucket, one folder per user (<user id>/...)
 -- ---------------------------------------------------------------------------------------------
 
