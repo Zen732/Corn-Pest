@@ -28,12 +28,13 @@ import imagehash
 from PIL import Image, ImageDraw, ImageOps
 
 from inat_download import CREDITS_FILE as INAT_CREDITS, LICENSES as INAT_LICENSES, first_open_photo
+import archive_paths
 
 SORTER_DIR = Path(__file__).resolve().parent
 STAGING = SORTER_DIR / "staging"
 STAGING_CREDITS = STAGING / "staging_credits.csv"
 REJECTED = STAGING / "rejected.txt"
-AUDIT = SORTER_DIR / "audit"
+AUDIT = archive_paths.AUDIT  # was dataset_sorter/audit (moved to _archive/)
 DATASET_DIR = SORTER_DIR.parent / "ml" / "dataset"
 RAW_DIR = DATASET_DIR / "raw"
 LABELS_FILE = DATASET_DIR / "labels.csv"

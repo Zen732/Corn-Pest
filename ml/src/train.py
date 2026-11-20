@@ -102,11 +102,12 @@ def load_data():
 
 def adult_moth_paths():
     """Adult moth photos in the caterpillar-pest folders ("corn/<class>/<file>"): iNaturalist
-    photos credited as adults, and moths moved back from the reserve (add_moths.py, filter_moths.py)."""
+    photos credited as adults, and moths moved back from the reserve (add_moths.py, filter_moths.py;
+    logged in ml/dataset/moth_moves.csv)."""
     paths = set()
     with open(DATASET_DIR / "inaturalist_credits.csv", newline="", encoding="utf-8") as f:
         paths |= {r["file"].replace("\\", "/") for r in csv.DictReader(f) if "adult" in r.get("species", "")}
-    with open(DATASET_DIR / "reserve" / "corn" / "moth_moves.csv", newline="", encoding="utf-8") as f:
+    with open(DATASET_DIR / "moth_moves.csv", newline="", encoding="utf-8") as f:
         for r in csv.DictReader(f):
             moved_to = r["moved_to"].replace("\\", "/")
             if "/raw/" in f"/{moved_to}/" and "reserve" not in moved_to:

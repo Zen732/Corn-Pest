@@ -28,13 +28,14 @@ from pathlib import Path
 
 from PIL import Image, ImageOps
 
+import archive_paths
 from api_import import Known, is_tilted_copy, variant_hashes
 from bulk_import import (CREDIT_FIELDS, CREDITS_FILE, DATASET_DIR, ParquetSource, append_csv, list_images, log,
                          phash, prepare)
 
 NOT_CORN = DATASET_DIR / "not_corn"
-ARCHIVE = DATASET_DIR / "archive_rice_banana"
-AGML = Path(__file__).resolve().parent / "archive_non_corn" / "downloads"
+ARCHIVE = archive_paths.RICE_BANANA  # was ml/dataset/archive_rice_banana (moved to _archive/)
+AGML = archive_paths.AGML_DOWNLOADS
 PEST_FOLDERS = {"rice": ["black_bug", "brown_planthopper", "stem_borer"], "banana": ["aphid", "thrips", "weevil"]}
 AGML_SETS = [  # key, folder, pattern, {label: not_corn subfolder}, citation
     ("agmlRiceBGD", "agml_rice_bangladesh", "raw_*.parquet",
@@ -53,7 +54,7 @@ AGML_SETS = [  # key, folder, pattern, {label: not_corn subfolder}, citation
 
 
 CCMT_KAGGLE = "nirmalsankalana/crop-pest-and-disease-detection"
-CCMT_ZIP = Path(__file__).resolve().parent / "downloads" / "kaggle_ccmt" / "crop-pest-and-disease-detection.zip"
+CCMT_ZIP = archive_paths.DOWNLOADS / "kaggle_ccmt" / "crop-pest-and-disease-detection.zip"
 CCMT_CROPS = ("cashew", "cassava", "tomato")
 CCMT_CITE = ("Mensah et al., CCMT: Dataset for crop pest and disease detection, Data in Brief 2023, "
              "doi:10.17632/bwh3zbpkpv.1 (raw images, via Kaggle copy " + CCMT_KAGGLE + ")")

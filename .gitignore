@@ -49,36 +49,34 @@ app.*.map.json
 
 # Backend secrets and Python artifacts
 .env
+# App settings (Supabase URL + publishable key); copy env.example.json to env.json
+env.json
 __pycache__/
 .venv/
 .ipynb_checkpoints/
 
+# Archive of unused photos, downloads, old models, backups and logs (17 GB, stays local;
+# see _archive/README.md)
+_archive/
+
 # Trained models and datasets (large files)
 backend/models/*.joblib
-ml/dataset/raw/*/*/*
-ml/dataset/test_local/*/*/*
-ml/dataset/reserve/*/*/*
-ml/dataset/split/
-ml/dataset/rejected/
-ml/dataset/archive_rice_banana/
 backend/models/archive_*/
+ml/dataset/raw/*/*/*
+ml/dataset/not_corn/*/*
+ml/dataset/test_local/*/*/*
+ml/dataset/split/
 ml/results/archive_*/
 ml/results/features.npy
 ml/results/features_meta.csv
-dataset_sorter/audit/
-dataset_sorter/downloads/
-dataset_sorter/*.log
 
-# Dataset sorter (downloaded datasets and outputs)
-dataset_sorter/inbox/*
-dataset_sorter/review/*
-dataset_sorter/examples/*/*/*
+# Dataset sorter: logs and working folders the tools create when run again
+dataset_sorter/*.log
+dataset_sorter/inbox/
+dataset_sorter/review/
+dataset_sorter/staging/
 dataset_sorter/sort_log*.csv
 !dataset_sorter/**/.gitkeep
-dataset_sorter/archive_non_corn/
-ml/results/archive_3crop/
-ml/dataset/not_corn/*/*
-ml/dataset/archive_asian_corn_borer/
 
 # API keys (never commit)
 dataset_sorter/roboflow_key.txt

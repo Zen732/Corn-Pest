@@ -23,11 +23,12 @@ from PIL import Image, ImageOps
 
 from inat_download import LABELS_FILE, RAW_DIR, append_csv, list_images
 from inat_larvae import KEEP, Judge
+import archive_paths
 
 DATASET_DIR = RAW_DIR.parent
-RESERVE_DIR = DATASET_DIR / "reserve"
-MOVES_FILE = RESERVE_DIR / "corn" / "moth_moves.csv"
-PREVIEW_DIR = Path(__file__).resolve().parent / "moth_preview"
+RESERVE_DIR = archive_paths.RESERVE  # was ml/dataset/reserve (moved to _archive/)
+MOVES_FILE = archive_paths.MOTH_MOVES
+PREVIEW_DIR = archive_paths.MOTH_PREVIEW
 BATCH = 64
 
 

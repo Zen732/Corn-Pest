@@ -26,10 +26,11 @@ from PIL import Image, ImageOps
 from inat_download import (API, CREDIT_FIELDS, CREDITS_FILE, LABELS_FILE, RAW_DIR, append_csv, fetch_photo,
                            first_open_photo, get_json, is_duplicate, list_images, log, phash)
 from inat_larvae import REJECTED_FILE, SPECIES, Judge
+import archive_paths
 
 DATASET_DIR = RAW_DIR.parent
-RESERVE = DATASET_DIR / "reserve"
-MOVES_FILE = RESERVE / "corn" / "moth_moves.csv"
+RESERVE = archive_paths.RESERVE  # was ml/dataset/reserve (moved to _archive/)
+MOVES_FILE = archive_paths.MOTH_MOVES
 DRAWING = ["a black and white drawing of an insect", "a scientific illustration", "a diagram with text"]
 PHOTO = ["a photo of a moth", "a photo of an insect"]
 

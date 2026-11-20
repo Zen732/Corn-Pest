@@ -1,0 +1,19 @@
+# Backend for the Corn Pest Assessment app (Python 3.12).
+# The model files only load with the exact versions they were trained with (ml/.venv),
+# so these pins must match it. Change them only together with retraining.
+numpy==2.5.3
+scipy==1.18.1
+scikit-learn==1.9.1
+joblib==1.6.0
+threadpoolctl==3.7.0
+scikit-image==0.26.0
+opencv-python-headless==5.0.0.93
+
+# Web server
+fastapi
+uvicorn
+python-multipart
+
+# Tests
+pytest
+httpx

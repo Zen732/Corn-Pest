@@ -3,10 +3,19 @@
 Finds images in big downloaded datasets that look like your example photos and copies
 them into `ml/dataset/raw/`. Your original dataset files are never changed.
 
+The tools here built the dataset and aren't needed day to day. Since 20 November 2026 their
+data lives in `_archive/`:
+- downloads in `_archive/3_downloads/`;
+- reserve and rejected photos in `_archive/2_unused_photos/`;
+- audits, examples and previews in `_archive/4_dataset_tool_outputs/`.
+
+The scripts find these through [archive_paths.py](archive_paths.py), so they still work.
+
 ## How to use
 
 1. **Dump datasets** (whole folders, any structure) into `inbox/`.
-2. **Add examples**: 3-10 clear photos per class into `examples/<crop>/<class>/`.
+2. **Add examples**: 3-10 clear photos per class into
+   `_archive/4_dataset_tool_outputs/examples/<crop>/<class>/`.
    Use varied angles and lighting. Classes with no examples are skipped.
 3. **Dry run first** (copies nothing, shows the numbers):
    ```

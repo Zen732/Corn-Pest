@@ -25,13 +25,14 @@ import torch
 from PIL import Image, ImageDraw, ImageOps
 
 from sort_images import embed_images, load_image
+import archive_paths
 
 SORTER_DIR = Path(__file__).resolve().parent
 DATASET_DIR = SORTER_DIR.parent / "ml" / "dataset"
 RAW_DIR = DATASET_DIR / "raw"
 LABELS_FILE = DATASET_DIR / "labels.csv"
-AUDIT_DIR = SORTER_DIR / "audit"
-APPLIED_LOG = DATASET_DIR / "prelabel_log.csv"
+AUDIT_DIR = archive_paths.AUDIT  # was dataset_sorter/audit (moved to _archive/)
+APPLIED_LOG = archive_paths.LOGS / "prelabel_log.csv"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
 BUG = ["a close-up photo of an insect", "a caterpillar on a plant", "a moth",

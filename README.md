@@ -16,6 +16,7 @@ See [docs/classification_flow.md](docs/classification_flow.md) for the full deci
 | `backend/` | FastAPI server exposing `POST /predict` |
 | `database/` | Supabase `schema.sql` and `seed_data.sql` (scans and results only, no recommendations) |
 | `docs/` | Design, severity method, dataset sources, corn pest research |
+| `_archive/` | Unused photos, downloads, old models, backups and logs, sorted by type (local only, not on GitHub; see `_archive/README.md`) |
 
 ## App flow
 
@@ -47,6 +48,6 @@ No field questions and no recommendations. Severity is computed from the photo a
 10. Testing with photos from Cabadbaran corn fields
 
 Rice and banana were removed from the project on 15 October 2026. Their photos are kept in
-`ml/dataset/archive_rice_banana/` (not used). `ml/dataset/not_corn/` holds 10,000 photos of
+`_archive/2_unused_photos/rice_banana_project/` (not used). `ml/dataset/not_corn/` holds 10,000 photos of
 other plants (rice, banana, tomato, cassava, cashew) that teach the corn check what is not
 corn; see [docs/dataset_sources.md](docs/dataset_sources.md).

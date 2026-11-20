@@ -26,9 +26,11 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
 
+import archive_paths
+
 SORTER_DIR = Path(__file__).resolve().parent
 INBOX_DIR = SORTER_DIR / "inbox"
-EXAMPLES_DIR = SORTER_DIR / "examples"
+EXAMPLES_DIR = archive_paths.EXAMPLES  # was dataset_sorter/examples (moved to _archive/)
 REVIEW_DIR = SORTER_DIR / "review"
 RAW_DIR = SORTER_DIR.parent / "ml" / "dataset" / "raw"
 LOG_FILE = SORTER_DIR / "sort_log.csv"

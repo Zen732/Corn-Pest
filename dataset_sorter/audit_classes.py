@@ -27,14 +27,15 @@ import torch
 from PIL import Image, ImageDraw
 
 from sort_images import embed_images, list_images, load_image
+import archive_paths
 
 SORTER_DIR = Path(__file__).resolve().parent
 PROJECT_DIR = SORTER_DIR.parent
 RAW_DIR = PROJECT_DIR / "ml" / "dataset" / "raw"
-REJECTED_DIR = PROJECT_DIR / "ml" / "dataset" / "rejected"
-AUDIT_DIR = SORTER_DIR / "audit"
+REJECTED_DIR = archive_paths.REJECTED  # was ml/dataset/rejected (moved to _archive/)
+AUDIT_DIR = archive_paths.AUDIT
 AUDIT_LOG = AUDIT_DIR / "audit_log.csv"
-REJECTED_LOG = PROJECT_DIR / "ml" / "dataset" / "rejected_log.csv"
+REJECTED_LOG = archive_paths.REJECTED_LOG
 
 # Shared "wrong insect" descriptions, reused below.
 OTHER_INSECTS = ["a moth", "a butterfly", "a caterpillar", "a beetle", "a ladybird", "a stink bug",

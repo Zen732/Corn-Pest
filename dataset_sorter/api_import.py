@@ -33,6 +33,8 @@ import numpy as np
 from PIL import Image, ImageOps
 from tqdm import tqdm
 
+import archive_paths
+
 from bulk_import import (CREDIT_FIELDS, CREDITS_FILE, DATASET_DIR, DOWNLOADS, LABELS_FILE, RAW_DIR, UA,
                          append_csv, list_images, log, phash, prepare)
 
@@ -396,7 +398,7 @@ def run(name, target, dry_run):
         log(f"{p['cls']}: already {len(existing)}, nothing to do")
         return
     known = Known()
-    for f in existing + list_images(DATASET_DIR / "rejected" / p["cls"]) + list_images(DATASET_DIR / "reserve" / p["cls"]):
+    for f in existing + list_images(archive_paths.REJECTED / p["cls"]) + list_images(archive_paths.RESERVE / p["cls"]):
         try:
             known.add(phash(prepare(f.read_bytes())))
         except Exception:

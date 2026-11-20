@@ -4,7 +4,7 @@ Where every training photo came from, under what licence, and how it was cleaned
 Per-photo credits: `ml/dataset/inaturalist_credits.csv` and `ml/dataset/dataset_credits.csv`.
 Counts as of 7 November 2026. Pest list: fall armyworm, corn planthopper, corn aphid,
 armyworm, common cutworm (Asian corn borer and corn weevil dropped; Asian corn borer photos
-archived in `ml/dataset/archive_asian_corn_borer/`).
+archived in `_archive/2_unused_photos/asian_corn_borer/`).
 
 ## Corn photos (`ml/dataset/raw/corn/`, 28,083 photos)
 
@@ -37,8 +37,8 @@ skipped): common cutworm 2,142 and armyworm 1,182. So that all three caterpillar
 similar share of moths (fall armyworm 40%, common cutworm 43%, armyworm 57%), fall armyworm
 swapped 2,000 of its least reliable photos (197 uncredited first-download, 1,803 unconfirmed
 "needs ID") for 2,000 moths (`add_moths.py --swap 2000`); otherwise the model could learn
-"adult moth = cutworm or armyworm". Still in `ml/dataset/reserve/corn/` (logged in
-`moth_moves.csv`): fall armyworm 1,322 moths and 2,000 swapped-out photos, common cutworm
+"adult moth = cutworm or armyworm". Kept in `_archive/2_unused_photos/extra_moths_and_others/` (logged in
+`ml/dataset/moth_moves.csv`): fall armyworm 1,322 moths and 2,000 swapped-out photos, common cutworm
 1,689 moths, armyworm 26 moth drawings, and 508 "other" photos (pupae, eggs, diagrams, some
 caterpillars). Rejected iNaturalist observations: `dataset_sorter/inat_rejected.csv`.
 
@@ -150,7 +150,7 @@ commercial app. The "not corn" sources stay cited because their photos are still
 ## Cleaning
 
 1. **First download.** The original visual-similarity sort put many wrong species into the
-   pest folders. Wrong photos were moved to `ml/dataset/rejected/` after a CLIP audit with
+   pest folders. Wrong photos were moved out (now in `_archive/2_unused_photos/rejected_bad_photos/`) after a CLIP audit with
    per-class cutoffs chosen by viewing contact sheets.
 2. **Diagrams.** Drawings, labelled diagrams and infographics among the IP102 photos were
    removed (CLIP diagram score >= 0.9, checked on a contact sheet).
@@ -158,7 +158,7 @@ commercial app. The "not corn" sources stay cited because their photos are still
    The Roboflow fall armyworm set already contained edited copies of its photos, so
    `api_import.py` also skipped flipped/turned copies, tilted copies with black border
    wedges, and zoomed/shifted copies (CLIP similarity > 0.97). 204 that slipped through the
-   first import are in `ml/dataset/rejected/corn/fall_armyworm/` (logged in `rejected_log.csv`).
+   first import are in `_archive/2_unused_photos/rejected_bad_photos/corn/fall_armyworm/` (logged in its `rejected_log.csv`).
    For the Doctor Maiz leaf close-ups the CLIP cutoff was 0.985, because different healthy
    leaves often score above 0.97; the closest kept pairs were checked by eye.
 4. **Credits.** Every "not corn" photo has a known source; photos without one were replaced.

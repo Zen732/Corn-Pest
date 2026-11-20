@@ -25,7 +25,7 @@ Rules:
 - A photo keeps its set on later runs (read from split.csv); only new photos are placed.
 
 raw/ and not_corn/ are never changed. Copies in split/ whose photo is gone from raw/ (or that
-are no longer needed) are moved to ml/dataset/reserve/split_removed/, not deleted.
+are no longer needed) are moved to _archive/2_unused_photos/removed_from_split/, not deleted.
 """
 import csv
 import hashlib
@@ -49,7 +49,7 @@ SPLIT_DIR = DATASET_DIR / "split"
 SPLIT_FILE = DATASET_DIR / "split.csv"
 LABELS_FILE = DATASET_DIR / "labels.csv"
 CREDITS_FILE = DATASET_DIR / "dataset_credits.csv"
-REMOVED_DIR = DATASET_DIR / "reserve" / "split_removed"
+REMOVED_DIR = DATASET_DIR.parents[1] / "_archive" / "2_unused_photos" / "removed_from_split"
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
 SHARES = {"train": 0.70, "val": 0.15, "test": 0.15}

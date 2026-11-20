@@ -37,8 +37,10 @@ import pyarrow.parquet as pq
 from PIL import Image, ImageOps
 from tqdm import tqdm
 
+import archive_paths
+
 SORTER_DIR = Path(__file__).resolve().parent
-DOWNLOADS = SORTER_DIR / "downloads"
+DOWNLOADS = archive_paths.DOWNLOADS  # was dataset_sorter/downloads (moved to _archive/)
 DATASET_DIR = SORTER_DIR.parent / "ml" / "dataset"
 RAW_DIR = DATASET_DIR / "raw"
 LABELS_FILE = DATASET_DIR / "labels.csv"
@@ -257,7 +259,7 @@ def fill_class(cls, sources, target, rng):
     # Photos already moved to ml/dataset/rejected/ count as duplicates, so a refill can't
     # bring a rejected photo (e.g. a diagram) back in.
     known = []
-    for f in existing + list_images(DATASET_DIR / "rejected" / cls):
+    for f in existing + list_images(archive_paths.REJECTED / cls):
         try:
             known.append(phash(prepare(f.read_bytes())))
         except Exception:
