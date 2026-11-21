@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pest_assessment/main.dart';
 import 'package:pest_assessment/services/app_services.dart';
 import 'package:pest_assessment/services/auth_service.dart';
+import 'package:pest_assessment/services/history_store.dart';
 import 'package:pest_assessment/services/scan_service.dart';
 import 'package:pest_assessment/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -81,17 +82,59 @@ class FakeApi implements ScanApi {
   }
 }
 
-class FakeStore implements ScanStore {
-  final saved = <ScanResult>[];
-  int failuresLeft = 0;
+/// Supabase stand-in for History; set [online] to false to test working offline.
+class FakeRemote implements ScanRemote {
+  bool online = true;
+  @override
+  String? userId = 'user-1';
+  final rows = <String, LocalScan>{};
+  final removed = <String>[];
+  final fromOtherPhone = <RemoteScan>[];
+
+  void _check() {
+    if (!online) throw Exception('no internet');
+  }
 
   @override
-  Future<void> save(ScanResult result, Uint8List photo) async {
-    if (failuresLeft > 0) {
-      failuresLeft--;
-      throw const ScanFailure(S.saveFailed);
+  Future<void> upload(LocalScan scan, Uint8List photo) async {
+    _check();
+    rows[scan.id] = scan;
+  }
+
+  @override
+  Future<void> remove(LocalScan scan) async {
+    _check();
+    rows.remove(scan.id);
+    removed.add(scan.id);
+  }
+
+  @override
+  Future<List<RemoteScan>> list() async {
+    _check();
+    return [
+      ...fromOtherPhone,
+      for (final s in rows.values)
+        RemoteScan(id: s.id, createdAt: s.createdAt, result: s.result, photoPath: s.remotePhotoPath),
+    ];
+  }
+
+  @override
+  Future<Uint8List> downloadPhoto(String path) async {
+    _check();
+    return tinyPng;
+  }
+}
+
+/// Phone storage that fails the next [failures] writes (e.g. storage full).
+class FlakyStorage extends MemoryStorage {
+  int failures = 0;
+  @override
+  Future<void> write(String name, List<int> bytes) async {
+    if (failures > 0) {
+      failures--;
+      throw Exception('storage full');
     }
-    saved.add(result);
+    return super.write(name, bytes);
   }
 }
 
@@ -112,7 +155,7 @@ class FakePhotos implements PhotoSource {
 Future<AppServices> makeServices({
   FakeAuth? auth,
   ScanApi? api,
-  ScanStore? store,
+  HistoryStore? history,
   PhotoSource? photos,
   Map<String, Object> prefs = const {},
 }) async {
@@ -120,7 +163,7 @@ Future<AppServices> makeServices({
   return AppServices(
     auth: auth ?? FakeAuth(),
     api: api ?? FakeApi(const [ScanResult(outcome: 'healthy', severity: 'Healthy')]),
-    store: store ?? FakeStore(),
+    history: history ?? HistoryStore(storage: MemoryStorage(), remote: FakeRemote()),
     photos: photos ?? FakePhotos(),
     tips: TipsPrefs(await SharedPreferences.getInstance()),
   );

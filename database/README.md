@@ -12,13 +12,17 @@ storage**. No treatment advice or recommendations are stored anywhere.
 
 ```
 App: user logs in (email + password)
- -> takes a photo -> sends it to the FastAPI backend -> backend runs the 4 models -> result
- -> app uploads the photo to scan-photos/<user id>/<scan id>.jpg
- -> app saves the result as a row in "scans"
- -> History screen lists the user's own scans, newest first
+ -> takes a photo -> the 4 models run on the phone (works offline) -> result
+ -> saved on the phone first
+ -> when online: photo to scan-photos/<user id>/<scan id>.jpg, result as a row in "scans"
+    (the row id is the scan's id from the phone, so a retried upload never makes a copy)
+ -> History screen lists the user's scans, newest first, uploaded or waiting
 ```
 
-The backend never connects to the database, so no secret database key is needed on the server.
+Since 22 November 2026 the app checks photos on the phone
+([docs/offline_checking.md](../docs/offline_checking.md)). The FastAPI backend is kept for
+testing, and it never connects to the database either. No secret database key is needed
+anywhere.
 The app uses only Supabase's public key; the security rules decide what each user may do.
 
 ## Tables

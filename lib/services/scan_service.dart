@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show AssetBundle, rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../config.dart';
 import '../offline/decode.dart';
@@ -64,6 +62,20 @@ class ScanResult {
       modelVersion: (j['model_version'] as String?) ?? 'unknown',
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'outcome': outcome,
+        'pest': pest,
+        'pest_confidence': pestConfidence,
+        'severity': severity,
+        'damage_percent': damagePercent,
+        'insect_visible': insectVisible,
+        'insect_confidence': insectConfidence,
+        'healthy': healthy,
+        'health_confidence': healthConfidence,
+        'corn_confidence': cornConfidence,
+        'model_version': modelVersion,
+      };
 
   /// Only real results go to History; "not corn" and "unclear" ask for a new photo instead.
   bool get savable => const {'healthy', 'severity_only', 'pest'}.contains(outcome);
@@ -165,42 +177,6 @@ class OfflineScanApi implements ScanApi {
       return ScanResult.fromJson(await Isolate.run(() => assessPhoto(img, models)));
     } catch (_) {
       throw const ScanFailure(S.checkFailed);
-    }
-  }
-}
-
-/// Saves a result and its photo to the user's History.
-abstract class ScanStore {
-  Future<void> save(ScanResult result, Uint8List photo);
-}
-
-class SupabaseScanStore implements ScanStore {
-  SupabaseClient get _db => Supabase.instance.client;
-  final _random = Random();
-
-  @override
-  Future<void> save(ScanResult result, Uint8List photo) async {
-    final uid = _db.auth.currentUser?.id;
-    if (uid == null) throw const ScanFailure(S.saveFailed);
-    final isPng = photo.length > 4 && photo[0] == 0x89 && photo[1] == 0x50;
-    final name = '${DateTime.now().millisecondsSinceEpoch}_${_random.nextInt(1 << 32).toRadixString(16)}';
-    final path = '$uid/$name.${isPng ? 'png' : 'jpg'}'; // each user's own folder (database/schema.sql)
-    try {
-      await _db.storage.from('scan-photos').uploadBinary(path, photo,
-          fileOptions: FileOptions(contentType: isPng ? 'image/png' : 'image/jpeg'));
-      await _db.from('scans').insert({
-        'photo_path': path,
-        'outcome': result.outcome,
-        'pest_key': result.outcome == 'pest' ? result.pest : null,
-        'pest_confidence': result.outcome == 'pest' ? result.pestConfidence : null,
-        'damage_percent': result.damagePercent,
-        'severity': result.severity,
-        'model_version': result.modelVersion,
-        'details': result.details,
-        // barangay_id is filled in from the user's profile by the database
-      });
-    } catch (_) {
-      throw const ScanFailure(S.saveFailed);
     }
   }
 }

@@ -43,7 +43,6 @@ class S {
   static const signOut = 'Sign out';
   static const signOutQuestion = 'Sign out of the app?';
   static const cancel = 'Cancel';
-  static const comingSoon = 'Coming in the next update.';
 
   // Scan: photo tips and taking the photo
   static const photoTips = 'Photo tips';
@@ -90,7 +89,40 @@ class S {
   };
   static const saving = 'Saving to History...';
   static const saved = 'Saved to History';
-  static const saveFailed = 'Couldn\'t save this result. Check your internet.';
+  static const saveFailed = 'Couldn\'t save this result on the phone. Is the storage full?';
+
+  // History
+  static const historyEmpty = 'No scans yet. Results you check are saved here.';
+  static const uploaded = 'Uploaded';
+  static const waitingToUpload = 'Waiting to upload';
+  static const waitingNote = 'Saved on this phone. It uploads by itself when you have internet.';
+  static String waitingCount(int n) => n == 1 ? '1 scan is waiting to upload.' : '$n scans are waiting to upload.';
+  static const photoNotAvailable = 'Photo not on this phone yet. Connect to the internet to see it.';
+  static const deleteScan = 'Delete this scan';
+  static const deleteQuestion = 'Delete this scan from History?';
+  static const delete = 'Delete';
+  static const scanDetails = 'Scan details';
+  static String scannedOn(DateTime t) {
+    final l = t.toLocal();
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final h = l.hour % 12 == 0 ? 12 : l.hour % 12;
+    return '${months[l.month - 1]} ${l.day}, ${l.year}  $h:${l.minute.toString().padLeft(2, '0')} ${l.hour < 12 ? 'AM' : 'PM'}';
+  }
+
+  /// One-line summary of a result, for the History list.
+  static String summary(String outcome, String? pest, String? severity) {
+    switch (outcome) {
+      case 'pest':
+        final name = pests[pest]?.$1 ?? (pest ?? 'Pest');
+        return severity == null || severity == 'Unclear' ? name : '$name - $severity';
+      case 'severity_only':
+        return 'Damage - ${severity ?? ''}';
+      case 'healthy':
+        return healthyTitle;
+      default:
+        return outcome;
+    }
+  }
   static const retakePhoto = 'Retake photo';
   static const scanAnother = 'Scan another plant';
   static const done = 'Done';

@@ -7,6 +7,7 @@ import 'screens/home_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'services/app_services.dart';
 import 'services/auth_service.dart';
+import 'services/history_store.dart';
 import 'services/scan_service.dart';
 import 'strings.dart';
 
@@ -25,7 +26,7 @@ Future<void> main() async {
     services: AppServices(
       auth: SupabaseAuthService(),
       api: api,
-      store: SupabaseScanStore(),
+      history: HistoryStore(storage: DirStorage(), remote: SupabaseScanRemote()),
       photos: ImagePickerSource(),
       tips: TipsPrefs(await SharedPreferences.getInstance()),
     ),

@@ -2,6 +2,7 @@
 // Fakes stand in for the camera, the backend and Supabase. Run: flutter test
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pest_assessment/services/history_store.dart';
 import 'package:pest_assessment/services/scan_service.dart';
 import 'package:pest_assessment/strings.dart';
 
@@ -50,9 +51,9 @@ void main() {
   });
 
   testWidgets('pest result: name, scientific name, how sure, severity; saved to History', (tester) async {
-    final store = FakeStore();
+    final history = HistoryStore(storage: MemoryStorage(), remote: FakeRemote());
     final photos = FakePhotos();
-    await pumpApp(tester, await makeServices(auth: FakeAuth.signedIn(), api: FakeApi([pestResult]), store: store, photos: photos));
+    await pumpApp(tester, await makeServices(auth: FakeAuth.signedIn(), api: FakeApi([pestResult]), history: history, photos: photos));
     await openScan(tester);
     await takePhoto(tester);
 
@@ -62,7 +63,7 @@ void main() {
     expect(find.text(S.howSure(0.84)), findsOneWidget);
     expect(find.text(S.severityLine('Moderate', 23.4)), findsOneWidget);
     expect(find.text(S.saved), findsOneWidget);
-    expect(store.saved.single.pest, 'fall_armyworm');
+    expect((await history.list()).single.result.pest, 'fall_armyworm');
   });
 
   testWidgets('pest with no plant in the photo: severity "not measured"', (tester) async {
@@ -75,12 +76,12 @@ void main() {
   });
 
   testWidgets('healthy and damage-only results, both saved', (tester) async {
-    final store = FakeStore();
+    final history = HistoryStore(storage: MemoryStorage(), remote: FakeRemote());
     final api = FakeApi(const [
       ScanResult(outcome: 'healthy', severity: 'Healthy'),
       ScanResult(outcome: 'severity_only', severity: 'High', damagePercent: 52),
     ]);
-    await pumpApp(tester, await makeServices(auth: FakeAuth.signedIn(), api: api, store: store));
+    await pumpApp(tester, await makeServices(auth: FakeAuth.signedIn(), api: api, history: history));
     await openScan(tester);
     await takePhoto(tester);
     expect(find.text(S.healthyTitle), findsOneWidget);
@@ -92,20 +93,20 @@ void main() {
     expect(find.text(S.damageTitle), findsOneWidget);
     expect(find.text(S.severityLine('High', 52)), findsOneWidget);
     expect(find.text(S.noInsectSeen), findsOneWidget);
-    expect(store.saved.map((r) => r.outcome), ['healthy', 'severity_only']);
+    expect((await history.list()).map((s) => s.result.outcome).toSet(), {'healthy', 'severity_only'});
   });
 
   testWidgets('not corn: message and retake, nothing saved', (tester) async {
-    final store = FakeStore();
+    final history = HistoryStore(storage: MemoryStorage(), remote: FakeRemote());
     await pumpApp(tester, await makeServices(
-        auth: FakeAuth.signedIn(), api: FakeApi(const [ScanResult(outcome: 'not_corn')]), store: store));
+        auth: FakeAuth.signedIn(), api: FakeApi(const [ScanResult(outcome: 'not_corn')]), history: history));
     await openScan(tester);
     await tester.tap(find.text(S.chooseFromGallery));
     await tester.pumpAndSettle();
     expect(find.text(S.notCornTitle), findsOneWidget);
     expect(find.text(S.retakePhoto), findsOneWidget);
     expect(find.text(S.saved), findsNothing);
-    expect(store.saved, isEmpty);
+    expect(await history.list(), isEmpty);
 
     await tester.tap(find.text(S.retakePhoto));
     await tester.pumpAndSettle();
@@ -125,16 +126,17 @@ void main() {
     expect(api.calls, 2);
   });
 
-  testWidgets('saving fails: says so, and Try again saves it', (tester) async {
-    final store = FakeStore()..failuresLeft = 1;
-    await pumpApp(tester, await makeServices(auth: FakeAuth.signedIn(), api: FakeApi([pestResult]), store: store));
+  testWidgets('saving fails (storage full): says so, and Try again saves it', (tester) async {
+    final storage = FlakyStorage()..failures = 1;
+    final history = HistoryStore(storage: storage, remote: FakeRemote());
+    await pumpApp(tester, await makeServices(auth: FakeAuth.signedIn(), api: FakeApi([pestResult]), history: history));
     await openScan(tester);
     await takePhoto(tester);
     expect(find.text(S.saveFailed), findsOneWidget);
     await tester.tap(find.text(S.tryAgain));
     await tester.pumpAndSettle();
     expect(find.text(S.saved), findsOneWidget);
-    expect(store.saved, hasLength(1));
+    expect(await history.list(), hasLength(1));
   });
 
   testWidgets('cancelling the camera stays on the scan screen; Done goes Home', (tester) async {

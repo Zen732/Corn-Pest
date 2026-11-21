@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../services/app_services.dart';
 import '../services/auth_service.dart';
 import '../strings.dart';
+import 'history_screen.dart';
 import 'scan_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,11 +18,21 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<Profile> _profile;
+  Timer? _syncTimer;
 
   @override
   void initState() {
     super.initState();
     _profile = widget.services.auth.profile();
+    // Upload scans saved while offline: now, and every minute while the app is open.
+    widget.services.history.sync();
+    _syncTimer = Timer.periodic(const Duration(minutes: 1), (_) => widget.services.history.sync());
+  }
+
+  @override
+  void dispose() {
+    _syncTimer?.cancel();
+    super.dispose();
   }
 
   Future<void> _signOut() async {
@@ -42,8 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _comingSoon() =>
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(S.comingSoon)));
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 72,
               child: OutlinedButton.icon(
-                onPressed: _comingSoon,
+                onPressed: () => Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => HistoryScreen(services: widget.services))),
                 icon: const Icon(Icons.history, size: 28),
                 label: const Text(S.history, style: TextStyle(fontSize: 20)),
               ),

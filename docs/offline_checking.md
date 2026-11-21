@@ -5,8 +5,32 @@ models and the whole decision (corn check, insect detector, pest classifier or h
 severity) were ported from Python to Dart in [lib/offline/](../lib/offline/).
 
 The backend ([backend/](../backend/)) still runs the original Python and is used to test and
-compare. Logging in the first time and saving to History still need internet; saving while
-offline is part 3 of this work.
+compare. Only creating an account and the first sign-in need internet; after that the app
+stays signed in offline.
+
+## History works offline too
+
+Results are saved **on the phone first** in the app's private folder: the photo, plus a small
+file with the result ([lib/services/history_store.dart](../lib/services/history_store.dart)).
+
+**Uploading to Supabase** happens whenever there is internet:
+- right after each scan;
+- when the app opens;
+- every minute while it is open;
+- when the user pulls down on the History screen.
+
+**Retries are safe.** Each scan gets its own id on the phone, which is also its row id in
+Supabase. An upload that stopped halfway is simply retried, and an already-uploaded photo or row
+counts as done, so nothing is saved twice.
+
+**History** lists the user's scans newest first and marks each one "Uploaded" or "Waiting to
+upload". Scans saved on another phone appear once online, and their photo is downloaded once.
+
+**Deleting** removes a scan from History straight away; while offline, the deletion reaches
+Supabase on the next upload. Each account only sees its own scans, even on a shared phone.
+
+Tested in [test/history_test.dart](../test/history_test.dart) with a stand-in for Supabase
+that can be switched offline.
 
 ## How the models get onto the phone
 

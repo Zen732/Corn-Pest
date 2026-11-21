@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../services/app_services.dart';
 import '../services/scan_service.dart';
 import '../strings.dart';
+import '../widgets/result_card.dart';
 
 enum _Save { none, saving, saved, failed }
 
@@ -48,10 +49,11 @@ class _ResultScreenState extends State<ResultScreen> {
   Future<void> _saveResult() async {
     setState(() => _save = _Save.saving);
     try {
-      await widget.services.store.save(_result!, widget.photo);
+      // Saved on the phone (works offline); it uploads to Supabase by itself when online.
+      await widget.services.history.save(_result!, widget.photo);
       if (mounted) setState(() => _save = _Save.saved);
-    } on ScanFailure {
-      if (mounted) setState(() => _save = _Save.failed);
+    } catch (_) {
+      if (mounted) setState(() => _save = _Save.failed); // e.g. the phone's storage is full
     }
   }
 
@@ -71,7 +73,7 @@ class _ResultScreenState extends State<ResultScreen> {
             ),
             const SizedBox(height: 24),
             if (_error != null)
-              _Message(icon: Icons.cloud_off, color: Colors.grey.shade700, title: _error!)
+              MessageCard(icon: Icons.cloud_off, color: Colors.grey.shade700, title: _error!)
             else if (result == null)
               const Column(children: [
                 CircularProgressIndicator(),
@@ -79,7 +81,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 Text(S.checking, style: TextStyle(fontSize: 18)),
               ])
             else
-              _ResultCard(result: result),
+              ResultCard(result: result),
             if (result != null && result.savable) ...[
               const SizedBox(height: 16),
               _SaveStatus(state: _save, onRetry: _saveResult),
@@ -100,77 +102,6 @@ class _ResultScreenState extends State<ResultScreen> {
                 onPressed: _save == _Save.saving ? null : () => Navigator.of(context).popUntil((r) => r.isFirst),
                 child: const Text(S.done),
               ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ResultCard extends StatelessWidget {
-  const _ResultCard({required this.result});
-  final ScanResult result;
-
-  @override
-  Widget build(BuildContext context) {
-    final r = result;
-    switch (r.outcome) {
-      case 'healthy':
-        return const _Message(icon: Icons.check_circle, color: Color(0xFF2E7D32), title: S.healthyTitle, lines: [S.healthyBody]);
-      case 'severity_only':
-        return _Message(
-          icon: Icons.warning_amber_rounded,
-          color: const Color(0xFFE65100),
-          title: S.damageTitle,
-          lines: [S.severityLine(r.severity ?? '', r.damagePercent), S.noInsectSeen],
-        );
-      case 'pest':
-        final (name, scientific) = S.pests[r.pest] ?? (r.pest ?? '', '');
-        return _Message(
-          icon: Icons.bug_report,
-          color: const Color(0xFFC62828),
-          title: name,
-          subtitle: scientific,
-          lines: [
-            if (r.pestConfidence != null) S.howSure(r.pestConfidence!),
-            r.severity == 'Unclear' || r.severity == null
-                ? S.severityNotMeasured
-                : S.severityLine(r.severity!, r.damagePercent),
-          ],
-        );
-      case 'not_corn':
-        return _Message(icon: Icons.help_outline, color: Colors.grey.shade700, title: S.notCornTitle, lines: const [S.notCornBody]);
-      default:
-        return _Message(icon: Icons.blur_on, color: Colors.grey.shade700, title: S.unclearTitle, lines: const [S.unclearBody]);
-    }
-  }
-}
-
-class _Message extends StatelessWidget {
-  const _Message({required this.icon, required this.color, required this.title, this.subtitle, this.lines = const []});
-  final IconData icon;
-  final Color color;
-  final String title;
-  final String? subtitle;
-  final List<String> lines;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Icon(icon, size: 56, color: color),
-            const SizedBox(height: 8),
-            Text(title, textAlign: TextAlign.center, style: theme.textTheme.headlineSmall?.copyWith(color: color)),
-            if (subtitle != null && subtitle!.isNotEmpty)
-              Text(subtitle!, textAlign: TextAlign.center, style: const TextStyle(fontStyle: FontStyle.italic, fontSize: 16)),
-            for (final line in lines) ...[
-              const SizedBox(height: 10),
-              Text(line, textAlign: TextAlign.center, style: theme.textTheme.bodyLarge),
             ],
           ],
         ),
