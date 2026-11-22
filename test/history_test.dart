@@ -10,7 +10,7 @@ import 'package:pest_assessment/strings.dart';
 
 import 'fakes.dart';
 
-const pest = ScanResult(outcome: 'pest', pest: 'fall_armyworm', pestConfidence: 0.84, severity: 'Moderate', damagePercent: 23.4);
+const pest = ScanResult(outcome: 'pest', pest: 'fall_armyworm', pestConfidence: 0.84);
 const healthy = ScanResult(outcome: 'healthy', severity: 'Healthy', damagePercent: 1.0);
 
 void main() {
@@ -42,7 +42,7 @@ void main() {
       final reloaded = (await HistoryStore(storage: storage, remote: FakeRemote()).list()).single;
       expect(reloaded.createdAt, at);
       expect(reloaded.result.pest, 'fall_armyworm');
-      expect(reloaded.result.damagePercent, 23.4);
+      expect(reloaded.result.pestConfidence, 0.84);
       expect(reloaded.remotePhotoPath, startsWith('user-1/'));
     });
 
@@ -141,10 +141,10 @@ void main() {
     await tester.tap(find.byTooltip(S.history));
     await tester.pumpAndSettle();
     expect(find.text(S.waitingCount(2)), findsOneWidget);
-    expect(find.text(S.summary('pest', 'fall_armyworm', 'Moderate')), findsOneWidget);
+    expect(find.text(S.summary('pest', 'fall_armyworm', null)), findsOneWidget);
     expect(find.text(S.healthyTitle), findsOneWidget);
 
-    await tester.tap(find.text(S.summary('pest', 'fall_armyworm', 'Moderate')));
+    await tester.tap(find.text(S.summary('pest', 'fall_armyworm', null)));
     await tester.pumpAndSettle();
     expect(find.text('Fall armyworm'), findsOneWidget);
     expect(find.text(S.waitingNote), findsOneWidget);
@@ -152,7 +152,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, S.delete));
     await tester.pumpAndSettle();
-    expect(find.text(S.summary('pest', 'fall_armyworm', 'Moderate')), findsNothing);
+    expect(find.text(S.summary('pest', 'fall_armyworm', null)), findsNothing);
     expect(find.text(S.waitingCount(1)), findsOneWidget);
 
     remote.online = true;

@@ -22,7 +22,7 @@ BACKEND = Path(__file__).resolve().parents[1]
 ROOT = BACKEND.parent
 FLOW_TEST = ROOT / "ml" / "results" / "flow_test.csv"
 TEST_PHOTOS = ROOT / "ml" / "dataset" / "split" / "test"
-OUTCOMES = {"healthy", "severity_only", "pest", "not_corn", "unclear"}
+OUTCOMES = {"healthy", "severity_only", "pest", "unknown_pest", "not_corn", "unclear"}
 
 
 @pytest.fixture(scope="module")

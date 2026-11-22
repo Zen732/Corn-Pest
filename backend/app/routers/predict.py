@@ -26,11 +26,11 @@ def load_models():
 
 class PredictResult(BaseModel):
     """What the app shows; see ml/src/flow.py. Save it to Supabase only when outcome is
-    healthy, severity_only or pest (database/README.md)."""
-    outcome: Literal["healthy", "severity_only", "pest", "not_corn", "unclear"]
+    healthy, severity_only, pest or unknown_pest (database/README.md)."""
+    outcome: Literal["healthy", "severity_only", "pest", "unknown_pest", "not_corn", "unclear"]
     pest: Optional[str] = None                  # fall_armyworm, common_cutworm, armyworm, corn_planthopper, corn_aphid
     pest_confidence: Optional[float] = None
-    severity: Optional[Literal["Healthy", "Low", "Moderate", "High", "Unclear"]] = None
+    severity: Optional[Literal["Healthy", "Low", "Moderate", "High"]] = None  # none for a pest
     damage_percent: Optional[float] = None
     insect_visible: Optional[bool] = None
     insect_confidence: Optional[float] = None

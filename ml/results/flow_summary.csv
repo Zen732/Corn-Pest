@@ -1,10 +1,10 @@
 group,photos,correct_pct
-armyworm (insect),306.0,41.2
-common_cutworm (insect),749.0,50.2
-corn_aphid (insect),597.0,69.0
-corn_planthopper (insect),306.0,68.0
+armyworm (insect),306.0,29.7
+common_cutworm (insect),749.0,34.2
+corn_aphid (insect),597.0,63.5
+corn_planthopper (insect),306.0,56.2
 "damage, no insect",967.0,82.8
-fall_armyworm (insect),533.0,46.9
+fall_armyworm (insect),533.0,35.8
 healthy corn,754.0,82.5
 other plant,2247.0,89.9
-ALL,6459.0,74.5
+ALL,6459.0,70.2

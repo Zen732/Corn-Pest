@@ -5,7 +5,7 @@
 -- See database/README.md for the full setup.
 --
 -- What is stored: who scanned, when, the photo, and the app's result (healthy / severity only /
--- pest + severity). No treatment advice or recommendations are stored anywhere.
+-- pest name / insect not recognized). No treatment advice or recommendations are stored anywhere.
 -- Each user can only see and delete their own scans and photos (row level security).
 
 
@@ -71,11 +71,12 @@ create trigger on_auth_user_created
 -- Only real results are saved. "Not corn" and "unclear" photos are not saved: the app shows a
 -- message and lets the user retake the photo.
 do $$ begin
-  create type public.scan_outcome as enum ('healthy', 'severity_only', 'pest');
+  create type public.scan_outcome as enum ('healthy', 'severity_only', 'pest', 'unknown_pest');
 exception when duplicate_object then null;
 end $$;
+-- Databases made before 22 Nov 2026: see database/migrations/2026-11-22_pest_name_only.sql.
 
--- "Unclear" is possible only with a pest: the insect was seen but no plant was found to measure.
+-- A pest result has no severity (22 Nov 2026). "Unclear" and Low-High remain only on older pest scans.
 do $$ begin
   create type public.severity_level as enum ('Healthy', 'Low', 'Moderate', 'High', 'Unclear');
 exception when duplicate_object then null;
@@ -90,16 +91,20 @@ create table if not exists public.scans (
   pest_key        text references public.pests (key),
   pest_confidence real check (pest_confidence between 0 and 1),
   damage_percent  real check (damage_percent between 0 and 100),
-  severity        public.severity_level not null,
+  severity        public.severity_level,             -- none for pest and unknown_pest
   barangay_id     smallint references public.barangays (id),  -- filled from the profile if empty
   model_version   text not null,                    -- which trained models gave this result
   details         jsonb not null default '{}'::jsonb,  -- every confidence from the backend, for analysis
 
   constraint pest_named_only_for_pest_outcome check ((outcome = 'pest') = (pest_key is not null)),
   constraint severity_fits_outcome check (
-       (outcome = 'healthy'       and severity = 'Healthy')
-    or (outcome = 'severity_only' and severity in ('Low', 'Moderate', 'High'))
-    or (outcome = 'pest'          and severity in ('Low', 'Moderate', 'High', 'Unclear'))
+    case outcome::text
+      when 'healthy'       then coalesce(severity::text, '') = 'Healthy'
+      when 'severity_only' then coalesce(severity::text, '') in ('Low', 'Moderate', 'High')
+      when 'pest'          then severity is null or severity::text in ('Low', 'Moderate', 'High', 'Unclear')
+      when 'unknown_pest'  then severity is null
+      else false
+    end
   ),
   constraint photo_in_own_folder check (split_part(photo_path, '/', 1) = user_id::text)
 );

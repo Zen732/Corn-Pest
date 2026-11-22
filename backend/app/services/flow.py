@@ -2,20 +2,21 @@
 predict.py (backend/app/services/flow.py must be an exact copy), so the whole-app test
 (evaluate_flow.py) and the app give the same answers.
 
-    photo -> corn check -> insect detector -> healthy-vs-damaged model -> severity -> outcome
+    Is it a corn plant?  -> Is there an insect?  yes -> which pest?   (pest name only)
+                                                 no  -> healthy or damaged? -> damage grade
 
     not corn (corn check < CORN_AT_LEAST sure)     -> "not_corn"       "doesn't look like a corn plant"
-    corn, insect visible                           -> "pest"           pest name + severity ("Unclear"
-                                                                       if no plant is in view)
+    corn, insect, pest model >= PEST_AT_LEAST sure -> "pest"           pest name only, no severity
+    corn, insect, pest model less sure             -> "unknown_pest"   "insect not recognized"
     corn, no insect, health model says healthy     -> "healthy"
     corn, no insect, damaged                       -> "severity_only"  Low / Moderate / High
     corn, no insect, damaged, plant not found      -> "unclear"        ask for a clearer photo
 
-The insect check comes before "healthy", so a pest on a barely damaged plant is still named
-(see docs/classification_flow.md). If the pest classifier answers "healthy", the detector was
-probably wrong, and the photo is treated as "no insect". Healthy vs damaged is decided by a
-trained model, not by the damage % (which counts soil and weeds in field photos as damage);
-the K-Means damage % then grades the damage, at least "Low".
+A photo with an insect gets the pest's name and nothing else: no damage grade (22 Nov 2026; on
+insect close-ups the "damage" was mostly the insect and the background). If the pest classifier
+answers "healthy", the detector was probably wrong, and the photo is treated as "no insect".
+Healthy vs damaged is decided by a trained model, not by the damage % (which counts soil and
+weeds in field photos as damage); the K-Means damage % then grades the damage, at least "Low".
 
     from flow import assess_photo, load_models
     models = load_models("backend/models")
@@ -30,11 +31,10 @@ from features import extract_features
 from predict import predict_one
 from severity import assess
 
-# With a pest in view but less healthy green leaf than this share of the photo, there is no plant
-# to measure (an insect on a hand, wall or light): severity is "Unclear" instead of a misleading
-# "High, 100%". Under 5%: 0.2-0.5% of corn plant validation photos, 53-64% of caterpillar and
-# planthopper photos (20 Nov 2026).
-NO_PLANT_BELOW = 0.05
+# The pest classifier must be at least this sure to name a pest; below it the app says the insect
+# is not recognized (it may not be one of the five pests). On test photos with one of the five
+# pests in view, 33% are under 50% and only 41% of those were named right (22 Nov 2026).
+PEST_AT_LEAST = 0.50
 
 # The corn check must be at least this sure (probability of "corn") to go on; below it the photo
 # is "not_corn". Chosen on validation photos (22 Nov 2026), after real-world "not corn" photos
@@ -52,12 +52,12 @@ def load_models(folder):
     return {key: joblib.load(Path(folder) / name) for key, name in MODEL_FILES.items()}
 
 
-def decide(is_corn, insect_visible, healthy, damage_percent):
+def decide(is_corn, insect_visible, pest_sure, healthy, damage_percent):
     """The outcome rule on its own (see the table at the top)."""
     if not is_corn:
         return "not_corn"
     if insect_visible:
-        return "pest"
+        return "pest" if pest_sure else "unknown_pest"
     if healthy:
         return "healthy"
     return "unclear" if damage_percent is None else "severity_only"
@@ -76,28 +76,23 @@ def assess_photo(rgb, models, features=None):
 
     insect, insect_conf, _ = predict_one(models["detector"], x)
     insect_visible = insect == "yes"
+    result.update(insect_confidence=round(insect_conf, 3))
     if insect_visible:
         pest, pest_conf, _ = predict_one(models["pest"], x)
         if pest == "healthy":  # detector and pest classifier disagree: trust "no insect"
             insect_visible = False
         else:
-            result.update(pest=pest, pest_confidence=round(pest_conf, 3))
+            # An insect: the pest's name only, no damage grade.
+            sure = pest_conf >= PEST_AT_LEAST
+            result.update(outcome=decide(True, True, sure, None, None), insect_visible=True,
+                          pest=pest if sure else None, pest_confidence=round(pest_conf, 3))
+            return result
 
-    healthy = None
-    if not insect_visible:
-        health, health_conf, _ = predict_one(models["health"], x)
-        healthy = health == "healthy"
-        result.update(healthy=healthy, health_confidence=round(health_conf, 3))
-
+    health, health_conf, _ = predict_one(models["health"], x)
+    healthy = health == "healthy"
     sev = assess(rgb)
-    level, damage = sev["level"], sev["damage_percent"]
-    if healthy:
-        level = "Healthy"
-    elif level == "Healthy":
-        level = "Low"  # damaged or a pest present: never graded "Healthy"
-    if insect_visible and sev.get("green_share", 1.0) < NO_PLANT_BELOW:
-        level, damage = "Unclear", None  # no plant in the photo to measure
-    result.update(outcome=decide(True, insect_visible, healthy, sev["damage_percent"]),
-                  insect_visible=insect_visible, insect_confidence=round(insect_conf, 3),
-                  damage_percent=damage, severity=level)
+    level = "Healthy" if healthy else ("Low" if sev["level"] == "Healthy" else sev["level"])
+    result.update(outcome=decide(True, False, False, healthy, sev["damage_percent"]), insect_visible=False,
+                  healthy=healthy, health_confidence=round(health_conf, 3),
+                  damage_percent=sev["damage_percent"], severity=level)
     return result

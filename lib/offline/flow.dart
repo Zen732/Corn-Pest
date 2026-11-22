@@ -1,5 +1,5 @@
 // The app's decision for one photo, on the phone: the same rules as ml/src/flow.py
-//     corn check -> insect detector -> pest classifier or healthy-vs-damaged -> severity
+//     corn check -> insect? yes: pest classifier (name only) / no: healthy-vs-damaged -> severity
 import 'dart:typed_data';
 
 import 'features.dart';
@@ -7,8 +7,8 @@ import 'image_ops.dart';
 import 'severity.dart';
 import 'svm_model.dart';
 
-/// Pest named but less healthy green leaf than this share of the photo: severity not measured.
-const noPlantBelow = 0.05;
+/// The pest classifier must be at least this sure to name a pest (PEST_AT_LEAST in flow.py).
+const pestAtLeast = 0.50;
 
 /// The corn check must be at least this sure that the photo is corn (CORN_AT_LEAST in flow.py).
 const cornAtLeast = 0.60;
@@ -34,49 +34,33 @@ Map<String, dynamic> assessPhoto(Img rgb, OfflineModels m, {Float32List? feature
   if ((corn.probabilities['corn'] ?? 0) < cornAtLeast) return result;
 
   final insect = m.detector.predict(x);
-  var insectVisible = insect.label == 'yes';
-  if (insectVisible) {
+  result['insect_confidence'] = _r3(insect.confidence);
+  if (insect.label == 'yes') {
     final pest = m.pest.predict(x);
-    if (pest.label == 'healthy') {
-      insectVisible = false; // the detector was probably wrong
-    } else {
-      result['pest'] = pest.label;
-      result['pest_confidence'] = _r3(pest.confidence);
+    if (pest.label != 'healthy') {
+      // An insect: the pest's name only, no damage grade. Not sure enough: "not recognized".
+      final sure = pest.confidence >= pestAtLeast;
+      result.addAll({
+        'outcome': sure ? 'pest' : 'unknown_pest',
+        'insect_visible': true,
+        'pest': sure ? pest.label : null,
+        'pest_confidence': _r3(pest.confidence),
+      });
+      return result;
     }
-  }
-  bool? healthy;
-  if (!insectVisible) {
-    final hp = m.health.predict(x);
-    healthy = hp.label == 'healthy';
-    result['healthy'] = healthy;
-    result['health_confidence'] = _r3(hp.confidence);
+    // The pest classifier says "healthy": the detector was probably wrong; treat as no insect.
   }
 
+  final hp = m.health.predict(x);
+  final healthy = hp.label == 'healthy';
   final sev = assessSeverity(rgb);
-  var level = sev.level;
-  double? damage = sev.damagePercent;
-  if (healthy == true) {
-    level = 'Healthy';
-  } else if (level == 'Healthy') {
-    level = 'Low';
-  }
-  if (insectVisible && sev.greenShare < noPlantBelow) {
-    level = 'Unclear';
-    damage = null;
-  }
-  final String outcome;
-  if (insectVisible) {
-    outcome = 'pest';
-  } else if (healthy == true) {
-    outcome = 'healthy';
-  } else {
-    outcome = sev.damagePercent == null ? 'unclear' : 'severity_only';
-  }
+  final level = healthy ? 'Healthy' : (sev.level == 'Healthy' ? 'Low' : sev.level);
   result.addAll({
-    'outcome': outcome,
-    'insect_visible': insectVisible,
-    'insect_confidence': _r3(insect.confidence),
-    'damage_percent': damage,
+    'outcome': healthy ? 'healthy' : (sev.damagePercent == null ? 'unclear' : 'severity_only'),
+    'insect_visible': false,
+    'healthy': healthy,
+    'health_confidence': _r3(hp.confidence),
+    'damage_percent': sev.damagePercent,
     'severity': level,
   });
   return result;

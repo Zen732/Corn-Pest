@@ -12,8 +12,6 @@ const pestResult = ScanResult(
   outcome: 'pest',
   pest: 'fall_armyworm',
   pestConfidence: 0.84,
-  severity: 'Moderate',
-  damagePercent: 23.4,
   insectVisible: true,
   cornConfidence: 0.98,
   modelVersion: '2026-11-14',
@@ -61,18 +59,22 @@ void main() {
     expect(find.text('Fall armyworm'), findsOneWidget);
     expect(find.text('Spodoptera frugiperda'), findsOneWidget);
     expect(find.text(S.howSure(0.84)), findsOneWidget);
-    expect(find.text(S.severityLine('Moderate', 23.4)), findsOneWidget);
+    expect(find.textContaining('Severity'), findsNothing); // a pest: the name only
     expect(find.text(S.saved), findsOneWidget);
     expect((await history.list()).single.result.pest, 'fall_armyworm');
   });
 
-  testWidgets('pest with no plant in the photo: severity "not measured"', (tester) async {
-    const result = ScanResult(outcome: 'pest', pest: 'corn_aphid', pestConfidence: 0.7, severity: 'Unclear');
-    await pumpApp(tester, await makeServices(auth: FakeAuth.signedIn(), api: FakeApi([result])));
+  testWidgets('insect the app is not sure about: "not recognized", saved to History', (tester) async {
+    const result = ScanResult(outcome: 'unknown_pest', pestConfidence: 0.4, insectVisible: true);
+    final history = HistoryStore(storage: MemoryStorage(), remote: FakeRemote());
+    await pumpApp(tester, await makeServices(auth: FakeAuth.signedIn(), api: FakeApi([result]), history: history));
     await openScan(tester);
     await takePhoto(tester);
-    expect(find.text('Corn aphid'), findsOneWidget);
-    expect(find.text(S.severityNotMeasured), findsOneWidget);
+    expect(find.text(S.unknownPestTitle), findsOneWidget);
+    expect(find.text(S.unknownPestBody), findsOneWidget);
+    expect(find.textContaining('Severity'), findsNothing);
+    expect(find.text(S.saved), findsOneWidget);
+    expect((await history.list()).single.result.outcome, 'unknown_pest');
   });
 
   testWidgets('healthy and damage-only results, both saved', (tester) async {

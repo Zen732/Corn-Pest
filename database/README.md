@@ -103,11 +103,11 @@ The backend's result (`ml/src/flow.py`) maps to the `scans` columns like this:
 
 | Backend result | `scans` column |
 |---|---|
-| `outcome` (`healthy`, `severity_only`, `pest`) | `outcome`. Don't save `not_corn` or `unclear` |
+| `outcome` (`healthy`, `severity_only`, `pest`, `unknown_pest`) | `outcome`. Don't save `not_corn` or `unclear` |
 | `pest` | `pest_key` (only when the outcome is `pest`) |
-| `pest_confidence` | `pest_confidence` |
+| `pest_confidence` | `pest_confidence` (also kept for `unknown_pest`) |
 | `damage_percent` | `damage_percent` |
-| `severity` | `severity` |
+| `severity` | `severity` (empty for `pest` and `unknown_pest` since 22 Nov 2026) |
 | the backend's model version | `model_version` |
 | all the confidences | `details` (JSON) |
 | the uploaded photo's path, `<user id>/<scan id>.jpg` | `photo_path` |

@@ -31,12 +31,12 @@ class ScanResult {
     this.modelVersion = 'unknown',
   });
 
-  /// healthy, severity_only, pest, not_corn or unclear.
+  /// healthy, severity_only, pest (name only), unknown_pest (insect not recognized), not_corn or unclear.
   final String outcome;
   final String? pest;
   final double? pestConfidence;
 
-  /// Healthy, Low, Moderate, High, or Unclear (a pest with no plant in the photo to measure).
+  /// Healthy, Low, Moderate or High; none for a pest (older pest scans may have one).
   final String? severity;
   final double? damagePercent;
   final bool? insectVisible;
@@ -78,7 +78,7 @@ class ScanResult {
       };
 
   /// Only real results go to History; "not corn" and "unclear" ask for a new photo instead.
-  bool get savable => const {'healthy', 'severity_only', 'pest'}.contains(outcome);
+  bool get savable => const {'healthy', 'severity_only', 'pest', 'unknown_pest'}.contains(outcome);
 
   Map<String, dynamic> get details => {
         'corn_confidence': cornConfidence,

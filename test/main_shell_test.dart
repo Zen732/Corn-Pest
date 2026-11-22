@@ -7,7 +7,7 @@ import 'package:pest_assessment/strings.dart';
 
 import 'fakes.dart';
 
-const pest = ScanResult(outcome: 'pest', pest: 'fall_armyworm', pestConfidence: 0.84, severity: 'Moderate', damagePercent: 23.4);
+const pest = ScanResult(outcome: 'pest', pest: 'fall_armyworm', pestConfidence: 0.84);
 const healthy = ScanResult(outcome: 'healthy', severity: 'Healthy');
 
 void main() {
@@ -23,7 +23,7 @@ void main() {
     expect(find.text(S.statScans), findsOneWidget);
     expect(find.text('2'), findsWidgets); // 2 scans, 2 waiting
     expect(find.text('1'), findsOneWidget); // 1 pest
-    expect(find.text(S.summary('pest', 'fall_armyworm', 'Moderate')), findsOneWidget);
+    expect(find.text(S.summary('pest', 'fall_armyworm', null)), findsOneWidget);
 
     await tester.tap(find.text(S.seeAll));
     await tester.pumpAndSettle();

@@ -52,33 +52,37 @@ used for training (`ml/dataset/test_random/`, kept off GitHub).
 - An insect from another crop, on a photo that passes the check, is named as one of the five
   corn pests.
 
-## The three outcomes
+## The outcomes
 
 Every scan that passes the corn check ends in exactly one of these. Nothing else is shown:
-no treatment advice, no product names, no "what to do" text, anywhere in the app.
+no treatment advice, no product names, no "what to do" text, anywhere in the app. A photo shows
+**either** a pest **or** the damage, never both (22 Nov 2026).
 
 | Outcome | When | What the app shows |
 |---|---|---|
+| **Pest** | An insect is visible and the pest classifier is at least 50% sure | Pest name + how sure (no severity) |
+| **Insect not recognized** (`unknown_pest`) | An insect is visible but the pest classifier is less than 50% sure | "An insect was found, but the app can't tell which pest it is. It may not be one of the 5 corn pests this app knows." |
 | **Healthy** | No insect visible, and the healthy-vs-damaged model says healthy | "Healthy" |
 | **Severity only** | No insect visible, and the model says damaged | Severity: Low / Moderate / High (+ damage %) |
-| **Pest + Severity** | An insect is visible in the photo (any damage level) | Pest name + confidence + Severity (at least "Low") |
 
 ## Pipeline (per scan)
 
-Code: [ml/src/flow.py](../ml/src/flow.py) (the backend uses an exact copy).
+Code: [ml/src/flow.py](../ml/src/flow.py) (the backend uses an exact copy; the phone app uses
+the same rules in [lib/offline/flow.dart](../lib/offline/flow.dart)).
 
 ```
 photo -> features.py -> corn_check model
-  -> not corn ---> outcome = Message ("doesn't look like corn"), stop
+  -> less than 60% sure it is corn ---> outcome = Message ("doesn't look like corn"), stop
   -> corn ---> continue:
 
-  1. Insect detector (binary classifier: bug_visible yes / no)
-       -> yes ---> pest classifier (fall armyworm / corn planthopper / corn aphid / armyworm /
-                   common cutworm / healthy)
-                     -> a pest  ---> outcome = Pest name + Severity (step 2), stop
+  1. Is there an insect? Insect detector (binary classifier: bug_visible yes / no)
+       -> yes ---> which pest? pest classifier (fall armyworm / corn planthopper / corn aphid /
+                   armyworm / common cutworm / healthy)
+                     -> a pest, at least 50% sure ---> outcome = Pest (name only), stop
+                     -> a pest, less sure         ---> outcome = Insect not recognized, stop
                      -> healthy ---> the detector was probably wrong: treat as "no insect"
 
-  2. Healthy-vs-damaged model (binary classifier, same features)
+  2. No insect: healthy-vs-damaged model (binary classifier, same features)
        -> healthy ---> outcome = Healthy
        -> damaged ---> step 3
 
@@ -86,6 +90,29 @@ photo -> features.py -> corn_check model
        -> plant not found ---> outcome = Unclear (ask for a clearer photo)
        -> otherwise       ---> outcome = Severity only (Low/Moderate/High, at least Low)
 ```
+
+**Pest name only, no severity** (22 Nov 2026). Before, a pest result also showed a damage grade.
+On insect close-ups that grade mostly measured the insect and the background (for example "High,
+92% damaged" for an aphid on a yellowing leaf), so a photo now shows either the pest or the damage.
+This replaces the 20 November rule that showed "Severity: not measured" for insects with no
+plant in view.
+
+**"Insect not recognized" under 50%** (`PEST_AT_LEAST` in `flow.py`, 22 Nov 2026). The pest
+classifier must name one of the five pests, even for an insect it never learned (a beetle on a
+corn leaf was called "Corn aphid, 87%"). When it is less than 50% sure, the app now says the
+insect is not recognized. In the whole-app test (test photos with one of the five pests in view):
+
+| | Before | 50% rule |
+|---|---|---|
+| Pest names shown | 2,405 | 1,583 |
+| ... of which right | 57.9% | **69.5%** |
+| Wrong pest names | 1,013 | **483** |
+| Insect photos named right | 55.1% | 43.7% |
+| Insect photos "not recognized" | 0% | 27.3% |
+
+Wrong names are halved; the cost is that about 1 in 4 photos of the five pests is answered "not
+recognized". The rule cannot catch an unknown insect the classifier is sure about (the beetle
+above, 87%); teaching the classifier an "other insect" answer is the planned next step.
 
 **Healthy vs damaged is decided by a trained model, not by the damage %** (changed 14 November
 2026). The first rule was "damage under 5% = Healthy", but the K-Means damage % counts soil,
@@ -98,17 +125,7 @@ with no insect in view: `healthy/` against `unidentified_damage/` and pest-folde
 
 The insect check comes **before** the healthy cutoff (changed 11 November 2026). The first
 version decided "Healthy" first, so a pest on a barely damaged plant was never named: in the
-whole-app test, 7-19% of pest photos (aphids the most) stopped at "Healthy". With a pest
-present the severity is shown as at least "Low", never "Healthy".
-
-**Severity "not measured" for insects with no plant in view** (added 20 November 2026). A
-close-up of a caterpillar on a hand, or a moth on a wall, has almost no leaf in it, and the
-damage % then counts the hand or wall as damage ("High, 100%"). So when a pest is named but
-less than 5% of the photo is healthy green tissue (`NO_PLANT_BELOW` in `flow.py`), the severity
-is `Unclear` and the app says "Severity: not measured. Take a photo of the damaged leaf".
-On the validation photos, under 5% green covered 0.2-0.5% of corn plant photos but 53-64% of
-caterpillar and planthopper photos (20% of aphid photos). In the whole-app test 1,253 of 2,539
-pest results (49%) became "not measured"; outcomes and pest names are unchanged (75.4%).
+whole-app test, 7-19% of pest photos (aphids the most) stopped at "Healthy".
 
 ## Why a detector, not just classifier confidence
 
@@ -154,20 +171,20 @@ this is stated as a limitation.
 the full decision in `flow.py` and checks what the app would show. Results are in
 `ml/results/flow_test.csv` and `flow_summary.csv`.
 
-| Kind of test photo | Should show | 11 Nov (first) | 12 Nov | 14 Nov | 22 Nov (now) |
-|---|---|---|---|---|---|
-| Fall armyworm (insect in view) | fall armyworm | 12.2% | 50.5% | 49.0% | 46.9% |
-| Common cutworm | common cutworm | 11.1% | 59.4% | 58.1% | 50.2% |
-| Corn aphid | corn aphid | 12.4% | 75.5% | 74.9% | 69.0% |
-| Armyworm | armyworm | 11.8% | 45.4% | 46.1% | 41.2% |
-| Corn planthopper | corn planthopper | 3.9% | 63.1% | 69.9% | 68.0% |
-| Damaged corn, no insect | Severity only | 59.6% | 60.2% | 84.9% | 82.8% |
-| Healthy corn | Healthy | 41.8% | 41.5% | 83.0% | 82.5% |
-| Other crops | Not corn | 96.4% | 90.8% | 90.8% | 93.4% |
-| **All of the above (5,709)** | | **45.6%** | **65.7%** | **75.4%** | **73.4%** |
-| Philippine plants (375, new) | Not corn | | | 2.1%* | 76.3% |
-| Everyday scenes (375, new) | Not corn | | | 4.0%* | 89.6% |
-| **All test photos (6,459)** | | | | | **74.5%** |
+| Kind of test photo | Should show | 11 Nov (first) | 12 Nov | 14 Nov | 22 Nov, corn check | 22 Nov, pest rule (now) |
+|---|---|---|---|---|---|---|
+| Fall armyworm (insect in view) | fall armyworm | 12.2% | 50.5% | 49.0% | 46.9% | 35.8% |
+| Common cutworm | common cutworm | 11.1% | 59.4% | 58.1% | 50.2% | 34.2% |
+| Corn aphid | corn aphid | 12.4% | 75.5% | 74.9% | 69.0% | 63.5% |
+| Armyworm | armyworm | 11.8% | 45.4% | 46.1% | 41.2% | 29.7% |
+| Corn planthopper | corn planthopper | 3.9% | 63.1% | 69.9% | 68.0% | 56.2% |
+| Damaged corn, no insect | Severity only | 59.6% | 60.2% | 84.9% | 82.8% | 82.8% |
+| Healthy corn | Healthy | 41.8% | 41.5% | 83.0% | 82.5% | 82.5% |
+| Other crops | Not corn | 96.4% | 90.8% | 90.8% | 93.4% | 93.4% |
+| **All of the above (5,709)** | | **45.6%** | **65.7%** | **75.4%** | **73.4%** | **68.5%** |
+| Philippine plants (375, new) | Not corn | | | 2.1%* | 76.3% | 76.3% |
+| Everyday scenes (375, new) | Not corn | | | 4.0%* | 89.6% | 89.6% |
+| **All test photos (6,459)** | | | | | **74.5%** | **70.2%** |
 
 \* the 14 Nov corn check on these photos (measured on 22 Nov; they were not in the test then).
 
@@ -183,6 +200,10 @@ What changed:
   passed before); the cost is that 8.5% of corn test photos are turned away (was 1.9%), so the
   pest rows drop 1-8 points and the score on the same 5,709 photos drops from 75.4% to 73.4%.
   The old 75.4% was flattered by a test with no everyday photos in it.
+- 22 Nov (pest rule): a pest is named only when the pest classifier is at least 50% sure;
+  otherwise "Insect not recognized" (counted as wrong in this table). The pest rows drop because
+  27% of pest photos are now "not recognized", but wrong pest names fall from 1,013 to 483 and a
+  shown pest name is right 69.5% of the time (was 57.9%). See "The outcomes" above.
 
 Remaining weak spots, for the paper:
 - **Caterpillar pest names** (46-58%): fall armyworm, common cutworm and armyworm are confused

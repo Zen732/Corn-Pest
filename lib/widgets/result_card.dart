@@ -29,12 +29,14 @@ class ResultCard extends StatelessWidget {
           color: const Color(0xFFC62828),
           title: name,
           subtitle: scientific,
-          lines: [
-            if (r.pestConfidence != null) S.howSure(r.pestConfidence!),
-            r.severity == 'Unclear' || r.severity == null
-                ? S.severityNotMeasured
-                : S.severityLine(r.severity!, r.damagePercent),
-          ],
+          lines: [if (r.pestConfidence != null) S.howSure(r.pestConfidence!)], // the name only, no damage grade
+        );
+      case 'unknown_pest':
+        return const MessageCard(
+          icon: Icons.bug_report_outlined,
+          color: Color(0xFF6D4C41),
+          title: S.unknownPestTitle,
+          lines: [S.unknownPestBody, S.unknownPestTip],
         );
       case 'not_corn':
         return MessageCard(icon: Icons.help_outline, color: Colors.grey.shade700, title: S.notCornTitle, lines: const [S.notCornBody]);

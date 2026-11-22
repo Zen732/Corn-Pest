@@ -135,7 +135,10 @@ class S {
   static String howSure(double c) => 'How sure: ${(c * 100).round()}%';
   static String severityLine(String level, double? percent) =>
       percent == null ? 'Severity: $level' : 'Severity: $level (${percent.round()}% of the plant damaged)';
-  static const severityNotMeasured = 'Severity: not measured. Take a photo of the damaged leaf to measure it.';
+  static const unknownPestTitle = 'Insect not recognized';
+  static const unknownPestBody =
+      'An insect was found, but the app can\'t tell which pest it is. It may not be one of the 5 corn pests this app knows.';
+  static const unknownPestTip = 'Try a closer, sharper photo of the insect.';
   static const pests = {
     'fall_armyworm': ('Fall armyworm', 'Spodoptera frugiperda'),
     'common_cutworm': ('Common cutworm', 'Spodoptera litura'),
@@ -169,8 +172,9 @@ class S {
   static String summary(String outcome, String? pest, String? severity) {
     switch (outcome) {
       case 'pest':
-        final name = pests[pest]?.$1 ?? (pest ?? 'Pest');
-        return severity == null || severity == 'Unclear' ? name : '$name - $severity';
+        return pests[pest]?.$1 ?? (pest ?? 'Pest');
+      case 'unknown_pest':
+        return unknownPestTitle;
       case 'severity_only':
         return 'Damage - ${severity ?? ''}';
       case 'healthy':

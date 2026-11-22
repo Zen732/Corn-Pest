@@ -153,7 +153,7 @@ class SupabaseScanRemote implements ScanRemote {
         'photo_path': scan.remotePhotoPath,
         'outcome': r.outcome,
         'pest_key': r.outcome == 'pest' ? r.pest : null,
-        'pest_confidence': r.outcome == 'pest' ? r.pestConfidence : null,
+        'pest_confidence': r.outcome == 'pest' || r.outcome == 'unknown_pest' ? r.pestConfidence : null,
         'damage_percent': r.damagePercent,
         'severity': r.severity,
         'model_version': r.modelVersion,

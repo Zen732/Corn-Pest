@@ -32,13 +32,14 @@ History uploads to Supabase when there is internet (see [docs/offline_checking.m
 
 ```
 Login -> Photo tips -> Take/pick photo
-      -> Corn check: is this a corn plant?
+      -> Corn check: is this a corn plant? (at least 60% sure)
            - No / unsure  -> Message ("doesn't look like a corn plant"), stop
            - Yes          -> continue
-      -> Result:
-           - Pest name + Severity                  (insect visible in photo)
-           - Healthy                              (no insect, healthy-vs-damaged model says healthy)
-           - Severity only (Low/Moderate/High)     (no insect, damaged; K-Means damage %)
+      -> Is there an insect?
+           - Yes -> Which pest?
+                      - at least 50% sure  -> Pest name (no severity)
+                      - less sure          -> "Insect not recognized"
+           - No  -> Healthy, or Severity only (Low/Moderate/High; K-Means damage %)
       -> Saved to History
 ```
 
@@ -61,5 +62,6 @@ Rice and banana were removed from the project on 15 October 2026. Their photos a
 `_archive/2_unused_photos/rice_banana_project/` (not used). `ml/dataset/not_corn/` holds 15,000 photos that
 teach the corn check what is not corn: 10,000 of other crops (rice, banana, tomato, cassava, cashew),
 2,500 plants photographed in the Philippines and 2,500 everyday scenes; see
-[docs/dataset_sources.md](docs/dataset_sources.md). Whole-app test: 74.5% of 6,459 test photos
-shown correctly (see [docs/classification_flow.md](docs/classification_flow.md)).
+[docs/dataset_sources.md](docs/dataset_sources.md). Whole-app test: 70.2% of 6,459 test photos
+shown correctly; a pest name, when shown, is right 69.5% of the time (see
+[docs/classification_flow.md](docs/classification_flow.md)).

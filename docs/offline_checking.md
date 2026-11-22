@@ -74,7 +74,7 @@ models and Dart decision. It compares the results with Python (`ml/src/parity_re
 | Outcome shown (healthy / damage / pest / not corn / unclear) | **100%** (903/903) |
 | Pest name | **100%** |
 | Plant area found (background, holes) | 100% |
-| Severity grade (Low / Moderate / High) | **98.6%** (727/737, models of 22 Nov 2026); damage % median difference 0, 90% within 0.4 points |
+| Severity grade (Low / Moderate / High) | **98.2%** (271/276; only photos with no insect get a grade since 22 Nov 2026); damage % median difference 0, 90% within 0.4 points |
 
 The severity grade is the only thing that can differ. scikit-learn's K-Means picks its starting
 points with Python's random generator, which cannot be reproduced in Dart, so the app uses its
