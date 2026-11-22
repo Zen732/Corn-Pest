@@ -22,7 +22,8 @@ class S {
 
   // Sign in with an email code
   static const sendCode = 'Send me a code';
-  static const codeIntro = 'Enter your email. We\'ll send you a 6-digit code - no password needed.';
+  static const codeIntro = 'Enter your email. We\'ll send you a 6-digit code - no password needed.\n\n'
+      'New here? Your account is made automatically.';
   static String codeSentTo(String email) => 'We sent a code to $email. Check your inbox (and spam folder).';
   static const code = 'Code from the email';
   static const enterCode = 'Enter the code from the email';
@@ -34,7 +35,7 @@ class S {
   static const changeEmail = 'Use a different email';
   static const usePassword = 'Use a password instead';
 
-  static const useCode = 'Sign in with an email code instead';
+  static const useCode = 'Sign in or sign up with an email code';
   static const logIn = 'Log in';
 
   // Bottom bar

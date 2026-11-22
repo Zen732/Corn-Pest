@@ -20,6 +20,16 @@ See [docs/classification_flow.md](docs/classification_flow.md) for the full deci
 
 ## App flow
 
+The app opens on the login form (email + password). Under it: **Sign in or sign up with an
+email code** (a 6-digit code by email, no password; new emails get an account automatically,
+then the app asks the name and barangay once) and **Create account** (password account, confirmed
+with the same kind of emailed code). Every email has a code, never a link.
+
+Signed in, a bottom bar holds **Home** (greeting, numbers, recent scans, photo tip), **History**,
+a big round **camera button** (Scan) and **Settings** (your info, edit name and barangay, change
+password, upload waiting scans, sign out). Scans work offline: the models run on the phone and
+History uploads to Supabase when there is internet (see [docs/offline_checking.md](docs/offline_checking.md)).
+
 ```
 Login -> Photo tips -> Take/pick photo
       -> Corn check: is this a corn plant?

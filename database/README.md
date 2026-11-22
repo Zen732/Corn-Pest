@@ -64,9 +64,27 @@ retake the photo.
    - **Table Editor** shows `pests` (5 rows), `barangays` (31 rows), `profiles` and `scans`
      (empty).
    - **Storage** shows a private bucket called `scan-photos`.
-4. **Turn on email login.** In **Authentication**, under sign-in methods / providers, make sure
-   **Email** is on. While testing you may turn off "Confirm email", so test accounts work
-   without opening a confirmation email. Turn it back on before real farmers use the app.
+4. **Turn on email login with codes.** The app never uses email links (they would open
+   `localhost`, which doesn't work on a phone); every email carries a 6-digit code.
+   - In **Authentication -> Sign In / Providers**, make sure **Email** is on and keep
+     **Confirm email** on.
+   - **Send emails through Gmail** (Supabase's own sender only reaches the project's team):
+     **Authentication -> Emails -> SMTP Settings**, turn on custom SMTP. Host `smtp.gmail.com`,
+     port `465`, username = the Gmail address, password = a Google **app password** (Google
+     Account -> Security -> 2-Step Verification on -> App passwords; 16 letters). Sender name:
+     `Corn Pest`. Keep the app password private.
+   - **Put the code in two templates**, **Authentication -> Emails -> Templates**:
+     **Magic link** (used when an existing account signs in with a code) and **Confirm sign up**
+     (used for new accounts and unconfirmed ones). In each: subject `Your Corn Pest code`, open
+     **Source**, replace everything with the text below, and **Save**. Make sure
+     `{{ .ConfirmationURL }}` is gone.
+
+     ```html
+     <h2>Your Corn Pest code</h2>
+     <p>Type this code in the app:</p>
+     <p style="font-size:32px;font-weight:bold;letter-spacing:6px">{{ .Token }}</p>
+     <p>The code works for 1 hour. If you didn't ask for it, ignore this email.</p>
+     ```
 5. **Copy two values for the app.** In **Project Settings -> API** (or **API Keys**), copy:
    - the **Project URL**;
    - the **anon / publishable key**.
@@ -96,9 +114,10 @@ The backend's result (`ml/src/flow.py`) maps to the `scans` columns like this:
 
 To delete a scan, delete both its photo in `scan-photos` and its row in `scans`.
 
-At sign-up the app sends the name and barangay as user metadata:
+With **Create account**, the app sends the name and barangay as user metadata:
 `{"full_name": "Juan Dela Cruz", "barangay_id": "13"}`. The profile is then filled in
-automatically.
+automatically. Accounts made with an email code start without them; the app asks once and saves
+them to `profiles` (the user can change them later in Settings).
 
 ## Data for the paper
 
