@@ -1,0 +1,16 @@
+PEST CLASSIFIER FEATURE EXPERIMENT (test photos; real photos only, same SVM for all)
+
+method        accuracy  macroF1  pests right  caterpillars  50%: names shown  ...right
+current          70.8%    0.661        62.9%         57.4%             64.3%     74.9%
+crop             65.5%    0.608        57.5%         50.9%             53.6%     73.4%
+cnn              90.5%    0.890        87.7%         85.9%             93.5%     91.5%
+cnn+current      90.9%    0.895        88.3%         86.7%             94.6%     91.0%
+
+current: by class armyworm 37%, common_cutworm 71%, corn_aphid 80%, corn_planthopper 58%, fall_armyworm 50%, healthy 97%
+    your 3 screenshots: beetle (not one of the 5) -> corn_aphid 94%; caterpillar -> corn_aphid 49%; aphid -> corn_aphid 46%
+crop: by class armyworm 27%, common_cutworm 64%, corn_aphid 75%, corn_planthopper 57%, fall_armyworm 46%, healthy 92%
+    your 3 screenshots: beetle (not one of the 5) -> corn_aphid 58%; caterpillar -> fall_armyworm 42%; aphid -> corn_aphid 55%
+cnn: by class armyworm 75%, common_cutworm 91%, corn_aphid 93%, corn_planthopper 87%, fall_armyworm 86%, healthy 100%
+    your 3 screenshots: beetle (not one of the 5) -> corn_aphid 87%; caterpillar -> armyworm 85%; aphid -> corn_aphid 99%
+cnn+current: by class armyworm 75%, common_cutworm 91%, corn_aphid 93%, corn_planthopper 87%, fall_armyworm 87%, healthy 100%
+    your 3 screenshots: beetle (not one of the 5) -> corn_aphid 54%; caterpillar -> armyworm 80%; aphid -> corn_aphid 99%

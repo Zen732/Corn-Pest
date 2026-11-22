@@ -1,0 +1,102 @@
+{
+ "current": {
+  "val_macro_f1": 0.6582,
+  "C": 10,
+  "class_weight": "balanced",
+  "test_accuracy": 0.7076,
+  "test_macro_f1": 0.6613,
+  "pest_photos_right": 0.6287,
+  "caterpillars_right": 0.5743,
+  "by_class_right": {
+   "armyworm": 0.366,
+   "common_cutworm": 0.7143,
+   "corn_aphid": 0.8007,
+   "corn_planthopper": 0.5752,
+   "fall_armyworm": 0.4972,
+   "healthy": 0.9682
+  },
+  "rule50_names_shown_share": 0.6435,
+  "rule50_names_right": 0.7486,
+  "rule50_pest_photos_named_right": 0.4817,
+  "your_screenshots": {
+   "beetle (not one of the 5)": "corn_aphid 94%",
+   "caterpillar": "corn_aphid 49%",
+   "aphid": "corn_aphid 46%"
+  }
+ },
+ "crop": {
+  "val_macro_f1": 0.6068,
+  "C": 10,
+  "class_weight": "balanced",
+  "test_accuracy": 0.6545,
+  "test_macro_f1": 0.6078,
+  "pest_photos_right": 0.5745,
+  "caterpillars_right": 0.5088,
+  "by_class_right": {
+   "armyworm": 0.2712,
+   "common_cutworm": 0.6422,
+   "corn_aphid": 0.7538,
+   "corn_planthopper": 0.5654,
+   "fall_armyworm": 0.4578,
+   "healthy": 0.9191
+  },
+  "rule50_names_shown_share": 0.5363,
+  "rule50_names_right": 0.7335,
+  "rule50_pest_photos_named_right": 0.3934,
+  "your_screenshots": {
+   "beetle (not one of the 5)": "corn_aphid 58%",
+   "caterpillar": "fall_armyworm 42%",
+   "aphid": "corn_aphid 55%"
+  }
+ },
+ "cnn": {
+  "val_macro_f1": 0.8962,
+  "C": 10,
+  "class_weight": "balanced",
+  "test_accuracy": 0.9048,
+  "test_macro_f1": 0.8902,
+  "pest_photos_right": 0.8768,
+  "caterpillars_right": 0.8589,
+  "by_class_right": {
+   "armyworm": 0.7484,
+   "common_cutworm": 0.9065,
+   "corn_aphid": 0.9296,
+   "corn_planthopper": 0.866,
+   "fall_armyworm": 0.8555,
+   "healthy": 0.9973
+  },
+  "rule50_names_shown_share": 0.9346,
+  "rule50_names_right": 0.9149,
+  "rule50_pest_photos_named_right": 0.8551,
+  "your_screenshots": {
+   "beetle (not one of the 5)": "corn_aphid 87%",
+   "caterpillar": "armyworm 85%",
+   "aphid": "corn_aphid 99%"
+  }
+ },
+ "cnn+current": {
+  "val_macro_f1": 0.9001,
+  "C": 10,
+  "class_weight": null,
+  "test_accuracy": 0.9091,
+  "test_macro_f1": 0.8952,
+  "pest_photos_right": 0.8828,
+  "caterpillars_right": 0.8665,
+  "by_class_right": {
+   "armyworm": 0.7516,
+   "common_cutworm": 0.9119,
+   "corn_aphid": 0.933,
+   "corn_planthopper": 0.8693,
+   "fall_armyworm": 0.8687,
+   "healthy": 0.996
+  },
+  "rule50_names_shown_share": 0.9462,
+  "rule50_names_right": 0.9096,
+  "rule50_pest_photos_named_right": 0.8607,
+  "your_screenshots": {
+   "beetle (not one of the 5)": "corn_aphid 54%",
+   "caterpillar": "armyworm 80%",
+   "aphid": "corn_aphid 99%"
+  }
+ }
+}

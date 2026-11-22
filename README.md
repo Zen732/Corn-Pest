@@ -6,6 +6,9 @@ planthopper, corn aphid, armyworm and common cutworm. No treatment
 recommendations are shown anywhere in the app.
 See [docs/classification_flow.md](docs/classification_flow.md) for the full decision logic.
 
+**Versions:** Version 1 (hand-crafted features + SVM) is saved as the branch `version-1` / tag `v1.0`;
+see [docs/version1.md](docs/version1.md) for how to go back to it and what it still needs.
+
 ## Layout
 
 | Folder | Purpose |

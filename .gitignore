@@ -87,3 +87,6 @@ kaggle.json
 # Models exported for the app (50 MB, made by ml/src/export_models.py; not on GitHub)
 assets/models/*
 !assets/models/README.md
+
+# Experiment vectors (large, rebuilt by the experiment scripts)
+ml/results/**/*.npy
