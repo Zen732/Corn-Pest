@@ -65,6 +65,7 @@ backend/models/archive_*/
 ml/dataset/raw/*/*/*
 ml/dataset/not_corn/*/*
 ml/dataset/test_local/*/*/*
+ml/dataset/test_random/
 ml/dataset/split/
 ml/results/archive_*/
 ml/results/features.npy
@@ -75,6 +76,7 @@ dataset_sorter/*.log
 dataset_sorter/inbox/
 dataset_sorter/review/
 dataset_sorter/staging/
+dataset_sorter/downloads/
 dataset_sorter/sort_log*.csv
 !dataset_sorter/**/.gitkeep
 

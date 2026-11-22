@@ -12,16 +12,45 @@ see `train.py`) decides whether the photo shows a corn plant.
   plant - check your photo.") instead of forcing a result.
 
 It is trained on every corn photo (healthy, diseased, damaged, and close-ups of the five
-pests) against 10,000 photos of other plants in `ml/dataset/not_corn/` (rice, banana,
-tomato, cassava, cashew). The pest close-ups were added on 11 November 2026: trained on corn
-plant photos only, it rejected three of four pest photos as "not corn", because a close-up
-of a caterpillar or aphid doesn't look like a corn plant.
+pests) against 15,000 "not corn" photos in `ml/dataset/not_corn/`: 10,000 of other crops (rice,
+banana, tomato, cassava, cashew), 2,500 plants photographed in the Philippines and 2,500
+everyday scenes (rooms, streets, food, people, vehicles). The pest close-ups were added on
+11 November 2026: trained on corn plant photos only, it rejected three of four pest photos as
+"not corn", because a close-up of a caterpillar or aphid doesn't look like a corn plant.
 
-**Limitations to state in the paper:** the only "not corn" examples are other plants. A
-photo of something unrelated (a person, a wall, a different insect) was never seen in
-training, so the check may still call it corn, and an insect from another crop would then
-be named as one of the five corn pests. A true "is this any known plant" rejector would
-need a much wider set of unrelated photos.
+"Corn" needs a probability of at least **60%** (`CORN_AT_LEAST` in `flow.py`), not just the
+more likely of the two answers. The level was chosen on validation photos (22 Nov 2026):
+
+| Corn check must be at least | Corn photos accepted | Philippine plants rejected | Everyday scenes rejected |
+|---|---|---|---|
+| 50% | 95.8% | 70.7% | 83.7% |
+| **60% (used)** | **92.1%** | **79.7%** | **89.9%** |
+| 70% | 86.4% | 87.5% | 94.4% |
+
+**Why the Philippine plants and everyday scenes were added (22 Nov 2026).** On 64 random
+phone photos (rooms, a table, a phone, scissors, garden plants and flowers, the ground,
+slippers), the corn check then in use said "corn" for 62, and the app named a pest for 54. Its
+"not corn" side held only crop photos from a few research collections, so it partly learned
+"looks like those collections = not corn". A "corn only" check (One-Class SVM, Isolation
+Forest, nearest-neighbour distance, trained on corn photos alone) was tried first and rejected
+0-3 of the 64 photos: with colour, texture and shape features, the range of corn photos (leaves,
+fields, pests on hands, walls and white backgrounds) is too wide to draw a tight boundary
+around (`ml/src/one_class_experiment.py`, results in `ml/results/one_class/`).
+
+With the new photos and the 60% level, 36 of the 64 photos are rejected (was 2): 7 of 12
+indoor things, 27 of 47 garden plants, 2 of 5 photos of the ground. These photos are never
+used for training (`ml/dataset/test_random/`, kept off GitHub).
+
+**Limitations to state in the paper:**
+- The check still lets through about 1 in 4 garden plants and 1 in 10 everyday scenes; the
+  app then names a pest or a severity for them.
+- Pale objects on dark backgrounds can look like pale leaves on soil to these features: a pale
+  blue bowl on a dark wooden table is still called corn (81% sure), and its nearest training
+  photo is a pale leaf over dark soil.
+- About 1 in 12 real corn photos is now asked to be taken again ("doesn't look like a corn
+  plant"); the old check turned away about 1 in 50.
+- An insect from another crop, on a photo that passes the check, is named as one of the five
+  corn pests.
 
 ## The three outcomes
 
@@ -125,17 +154,22 @@ this is stated as a limitation.
 the full decision in `flow.py` and checks what the app would show. Results are in
 `ml/results/flow_test.csv` and `flow_summary.csv`.
 
-| Kind of test photo | Should show | 11 Nov (first) | 12 Nov | 14 Nov (now) |
-|---|---|---|---|---|
-| Fall armyworm (insect in view) | fall armyworm | 12.2% | 50.5% | 49.0% |
-| Common cutworm | common cutworm | 11.1% | 59.4% | 58.1% |
-| Corn aphid | corn aphid | 12.4% | 75.5% | 74.9% |
-| Armyworm | armyworm | 11.8% | 45.4% | 46.1% |
-| Corn planthopper | corn planthopper | 3.9% | 63.1% | 69.9% |
-| Damaged corn, no insect | Severity only | 59.6% | 60.2% | 84.9% |
-| Healthy corn | Healthy | 41.8% | 41.5% | 83.0% |
-| Other plants | Not corn | 96.4% | 90.8% | 90.8% |
-| **All test photos** | | **45.6%** | **65.7%** | **75.4%** |
+| Kind of test photo | Should show | 11 Nov (first) | 12 Nov | 14 Nov | 22 Nov (now) |
+|---|---|---|---|---|---|
+| Fall armyworm (insect in view) | fall armyworm | 12.2% | 50.5% | 49.0% | 46.9% |
+| Common cutworm | common cutworm | 11.1% | 59.4% | 58.1% | 50.2% |
+| Corn aphid | corn aphid | 12.4% | 75.5% | 74.9% | 69.0% |
+| Armyworm | armyworm | 11.8% | 45.4% | 46.1% | 41.2% |
+| Corn planthopper | corn planthopper | 3.9% | 63.1% | 69.9% | 68.0% |
+| Damaged corn, no insect | Severity only | 59.6% | 60.2% | 84.9% | 82.8% |
+| Healthy corn | Healthy | 41.8% | 41.5% | 83.0% | 82.5% |
+| Other crops | Not corn | 96.4% | 90.8% | 90.8% | 93.4% |
+| **All of the above (5,709)** | | **45.6%** | **65.7%** | **75.4%** | **73.4%** |
+| Philippine plants (375, new) | Not corn | | | 2.1%* | 76.3% |
+| Everyday scenes (375, new) | Not corn | | | 4.0%* | 89.6% |
+| **All test photos (6,459)** | | | | | **74.5%** |
+
+\* the 14 Nov corn check on these photos (measured on 22 Nov; they were not in the test then).
 
 What changed:
 - 12 Nov: the insect check comes before "Healthy", and the corn check also learned from pest
@@ -144,6 +178,11 @@ What changed:
   or given a severity.
 - 14 Nov: "Healthy" is decided by the healthy-vs-damaged model instead of "damage under 5%",
   and the pest classifier learns caterpillars and moths separately.
+- 22 Nov: the corn check also learned 2,500 Philippine plants and 2,500 everyday scenes, and
+  must be 60% sure. Everyday scenes and garden plants are now mostly rejected (they almost all
+  passed before); the cost is that 8.5% of corn test photos are turned away (was 1.9%), so the
+  pest rows drop 1-8 points and the score on the same 5,709 photos drops from 75.4% to 73.4%.
+  The old 75.4% was flattered by a test with no everyday photos in it.
 
 Remaining weak spots, for the paper:
 - **Caterpillar pest names** (46-58%): fall armyworm, common cutworm and armyworm are confused

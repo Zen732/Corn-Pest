@@ -4,7 +4,7 @@ predict.py (backend/app/services/flow.py must be an exact copy), so the whole-ap
 
     photo -> corn check -> insect detector -> healthy-vs-damaged model -> severity -> outcome
 
-    not corn                                       -> "not_corn"       "doesn't look like a corn plant"
+    not corn (corn check < CORN_AT_LEAST sure)     -> "not_corn"       "doesn't look like a corn plant"
     corn, insect visible                           -> "pest"           pest name + severity ("Unclear"
                                                                        if no plant is in view)
     corn, no insect, health model says healthy     -> "healthy"
@@ -36,6 +36,12 @@ from severity import assess
 # planthopper photos (20 Nov 2026).
 NO_PLANT_BELOW = 0.05
 
+# The corn check must be at least this sure (probability of "corn") to go on; below it the photo
+# is "not_corn". Chosen on validation photos (22 Nov 2026), after real-world "not corn" photos
+# were added: 50% -> 60% kept 92% of corn photos while rejecting 80% of Philippine garden plants
+# and 90% of everyday scenes (was 71% / 84%); 70% would turn away 1 in 7 real corn photos.
+CORN_AT_LEAST = 0.60
+
 MODEL_FILES = {"corn_check": "corn_check_model.joblib",
                "detector": "corn_detector_model.joblib",
                "pest": "corn_pest_model.joblib",
@@ -61,11 +67,11 @@ def assess_photo(rgb, models, features=None):
     """Everything the app shows for one photo. `features` may be passed if already computed
     (extract_features(rgb)); severity is always measured from the photo."""
     x = extract_features(rgb) if features is None else features
-    corn, corn_conf, _ = predict_one(models["corn_check"], x)
+    _, corn_conf, corn_probs = predict_one(models["corn_check"], x)
     result = {"outcome": "not_corn", "corn_confidence": round(corn_conf, 3), "insect_visible": None,
               "insect_confidence": None, "pest": None, "pest_confidence": None,
               "healthy": None, "health_confidence": None, "damage_percent": None, "severity": None}
-    if corn != "corn":
+    if corn_probs.get("corn", 0.0) < CORN_AT_LEAST:
         return result
 
     insect, insect_conf, _ = predict_one(models["detector"], x)

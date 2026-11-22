@@ -10,6 +10,9 @@ import 'svm_model.dart';
 /// Pest named but less healthy green leaf than this share of the photo: severity not measured.
 const noPlantBelow = 0.05;
 
+/// The corn check must be at least this sure that the photo is corn (CORN_AT_LEAST in flow.py).
+const cornAtLeast = 0.60;
+
 class OfflineModels {
   const OfflineModels({required this.cornCheck, required this.detector, required this.pest, required this.health, required this.version});
   final SvmModel cornCheck, detector, pest, health;
@@ -28,7 +31,7 @@ Map<String, dynamic> assessPhoto(Img rgb, OfflineModels m, {Float32List? feature
     'insect_confidence': null, 'pest': null, 'pest_confidence': null, 'healthy': null,
     'health_confidence': null, 'damage_percent': null, 'severity': null, 'model_version': m.version,
   };
-  if (corn.label != 'corn') return result;
+  if ((corn.probabilities['corn'] ?? 0) < cornAtLeast) return result;
 
   final insect = m.detector.predict(x);
   var insectVisible = insect.label == 'yes';

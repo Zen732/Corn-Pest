@@ -58,6 +58,8 @@ No field questions and no recommendations. Severity is computed from the photo a
 10. Testing with photos from Cabadbaran corn fields
 
 Rice and banana were removed from the project on 15 October 2026. Their photos are kept in
-`_archive/2_unused_photos/rice_banana_project/` (not used). `ml/dataset/not_corn/` holds 10,000 photos of
-other plants (rice, banana, tomato, cassava, cashew) that teach the corn check what is not
-corn; see [docs/dataset_sources.md](docs/dataset_sources.md).
+`_archive/2_unused_photos/rice_banana_project/` (not used). `ml/dataset/not_corn/` holds 15,000 photos that
+teach the corn check what is not corn: 10,000 of other crops (rice, banana, tomato, cassava, cashew),
+2,500 plants photographed in the Philippines and 2,500 everyday scenes; see
+[docs/dataset_sources.md](docs/dataset_sources.md). Whole-app test: 74.5% of 6,459 test photos
+shown correctly (see [docs/classification_flow.md](docs/classification_flow.md)).

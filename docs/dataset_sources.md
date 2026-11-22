@@ -42,9 +42,21 @@ swapped 2,000 of its least reliable photos (197 uncredited first-download, 1,803
 1,689 moths, armyworm 26 moth drawings, and 508 "other" photos (pupae, eggs, diagrams, some
 caterpillars). Rejected iNaturalist observations: `dataset_sorter/inat_rejected.csv`.
 
-## "Not corn" photos for the corn check (`ml/dataset/not_corn/`, 10,000 photos)
+## "Not corn" photos for the corn check (`ml/dataset/not_corn/`, 15,000 photos)
 
-Other plants, used only to teach the corn check what is not a corn plant: rice 3,753, banana
+**Real-world photos (added 22 Nov 2026, `dataset_sorter/fill_real_world.py`):** the corn check
+had learned only crop photos as "not corn" and called almost any phone photo "corn" (62 of 64
+random photos). Added:
+
+| Folder | Photos | Source | Credits |
+|---|---|---|---|
+| `ph_plants/` | 2,500 | iNaturalist research-grade plant observations in the Philippines, open licences, genus *Zea* (corn) left out; at most 2 per species, newest first (mostly phone photos) | `inaturalist_credits.csv` |
+| `everyday/` | 2,500 | COCO 2017 test images (Lin et al., ECCV 2014): Flickr photos of rooms, streets, food, people, vehicles and animals; "no derivatives" licences left out | `dataset_credits.csv` |
+
+Gap: none of these are close-ups of floors, ground or footwear, which the 64 test photos show
+are still often accepted.
+
+**Other crops,** used only to teach the corn check what is not a corn plant: rice 3,753, banana
 1,903, tomato 1,417, cassava 1,461, cashew 1,466 (healthy and diseased of each). Filled by
 `fill_not_corn.py` from the archived rice/banana classes, the archived AgML rice files, and
 CCMT raw field photos of cashew, cassava and tomato (Ghana; the same collection and photo
@@ -204,9 +216,9 @@ commercial app. The "not corn" sources stay cited because their photos are still
 - **Healthy and damage sources.** 4,000 of each class come from one compiled dataset (Doctor
   Maiz), mostly close-up photos of single leaves. Some disease photos (especially lethal
   necrosis) show only faint streaks, so the severity measure may grade them as near healthy.
-- **Corn check balance.** The corn check compares about 10,000 corn plant photos (healthy,
-  damage, and pest photos with no insect in view) with 10,000 "not corn" photos. The corn
-  side will grow a little once damage-only pest photos are labeled "no insect visible".
+- **Corn check balance.** The corn check compares about 34,000 corn photos (healthy, damage,
+  and pest photos, with or without an insect in view) with 15,000 "not corn" photos (10,000
+  other crops, 2,500 Philippine plants, 2,500 everyday scenes).
 - **Adult moths in the caterpillar pests.** Adult moths make up 40% of fall armyworm, 43% of
   common cutworm and 57% of armyworm. The three species' moths are all brown noctuid moths
   and look alike, so expect more confusion between these classes on moth photos.

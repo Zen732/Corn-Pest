@@ -1,0 +1,40 @@
+ONE-CLASS EXPERIMENT (trained on corn photos only)
+
+current corn check alone: corn test accepted 98.1%, other plants rejected 90.8%, stand-in rejected 17%, your photos rejected 3%
+
+== ocsvm {'support_vectors': 459}
+  accept 95% of val corn: corn accepted 94.5%, other plants rejected 33.6%, stand-in rejected 92%, your photos rejected 2% | + current check: corn 92.7%, plants rej 91.2%, stand-in rej 92%, your photos rej 5%
+     corn classes accepted less: corn_planthopper 88%, healthy 91%
+     stand-ins: brown wood=r, light wood=r, blue cloth=r, red cloth=r, black cloth=r, grey concrete=r, white tiles=r, skin tone=r, brown soil=r, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+  accept 98% of val corn: corn accepted 97.6%, other plants rejected 28.9%, stand-in rejected 67%, your photos rejected 0% | + current check: corn 95.8%, plants rej 91.1%, stand-in rej 75%, your photos rej 3%
+     stand-ins: brown wood=a, light wood=r, blue cloth=r, red cloth=r, black cloth=r, grey concrete=a, white tiles=r, skin tone=r, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+  accept 99% of val corn: corn accepted 98.8%, other plants rejected 26.5%, stand-in rejected 50%, your photos rejected 0% | + current check: corn 96.9%, plants rej 91.0%, stand-in rej 67%, your photos rej 3%
+     stand-ins: brown wood=a, light wood=a, blue cloth=a, red cloth=r, black cloth=r, grey concrete=a, white tiles=r, skin tone=r, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+
+== ocsvm_pca {'support_vectors': 455, 'pca_dims': 120}
+  accept 95% of val corn: corn accepted 94.3%, other plants rejected 33.4%, stand-in rejected 75%, your photos rejected 2% | + current check: corn 92.6%, plants rej 91.2%, stand-in rej 75%, your photos rej 5%
+     corn classes accepted less: corn_planthopper 89%, healthy 90%
+     stand-ins: brown wood=r, light wood=r, blue cloth=r, red cloth=r, black cloth=r, grey concrete=a, white tiles=r, skin tone=r, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+  accept 98% of val corn: corn accepted 97.8%, other plants rejected 28.9%, stand-in rejected 50%, your photos rejected 0% | + current check: corn 96.0%, plants rej 91.1%, stand-in rej 50%, your photos rej 3%
+     stand-ins: brown wood=r, light wood=r, blue cloth=a, red cloth=r, black cloth=a, grey concrete=a, white tiles=r, skin tone=a, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+  accept 99% of val corn: corn accepted 98.8%, other plants rejected 26.9%, stand-in rejected 25%, your photos rejected 0% | + current check: corn 96.9%, plants rej 91.0%, stand-in rej 42%, your photos rej 3%
+     stand-ins: brown wood=a, light wood=a, blue cloth=a, red cloth=a, black cloth=a, grey concrete=a, white tiles=r, skin tone=a, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+
+== knn {'stored_photos': 8000}
+  accept 95% of val corn: corn accepted 95.1%, other plants rejected 36.4%, stand-in rejected 42%, your photos rejected 5% | + current check: corn 93.4%, plants rej 91.2%, stand-in rej 58%, your photos rej 8%
+     corn classes accepted less: armyworm 90%, corn_aphid 86%, corn_planthopper 90%
+     stand-ins: brown wood=a, light wood=a, blue cloth=a, red cloth=a, black cloth=r, grey concrete=a, white tiles=r, skin tone=a, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=r
+  accept 98% of val corn: corn accepted 97.9%, other plants rejected 29.9%, stand-in rejected 25%, your photos rejected 2% | + current check: corn 96.1%, plants rej 90.9%, stand-in rej 42%, your photos rej 5%
+     corn classes accepted less: corn_aphid 94%
+     stand-ins: brown wood=a, light wood=a, blue cloth=a, red cloth=a, black cloth=a, grey concrete=a, white tiles=r, skin tone=a, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+  accept 99% of val corn: corn accepted 98.9%, other plants rejected 26.9%, stand-in rejected 25%, your photos rejected 2% | + current check: corn 97.1%, plants rej 90.9%, stand-in rej 42%, your photos rej 5%
+     stand-ins: brown wood=a, light wood=a, blue cloth=a, red cloth=a, black cloth=a, grey concrete=a, white tiles=r, skin tone=a, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+
+== iforest {}
+  accept 95% of val corn: corn accepted 94.8%, other plants rejected 31.7%, stand-in rejected 42%, your photos rejected 0% | + current check: corn 92.9%, plants rej 91.2%, stand-in rej 42%, your photos rej 3%
+     corn classes accepted less: corn_aphid 90%, corn_planthopper 91%
+     stand-ins: brown wood=r, light wood=r, blue cloth=a, red cloth=a, black cloth=a, grey concrete=a, white tiles=r, skin tone=a, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+  accept 98% of val corn: corn accepted 98.0%, other plants rejected 27.0%, stand-in rejected 42%, your photos rejected 0% | + current check: corn 96.2%, plants rej 91.0%, stand-in rej 42%, your photos rej 3%
+     stand-ins: brown wood=r, light wood=r, blue cloth=a, red cloth=a, black cloth=a, grey concrete=a, white tiles=r, skin tone=a, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a
+  accept 99% of val corn: corn accepted 98.9%, other plants rejected 25.9%, stand-in rejected 25%, your photos rejected 0% | + current check: corn 97.1%, plants rej 91.0%, stand-in rej 42%, your photos rej 3%
+     stand-ins: brown wood=a, light wood=a, blue cloth=a, red cloth=a, black cloth=a, grey concrete=a, white tiles=r, skin tone=a, brown soil=a, checkerboard=r, sky gradient=r, bowl (app screenshot)=a

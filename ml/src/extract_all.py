@@ -3,6 +3,12 @@ and cache them, so train.py doesn't have to re-read every photo on each run.
 
 Run after make_split.py, and again whenever the split or the labels change (from the project root):
     ml/.venv/Scripts/python.exe ml/src/extract_all.py
+    ml/.venv/Scripts/python.exe ml/src/extract_all.py --reuse   (only read photos that are new)
+
+--reuse copies the saved vector of every real photo already in features.npy (same set, same
+path) and reads only the rest; augmented copies are always read again. Use it only when
+features.py has not changed since features.npy was written (the vectors are deterministic).
+A few reused photos are read again and compared, to be sure.
 
 Corn photos need a bug_visible label in ml/dataset/labels.csv (ml/src/label_bug_visible.py);
 unlabeled ones are skipped. Augmented copies (aug-<kind>_<photo>, only in split/train/) take
@@ -18,7 +24,9 @@ Writes:
                                   pest_class, bug_visible, aug ("" for a real photo, else its
                                   kind, e.g. hflip), background, border_v, border_s
 """
+import argparse
 import csv
+import random
 from collections import Counter
 from pathlib import Path
 
@@ -94,16 +102,43 @@ def list_split(labels):
     return files, rows
 
 
+def saved_results():
+    """{(split, path): (vector, border stats)} for real photos in the saved features.npy."""
+    if not (RESULTS_DIR / "features.npy").exists():
+        return {}
+    X = np.load(RESULTS_DIR / "features.npy")
+    with open(RESULTS_DIR / "features_meta.csv", newline="", encoding="utf-8") as f:
+        meta = list(csv.DictReader(f))
+    keys = Counter((m["split"], m["path"]) for m in meta if not m["aug"])
+    return {(m["split"], m["path"]): (X[i], (m["background"], float(m["border_v"]), float(m["border_s"])))
+            for i, m in enumerate(meta) if not m["aug"] and keys[(m["split"], m["path"])] == 1}
+
+
 def main():
+    ap = argparse.ArgumentParser(description="Extract features for every photo in split/.")
+    ap.add_argument("--reuse", action="store_true", help="reuse saved vectors of unchanged real photos")
+    reuse = ap.parse_args().reuse
     if not SPLIT_DIR.is_dir():
         raise SystemExit(f"{SPLIT_DIR} not found - run ml/src/make_split.py first")
     files, rows = list_split(load_labels())
     counts = Counter((r["split"], "copy" if r["aug"] else "real") for r in rows)
-    print(f"{len(files)} photos to read: " + ", ".join(
+    print(f"{len(files)} photos: " + ", ".join(
         f"{s} {counts[(s, 'real')]}" + (f" (+{counts[(s, 'copy')]} copies)" if counts[(s, 'copy')] else "")
         for s in SHARES))
 
-    results = Parallel(n_jobs=-1, verbose=5)(delayed(_extract)(str(p)) for p in files)
+    saved = saved_results() if reuse else {}
+    results = [None if r["aug"] else saved.get((r["split"], r["path"])) for r in rows]
+    todo = [i for i, res in enumerate(results) if res is None]
+    print(f"reusing {len(rows) - len(todo)} saved vectors, reading {len(todo)} photos")
+    for i, res in zip(todo, Parallel(n_jobs=-1, verbose=5)(delayed(_extract)(str(files[i])) for i in todo)):
+        results[i] = res
+    if reuse and len(todo) < len(rows):  # spot-check: a reused vector must equal a fresh one
+        sample = random.Random(0).sample([i for i in range(len(rows)) if i not in set(todo)], 25)
+        for i in sample:
+            fresh, _ = _extract(str(files[i]))
+            if fresh is None or not np.allclose(fresh, results[i][0], atol=1e-5):
+                raise SystemExit(f"saved vector differs for {rows[i]['path']}: features changed, run without --reuse")
+        print("spot-check: 25 reused vectors match a fresh read")
 
     X, meta = [], []
     for row, (vec, border) in zip(rows, results):
