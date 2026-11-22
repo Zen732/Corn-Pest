@@ -12,6 +12,9 @@ class Profile {
   const Profile({this.fullName, this.barangay});
   final String? fullName;
   final String? barangay;
+
+  /// New accounts made with an email code have no name or barangay yet.
+  bool get complete => barangay != null && (fullName ?? '').trim().isNotEmpty;
 }
 
 /// A problem to show the user, already in plain words.
@@ -30,6 +33,15 @@ abstract class AuthService {
   Stream<bool> get signedInChanges;
 
   Future<void> signIn({required String email, required String password});
+
+  /// Emails a sign-in code (and makes the account if it's new).
+  Future<void> sendCode(String email);
+
+  /// Signs in with the code from the email.
+  Future<void> verifyCode({required String email, required String code});
+
+  /// Saves the name and barangay (asked once, after the first sign-in with a code).
+  Future<void> updateProfile({required String fullName, required int barangayId});
 
   /// Returns true if the user is signed in right away, false if they must confirm their
   /// email first (when "Confirm email" is on in Supabase).
@@ -59,6 +71,21 @@ class SupabaseAuthService implements AuthService {
   @override
   Future<void> signIn({required String email, required String password}) =>
       _guard(() => _db.auth.signInWithPassword(email: email.trim(), password: password));
+
+  @override
+  Future<void> sendCode(String email) =>
+      _guard(() => _db.auth.signInWithOtp(email: email.trim(), shouldCreateUser: true));
+
+  @override
+  Future<void> verifyCode({required String email, required String code}) =>
+      _guard(() => _db.auth.verifyOTP(email: email.trim(), token: code.trim(), type: OtpType.email));
+
+  @override
+  Future<void> updateProfile({required String fullName, required int barangayId}) => _guard(() async {
+        final uid = _db.auth.currentUser?.id;
+        if (uid == null) throw const AuthFailure(S.couldNotConnect);
+        await _db.from('profiles').update({'full_name': fullName.trim(), 'barangay_id': barangayId}).eq('id', uid);
+      });
 
   @override
   Future<bool> signUp({
@@ -115,6 +142,11 @@ class SupabaseAuthService implements AuthService {
         throw const AuthFailure(S.emailTaken);
       }
       if (m.contains('password') && m.contains('characters')) throw const AuthFailure(S.passwordTooShort);
+      if (m.contains('expired') || m.contains('invalid') || m.contains('otp')) throw const AuthFailure(S.codeWrong);
+      if (m.contains('rate limit') || m.contains('security purposes') || m.contains('seconds')) {
+        throw const AuthFailure(S.codeTooSoon);
+      }
+      if (m.contains('sending') && m.contains('email')) throw const AuthFailure(S.codeSendFailed);
       if (e is AuthRetryableFetchException) throw const AuthFailure(S.couldNotConnect);
       throw AuthFailure(e.message);
     } on PostgrestException catch (e) {

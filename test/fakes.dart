@@ -57,13 +57,35 @@ class FakeAuth implements AuthService {
     _changes.add(false);
   }
 
+  /// The code every fake email contains.
+  static const goodCode = '123456';
+  final codesSent = <String>[];
+
+  @override
+  Future<void> sendCode(String email) async => codesSent.add(email.trim());
+
+  @override
+  Future<void> verifyCode({required String email, required String code}) async {
+    if (!codesSent.contains(email.trim()) || code.trim() != goodCode) throw const AuthFailure(S.codeWrong);
+    users.putIfAbsent(email.trim(), () => (password: '', name: '', barangay: 0)); // new account
+    current = email.trim();
+    _changes.add(true);
+  }
+
+  @override
+  Future<void> updateProfile({required String fullName, required int barangayId}) async {
+    final u = users[current]!;
+    users[current!] = (password: u.password, name: fullName.trim(), barangay: barangayId);
+  }
+
   @override
   Future<List<Barangay>> barangays() async => const [Barangay(1, 'Antonio Luna'), Barangay(13, 'La Union')];
 
   @override
   Future<Profile> profile() async {
     final u = users[current];
-    return Profile(fullName: u?.name, barangay: u?.barangay == 13 ? 'La Union' : 'Antonio Luna');
+    if (u == null || u.barangay == 0) return Profile(fullName: u?.name);
+    return Profile(fullName: u.name, barangay: u.barangay == 13 ? 'La Union' : 'Antonio Luna');
   }
 }
 
@@ -167,6 +189,13 @@ Future<AppServices> makeServices({
     photos: photos ?? FakePhotos(),
     tips: TipsPrefs(await SharedPreferences.getInstance()),
   );
+}
+
+/// Opens the app and goes to the email + password screen ("Use a password instead").
+Future<void> pumpPasswordApp(WidgetTester tester, AppServices services) async {
+  await pumpApp(tester, services);
+  await tester.tap(find.text(S.usePassword));
+  await tester.pumpAndSettle();
 }
 
 Future<void> pumpApp(WidgetTester tester, AppServices services) async {

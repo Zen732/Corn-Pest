@@ -19,6 +19,25 @@ class S {
   static const emailNotConfirmed = 'Please confirm your email first: open the link we sent you, then sign in.';
   static const couldNotConnect = 'Can\'t connect. Check your internet and try again.';
 
+  // Sign in with an email code
+  static const sendCode = 'Send me a code';
+  static const codeIntro = 'Enter your email. We\'ll send you a 6-digit code - no password needed.';
+  static String codeSentTo(String email) => 'We sent a code to $email. Check your inbox (and spam folder).';
+  static const code = 'Code from the email';
+  static const enterCode = 'Enter the code from the email';
+  static const codeWrong = 'That code is wrong or has expired. Check it, or send a new one.';
+  static const codeTooSoon = 'Please wait a minute before asking for another code.';
+  static const codeSendFailed = 'The code email couldn\'t be sent. Try again later, or use a password.';
+  static const resendCode = 'Send a new code';
+  static String resendIn(int s) => 'Send a new code in ${s}s';
+  static const changeEmail = 'Use a different email';
+  static const usePassword = 'Use a password instead';
+
+  // First sign-in: name and barangay
+  static const aboutYou = 'About you';
+  static const aboutYouIntro = 'Your barangay helps show which pests are found where in Cabadbaran.';
+  static const save = 'Save';
+
   // Create account
   static const fullName = 'Full name';
   static const enterName = 'Enter your name';

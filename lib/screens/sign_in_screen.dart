@@ -42,7 +42,8 @@ class _SignInScreenState extends State<SignInScreen> {
     });
     try {
       await widget.auth.signIn(email: _email.text, password: _password.text);
-      // The app switches to Home by itself when the sign-in goes through.
+      // The app shows Home by itself; close this screen if it was opened from the code screen.
+      if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
     } on AuthFailure catch (e) {
       if (mounted) setState(() => _error = e.message);
     } finally {

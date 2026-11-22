@@ -3,8 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'config.dart';
+import 'screens/code_sign_in_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/sign_in_screen.dart';
+import 'screens/profile_screen.dart';
 import 'services/app_services.dart';
 import 'services/auth_service.dart';
 import 'services/history_store.dart';
@@ -76,8 +77,45 @@ class AuthGate extends StatelessWidget {
       stream: auth.signedInChanges,
       initialData: auth.isSignedIn,
       builder: (context, snap) => (snap.data ?? false)
-          ? HomeScreen(key: const ValueKey('home'), services: services)
-          : SignInScreen(auth: auth),
+          ? ProfileGate(key: const ValueKey('signed-in'), services: services)
+          : CodeSignInScreen(auth: auth),
+    );
+  }
+}
+
+/// After signing in: a new account (made with an email code) first gives its name and barangay.
+/// Offline, the profile can't be checked, so it goes straight to Home.
+class ProfileGate extends StatefulWidget {
+  const ProfileGate({super.key, required this.services});
+  final AppServices services;
+
+  @override
+  State<ProfileGate> createState() => _ProfileGateState();
+}
+
+class _ProfileGateState extends State<ProfileGate> {
+  late Future<Profile> _profile = widget.services.auth.profile();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Profile>(
+      future: _profile,
+      builder: (context, snap) {
+        if (snap.connectionState != ConnectionState.done) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        final p = snap.data;
+        if (p != null && !p.complete) {
+          return CompleteProfileScreen(
+            auth: widget.services.auth,
+            name: p.fullName,
+            onSaved: () => setState(() {
+              _profile = widget.services.auth.profile();
+            }),
+          );
+        }
+        return HomeScreen(key: const ValueKey('home'), services: widget.services);
+      },
     );
   }
 }

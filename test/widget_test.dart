@@ -27,14 +27,15 @@ void main() {
     expect(Config.normalizeSupabaseUrl('https://abc.supabase.co'), 'https://abc.supabase.co');
   });
 
-  testWidgets('starts on Sign in when signed out', (tester) async {
+  testWidgets('starts on the email-code sign-in, with a password option', (tester) async {
     await pumpApp(tester, await makeServices(auth: FakeAuth()));
     expect(find.text(S.appName), findsOneWidget);
-    expect(find.widgetWithText(FilledButton, S.signIn), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, S.sendCode), findsOneWidget);
+    expect(find.text(S.usePassword), findsOneWidget);
   });
 
   testWidgets('empty or wrong sign-in shows clear messages', (tester) async {
-    await pumpApp(tester, await makeServices(auth: FakeAuth()));
+    await pumpPasswordApp(tester, await makeServices(auth: FakeAuth()));
     await tester.tap(find.widgetWithText(FilledButton, S.signIn));
     await tester.pumpAndSettle();
     expect(find.text(S.enterEmail), findsOneWidget);
@@ -49,7 +50,7 @@ void main() {
 
   testWidgets('create account -> Home greets by name and barangay; sign out -> Sign in', (tester) async {
     final auth = FakeAuth();
-    await pumpApp(tester, await makeServices(auth: auth));
+    await pumpPasswordApp(tester, await makeServices(auth: auth));
     await tester.tap(find.text(S.createAccount));
     await tester.pumpAndSettle();
     await fillSignUp(tester);
@@ -63,7 +64,9 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, S.signOut));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(FilledButton, S.signIn), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, S.sendCode), findsOneWidget);
+    await tester.tap(find.text(S.usePassword));
+    await tester.pumpAndSettle();
 
     // ... and signing in again works.
     await tester.enterText(find.byKey(const Key('email')), 'juan@example.com');
@@ -78,7 +81,7 @@ void main() {
         .widget<EditableText>(find.descendant(of: find.byKey(Key(key)), matching: find.byType(EditableText)))
         .obscureText;
 
-    await pumpApp(tester, await makeServices(auth: FakeAuth()));
+    await pumpPasswordApp(tester, await makeServices(auth: FakeAuth()));
     expect(hidden('password'), isTrue);
     await tester.tap(find.byTooltip(S.showPassword));
     await tester.pump();
@@ -101,7 +104,7 @@ void main() {
   });
 
   testWidgets('create account checks the form', (tester) async {
-    await pumpApp(tester, await makeServices(auth: FakeAuth()));
+    await pumpPasswordApp(tester, await makeServices(auth: FakeAuth()));
     await tester.tap(find.text(S.createAccount));
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(const Key('password')), '123');
@@ -116,19 +119,19 @@ void main() {
   });
 
   testWidgets('when email confirmation is on, explains it and returns to Sign in', (tester) async {
-    await pumpApp(tester, await makeServices(auth: FakeAuth(confirmEmail: true)));
+    await pumpPasswordApp(tester, await makeServices(auth: FakeAuth(confirmEmail: true)));
     await tester.tap(find.text(S.createAccount));
     await tester.pumpAndSettle();
     await fillSignUp(tester);
     expect(find.text(S.checkEmailTitle), findsOneWidget);
     await tester.tap(find.text(S.ok));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(FilledButton, S.signIn), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, S.sendCode), findsOneWidget);
   });
 
   testWidgets('an email that already has an account gets a clear message', (tester) async {
     final auth = FakeAuth()..users['juan@example.com'] = (password: 'x', name: 'Juan', barangay: 1);
-    await pumpApp(tester, await makeServices(auth: auth));
+    await pumpPasswordApp(tester, await makeServices(auth: auth));
     await tester.tap(find.text(S.createAccount));
     await tester.pumpAndSettle();
     await fillSignUp(tester);
