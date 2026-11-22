@@ -21,7 +21,7 @@ Future<void> enterCode(WidgetTester tester, String code) async {
 void main() {
   testWidgets('new user: email -> code -> About you (name, barangay) -> Home', (tester) async {
     final auth = FakeAuth();
-    await pumpApp(tester, await makeServices(auth: auth));
+    await pumpCodeApp(tester, await makeServices(auth: auth));
     await sendCodeTo(tester, 'maria@example.com');
     expect(auth.codesSent, ['maria@example.com']);
     expect(find.text(S.codeSentTo('maria@example.com')), findsOneWidget);
@@ -49,7 +49,7 @@ void main() {
 
   testWidgets('existing user with a profile goes straight to Home', (tester) async {
     final auth = FakeAuth()..users['juan@example.com'] = (password: 'x', name: 'Juan', barangay: 13);
-    await pumpApp(tester, await makeServices(auth: auth));
+    await pumpCodeApp(tester, await makeServices(auth: auth));
     await sendCodeTo(tester, 'juan@example.com');
     await enterCode(tester, FakeAuth.goodCode);
     expect(find.text(S.aboutYou), findsNothing);
@@ -59,7 +59,7 @@ void main() {
 
   testWidgets('wrong or missing code: clear messages; can change email; resend waits 60 s', (tester) async {
     final auth = FakeAuth();
-    await pumpApp(tester, await makeServices(auth: auth));
+    await pumpCodeApp(tester, await makeServices(auth: auth));
     await tester.tap(find.widgetWithText(FilledButton, S.sendCode));
     await tester.pumpAndSettle();
     expect(find.text(S.enterEmail), findsOneWidget);
@@ -82,6 +82,9 @@ void main() {
     await tester.tap(find.text(S.changeEmail));
     await tester.pumpAndSettle();
     expect(find.widgetWithText(FilledButton, S.sendCode), findsOneWidget);
+    await tester.tap(find.text(S.usePassword)); // back to the login form
+    await tester.pumpAndSettle();
+    expect(find.text(S.useCode), findsOneWidget);
     await tester.pump(const Duration(seconds: 61));
   });
 

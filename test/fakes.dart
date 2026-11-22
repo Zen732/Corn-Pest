@@ -73,6 +73,12 @@ class FakeAuth implements AuthService {
   }
 
   @override
+  Future<void> changePassword(String newPassword) async {
+    final u = users[current]!;
+    users[current!] = (password: newPassword, name: u.name, barangay: u.barangay);
+  }
+
+  @override
   Future<void> updateProfile({required String fullName, required int barangayId}) async {
     final u = users[current]!;
     users[current!] = (password: u.password, name: fullName.trim(), barangay: barangayId);
@@ -84,8 +90,9 @@ class FakeAuth implements AuthService {
   @override
   Future<Profile> profile() async {
     final u = users[current];
-    if (u == null || u.barangay == 0) return Profile(fullName: u?.name);
-    return Profile(fullName: u.name, barangay: u.barangay == 13 ? 'La Union' : 'Antonio Luna');
+    if (u == null || u.barangay == 0) return Profile(fullName: u?.name, email: current);
+    return Profile(
+        fullName: u.name, barangay: u.barangay == 13 ? 'La Union' : 'Antonio Luna', barangayId: u.barangay, email: current);
   }
 }
 
@@ -191,10 +198,23 @@ Future<AppServices> makeServices({
   );
 }
 
-/// Opens the app and goes to the email + password screen ("Use a password instead").
-Future<void> pumpPasswordApp(WidgetTester tester, AppServices services) async {
+/// Opens the app on the email + password login form (the first screen).
+Future<void> pumpPasswordApp(WidgetTester tester, AppServices services) => pumpApp(tester, services);
+
+/// Opens the app and goes to "Sign in with an email code instead".
+Future<void> pumpCodeApp(WidgetTester tester, AppServices services) async {
   await pumpApp(tester, services);
-  await tester.tap(find.text(S.usePassword));
+  await tester.tap(find.text(S.useCode));
+  await tester.pumpAndSettle();
+}
+
+/// Signs out from the Settings tab.
+Future<void> signOutViaSettings(WidgetTester tester) async {
+  await tester.tap(find.byTooltip(S.settings));
+  await tester.pumpAndSettle();
+  await tester.tap(find.widgetWithText(OutlinedButton, S.signOut));
+  await tester.pumpAndSettle();
+  await tester.tap(find.widgetWithText(FilledButton, S.signOut));
   await tester.pumpAndSettle();
 }
 

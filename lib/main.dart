@@ -3,9 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'config.dart';
-import 'screens/code_sign_in_screen.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_shell.dart';
 import 'screens/profile_screen.dart';
+import 'screens/sign_in_screen.dart';
 import 'services/app_services.dart';
 import 'services/auth_service.dart';
 import 'services/history_store.dart';
@@ -78,7 +78,7 @@ class AuthGate extends StatelessWidget {
       initialData: auth.isSignedIn,
       builder: (context, snap) => (snap.data ?? false)
           ? ProfileGate(key: const ValueKey('signed-in'), services: services)
-          : CodeSignInScreen(auth: auth),
+          : SignInScreen(auth: auth),
     );
   }
 }
@@ -114,7 +114,7 @@ class _ProfileGateState extends State<ProfileGate> {
             }),
           );
         }
-        return HomeScreen(key: const ValueKey('home'), services: widget.services);
+        return MainShell(key: const ValueKey('main'), services: widget.services);
       },
     );
   }

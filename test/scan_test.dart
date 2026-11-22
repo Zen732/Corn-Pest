@@ -20,7 +20,7 @@ const pestResult = ScanResult(
 );
 
 Future<void> openScan(WidgetTester tester) async {
-  await tester.tap(find.text(S.scanPlant));
+  await tester.tap(find.byTooltip(S.scanPlant));
   await tester.pumpAndSettle();
 }
 

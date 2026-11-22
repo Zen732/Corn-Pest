@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
 import '../strings.dart';
+import 'code_sign_in_screen.dart';
 import 'sign_up_screen.dart';
 
 String? validateEmail(String? v) {
@@ -108,6 +109,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         : const Text(S.signIn),
                   ),
                   const SizedBox(height: 16),
+                  TextButton.icon(
+                    onPressed: _busy
+                        ? null
+                        : () => Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (_) => CodeSignInScreen(auth: widget.auth))),
+                    icon: const Icon(Icons.pin_outlined),
+                    label: const Text(S.useCode),
+                  ),
                   Wrap(
                     alignment: WrapAlignment.center,
                     crossAxisAlignment: WrapCrossAlignment.center,

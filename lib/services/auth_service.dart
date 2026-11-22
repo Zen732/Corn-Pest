@@ -9,9 +9,11 @@ class Barangay {
 }
 
 class Profile {
-  const Profile({this.fullName, this.barangay});
+  const Profile({this.fullName, this.barangay, this.barangayId, this.email});
   final String? fullName;
   final String? barangay;
+  final int? barangayId;
+  final String? email;
 
   /// New accounts made with an email code have no name or barangay yet.
   bool get complete => barangay != null && (fullName ?? '').trim().isNotEmpty;
@@ -42,6 +44,9 @@ abstract class AuthService {
 
   /// Saves the name and barangay (asked once, after the first sign-in with a code).
   Future<void> updateProfile({required String fullName, required int barangayId});
+
+  /// Sets a new password (also lets someone who signed in with a code use a password).
+  Future<void> changePassword(String newPassword);
 
   /// Returns true if the user is signed in right away, false if they must confirm their
   /// email first (when "Confirm email" is on in Supabase).
@@ -88,6 +93,10 @@ class SupabaseAuthService implements AuthService {
       });
 
   @override
+  Future<void> changePassword(String newPassword) =>
+      _guard(() => _db.auth.updateUser(UserAttributes(password: newPassword)));
+
+  @override
   Future<bool> signUp({
     required String fullName,
     required int barangayId,
@@ -121,10 +130,13 @@ class SupabaseAuthService implements AuthService {
   Future<Profile> profile() => _guard(() async {
         final uid = _db.auth.currentUser?.id;
         if (uid == null) return const Profile();
-        final row = await _db.from('profiles').select('full_name, barangays(name)').eq('id', uid).maybeSingle();
+        final row =
+            await _db.from('profiles').select('full_name, barangay_id, barangays(name)').eq('id', uid).maybeSingle();
         return Profile(
           fullName: row?['full_name'] as String?,
           barangay: (row?['barangays'] as Map<String, dynamic>?)?['name'] as String?,
+          barangayId: row?['barangay_id'] as int?,
+          email: _db.auth.currentUser?.email,
         );
       });
 

@@ -27,11 +27,12 @@ void main() {
     expect(Config.normalizeSupabaseUrl('https://abc.supabase.co'), 'https://abc.supabase.co');
   });
 
-  testWidgets('starts on the email-code sign-in, with a password option', (tester) async {
+  testWidgets('starts on the login form, with code and create-account options', (tester) async {
     await pumpApp(tester, await makeServices(auth: FakeAuth()));
     expect(find.text(S.appName), findsOneWidget);
-    expect(find.widgetWithText(FilledButton, S.sendCode), findsOneWidget);
-    expect(find.text(S.usePassword), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, S.signIn), findsOneWidget);
+    expect(find.text(S.useCode), findsOneWidget);
+    expect(find.text(S.createAccount), findsOneWidget);
   });
 
   testWidgets('empty or wrong sign-in shows clear messages', (tester) async {
@@ -58,15 +59,10 @@ void main() {
     expect(auth.users['juan@example.com']?.barangay, 13);
     expect(find.text(S.hello('Juan Dela Cruz')), findsOneWidget);
     expect(find.text(S.fromBarangay('La Union')), findsOneWidget);
-    expect(find.text(S.scanPlant), findsOneWidget);
+    expect(find.byTooltip(S.scanPlant), findsOneWidget);
 
-    await tester.tap(find.byTooltip(S.signOut));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(FilledButton, S.signOut));
-    await tester.pumpAndSettle();
-    expect(find.widgetWithText(FilledButton, S.sendCode), findsOneWidget);
-    await tester.tap(find.text(S.usePassword));
-    await tester.pumpAndSettle();
+    await signOutViaSettings(tester);
+    expect(find.widgetWithText(FilledButton, S.signIn), findsOneWidget);
 
     // ... and signing in again works.
     await tester.enterText(find.byKey(const Key('email')), 'juan@example.com');
@@ -126,7 +122,7 @@ void main() {
     expect(find.text(S.checkEmailTitle), findsOneWidget);
     await tester.tap(find.text(S.ok));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(FilledButton, S.sendCode), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, S.signIn), findsOneWidget);
   });
 
   testWidgets('an email that already has an account gets a clear message', (tester) async {

@@ -69,7 +69,10 @@ class _CodeSignInScreenState extends State<CodeSignInScreen> {
   Future<void> _verify() async {
     if (!_form.currentState!.validate()) return;
     // The app switches to the next screen by itself once signed in.
-    await _run(() => widget.auth.verifyCode(email: _sentTo!, code: _code.text));
+    await _run(() async {
+      await widget.auth.verifyCode(email: _sentTo!, code: _code.text);
+      if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
+    });
   }
 
   @override
@@ -151,8 +154,10 @@ class _CodeSignInScreenState extends State<CodeSignInScreen> {
                   TextButton(
                     onPressed: _busy
                         ? null
-                        : () => Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (_) => SignInScreen(auth: widget.auth))),
+                        : () => Navigator.of(context).canPop()
+                            ? Navigator.of(context).pop()
+                            : Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (_) => SignInScreen(auth: widget.auth))),
                     child: const Text(S.usePassword),
                   ),
                 ],

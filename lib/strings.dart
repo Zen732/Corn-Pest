@@ -33,6 +33,43 @@ class S {
   static const changeEmail = 'Use a different email';
   static const usePassword = 'Use a password instead';
 
+  static const useCode = 'Sign in with an email code instead';
+  static const logIn = 'Log in';
+
+  // Bottom bar
+  static const home = 'Home';
+  static const settings = 'Settings';
+
+  // Home
+  static const statScans = 'Scans';
+  static const statPests = 'Pests found';
+  static const statWaiting = 'To upload';
+  static const recentScans = 'Recent scans';
+  static const seeAll = 'See all';
+  static const noScansYet = 'No scans yet. Tap the camera button below to check a corn plant.';
+  static const tipTitle = 'Photo tip';
+  static String today() {
+    final d = DateTime.now();
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+      'October', 'November', 'December'];
+    return '${days[d.weekday - 1]}, ${months[d.month - 1]} ${d.day}';
+  }
+
+  // Settings
+  static const yourAccount = 'Your account';
+  static const editProfile = 'Edit name and barangay';
+  static const changePassword = 'Change password';
+  static const newPassword = 'New password';
+  static const passwordChanged = 'Password changed.';
+  static const profileSaved = 'Saved.';
+  static const uploadNow = 'Upload now';
+  static const allUploaded = 'All your scans are uploaded.';
+  static const aboutApp = 'About this app';
+  static String modelVersion(String v) => 'Pest models from $v';
+  static const worksOffline = 'Checks photos on the phone, even without internet. No treatment advice is given.';
+  static const notSet = 'Not set';
+
   // First sign-in: name and barangay
   static const aboutYou = 'About you';
   static const aboutYouIntro = 'Your barangay helps show which pests are found where in Cabadbaran.';

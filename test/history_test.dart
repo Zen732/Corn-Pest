@@ -138,7 +138,7 @@ void main() {
     await history.save(pest, tinyPng, at: DateTime(2026, 11, 2, 9));
     await pumpApp(tester, await makeServices(auth: FakeAuth.signedIn(), history: history));
 
-    await tester.tap(find.text(S.history));
+    await tester.tap(find.byTooltip(S.history));
     await tester.pumpAndSettle();
     expect(find.text(S.waitingCount(2)), findsOneWidget);
     expect(find.text(S.summary('pest', 'fall_armyworm', 'Moderate')), findsOneWidget);

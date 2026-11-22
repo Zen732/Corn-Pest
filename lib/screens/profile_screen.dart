@@ -3,12 +3,22 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../strings.dart';
 
-/// Asked once, after the first sign-in with an email code: name and barangay.
+/// Name and barangay. Shown once after the first sign-in with an email code ([firstTime]),
+/// and from Settings to change them.
 class CompleteProfileScreen extends StatefulWidget {
-  const CompleteProfileScreen({super.key, required this.auth, required this.onSaved, this.name});
+  const CompleteProfileScreen({
+    super.key,
+    required this.auth,
+    required this.onSaved,
+    this.name,
+    this.barangayId,
+    this.firstTime = true,
+  });
   final AuthService auth;
   final VoidCallback onSaved;
   final String? name;
+  final int? barangayId;
+  final bool firstTime;
 
   @override
   State<CompleteProfileScreen> createState() => _CompleteProfileScreenState();
@@ -18,7 +28,7 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
   final _form = GlobalKey<FormState>();
   late final _name = TextEditingController(text: widget.name ?? '');
   late Future<List<Barangay>> _barangays = widget.auth.barangays();
-  int? _barangayId;
+  late int? _barangayId = widget.barangayId;
   bool _busy = false;
   String? _error;
 
@@ -49,8 +59,11 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(S.aboutYou),
-        actions: [IconButton(tooltip: S.signOut, icon: const Icon(Icons.logout), onPressed: widget.auth.signOut)],
+        title: Text(widget.firstTime ? S.aboutYou : S.editProfile),
+        actions: [
+          if (widget.firstTime)
+            IconButton(tooltip: S.signOut, icon: const Icon(Icons.logout), onPressed: widget.auth.signOut),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -83,9 +96,10 @@ class _CompleteProfileScreenState extends State<CompleteProfileScreen> {
                       ]);
                     }
                     final items = snap.data;
+                    final known = items?.any((b) => b.id == _barangayId) ?? false;
                     return DropdownButtonFormField<int>(
                       key: const Key('barangay'),
-                      initialValue: _barangayId,
+                      initialValue: known ? _barangayId : null,
                       isExpanded: true,
                       decoration: InputDecoration(
                         labelText: S.barangay,
