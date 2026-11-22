@@ -8,9 +8,12 @@ import 'sign_in_screen.dart';
 
 /// Sign in (or sign up) with a 6-digit code sent by email: no password to remember.
 /// A new account is made automatically; its name and barangay are asked next (profile_screen).
+/// Also confirms an account made with "Create account": then [sentTo] is the email the code
+/// already went to, and the screen starts at the code box.
 class CodeSignInScreen extends StatefulWidget {
-  const CodeSignInScreen({super.key, required this.auth});
+  const CodeSignInScreen({super.key, required this.auth, this.sentTo});
   final AuthService auth;
+  final String? sentTo;
 
   @override
   State<CodeSignInScreen> createState() => _CodeSignInScreenState();
@@ -25,6 +28,25 @@ class _CodeSignInScreenState extends State<CodeSignInScreen> {
   String? _error;
   int _wait = 0; // seconds before a new code may be asked for
   Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.sentTo != null) {
+      _sentTo = widget.sentTo;
+      _email.text = widget.sentTo!;
+      _startWait();
+    }
+  }
+
+  void _startWait() {
+    _wait = 60;
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted || _wait <= 1) t.cancel();
+      if (mounted) setState(() => _wait = _wait > 0 ? _wait - 1 : 0);
+    });
+  }
 
   @override
   void dispose() {
@@ -56,12 +78,7 @@ class _CodeSignInScreenState extends State<CodeSignInScreen> {
       if (!mounted) return;
       setState(() {
         _sentTo = email;
-        _wait = 60;
-      });
-      _timer?.cancel();
-      _timer = Timer.periodic(const Duration(seconds: 1), (t) {
-        if (!mounted || _wait <= 1) t.cancel();
-        if (mounted) setState(() => _wait = _wait > 0 ? _wait - 1 : 0);
+        _startWait();
       });
     });
   }

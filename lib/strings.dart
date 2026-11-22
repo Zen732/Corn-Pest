@@ -16,7 +16,8 @@ class S {
   static const showPassword = 'Show password';
   static const hidePassword = 'Hide password';
   static const wrongLogin = 'Wrong email or password.';
-  static const emailNotConfirmed = 'Please confirm your email first: open the link we sent you, then sign in.';
+  static const emailNotConfirmed = 'Your email isn\'t confirmed yet. Get a code by email to confirm it.';
+  static const confirmWithCode = 'Send me a code';
   static const couldNotConnect = 'Can\'t connect. Check your internet and try again.';
 
   // Sign in with an email code
@@ -87,8 +88,6 @@ class S {
   static const passwordTooShort = 'Use at least 6 characters';
   static const passwordsDiffer = 'The passwords are not the same';
   static const emailTaken = 'There is already an account with this email. Sign in instead.';
-  static const checkEmailTitle = 'Check your email';
-  static const checkEmailBody = 'We sent a confirmation link to your email. Open it, then come back and sign in.';
   static const ok = 'OK';
 
   // Home

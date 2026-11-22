@@ -49,7 +49,8 @@ abstract class AuthService {
   Future<void> changePassword(String newPassword);
 
   /// Returns true if the user is signed in right away, false if they must confirm their
-  /// email first (when "Confirm email" is on in Supabase).
+  /// email first (when "Confirm email" is on in Supabase): Supabase then emails a 6-digit
+  /// code, which [verifyCode] checks.
   Future<bool> signUp({
     required String fullName,
     required int barangayId,

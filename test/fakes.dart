@@ -27,6 +27,7 @@ class FakeAuth implements AuthService {
   final _changes = StreamController<bool>.broadcast();
   final users = <String, ({String password, String name, int barangay})>{};
   String? current;
+  final unconfirmed = <String>{};
 
   @override
   bool get isSignedIn => current != null;
@@ -37,6 +38,7 @@ class FakeAuth implements AuthService {
   Future<void> signIn({required String email, required String password}) async {
     final u = users[email.trim()];
     if (u == null || u.password != password) throw const AuthFailure(S.wrongLogin);
+    if (unconfirmed.contains(email.trim())) throw const AuthFailure(S.emailNotConfirmed);
     current = email.trim();
     _changes.add(true);
   }
@@ -45,7 +47,11 @@ class FakeAuth implements AuthService {
   Future<bool> signUp({required String fullName, required int barangayId, required String email, required String password}) async {
     if (users.containsKey(email)) throw const AuthFailure(S.emailTaken);
     users[email] = (password: password, name: fullName, barangay: barangayId);
-    if (confirmEmail) return false;
+    if (confirmEmail) {
+      unconfirmed.add(email);
+      codesSent.add(email); // the confirmation email has a code
+      return false;
+    }
     current = email;
     _changes.add(true);
     return true;
@@ -68,6 +74,7 @@ class FakeAuth implements AuthService {
   Future<void> verifyCode({required String email, required String code}) async {
     if (!codesSent.contains(email.trim()) || code.trim() != goodCode) throw const AuthFailure(S.codeWrong);
     users.putIfAbsent(email.trim(), () => (password: '', name: '', barangay: 0)); // new account
+    unconfirmed.remove(email.trim());
     current = email.trim();
     _changes.add(true);
   }

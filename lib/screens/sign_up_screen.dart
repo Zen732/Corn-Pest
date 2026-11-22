@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../services/auth_service.dart';
 import '../strings.dart';
+import 'code_sign_in_screen.dart';
 import 'sign_in_screen.dart' show validateEmail;
 
 /// The eye icon that shows or hides a password.
@@ -69,14 +70,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (!mounted) return;
       setState(() => _busy = false);
       if (!signedIn) {
-        await showDialog<void>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text(S.checkEmailTitle),
-            content: const Text(S.checkEmailBody),
-            actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text(S.ok))],
-          ),
-        );
+        // Supabase emailed a 6-digit code to confirm the email: ask for it next.
+        await Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (_) => CodeSignInScreen(auth: widget.auth, sentTo: _email.text.trim()),
+        ));
+        return;
       }
       // Back to the start: Home if signed in, otherwise Sign in.
       if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);

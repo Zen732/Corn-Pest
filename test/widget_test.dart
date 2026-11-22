@@ -114,15 +114,37 @@ void main() {
     expect(find.text(S.passwordsDiffer), findsOneWidget);
   });
 
-  testWidgets('when email confirmation is on, explains it and returns to Sign in', (tester) async {
-    await pumpPasswordApp(tester, await makeServices(auth: FakeAuth(confirmEmail: true)));
+  testWidgets('when email confirmation is on, asks for the emailed code, then Home', (tester) async {
+    final auth = FakeAuth(confirmEmail: true);
+    await pumpPasswordApp(tester, await makeServices(auth: auth));
     await tester.tap(find.text(S.createAccount));
     await tester.pumpAndSettle();
     await fillSignUp(tester);
-    expect(find.text(S.checkEmailTitle), findsOneWidget);
-    await tester.tap(find.text(S.ok));
+    expect(find.byKey(const Key('code')), findsOneWidget); // no link: a code box
+    await tester.enterText(find.byKey(const Key('code')), FakeAuth.goodCode);
+    await tester.tap(find.widgetWithText(FilledButton, S.signIn));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(FilledButton, S.signIn), findsOneWidget);
+    expect(auth.unconfirmed, isEmpty);
+    expect(find.byTooltip(S.scanPlant), findsOneWidget);
+  });
+
+  testWidgets('password sign-in on an unconfirmed account offers a code', (tester) async {
+    final auth = FakeAuth()
+      ..users['ana@example.com'] = (password: 'secret123', name: 'Ana', barangay: 1)
+      ..unconfirmed.add('ana@example.com');
+    await pumpPasswordApp(tester, await makeServices(auth: auth));
+    await tester.enterText(find.byKey(const Key('email')), 'ana@example.com');
+    await tester.enterText(find.byKey(const Key('password')), 'secret123');
+    await tester.tap(find.widgetWithText(FilledButton, S.signIn));
+    await tester.pumpAndSettle();
+    expect(find.text(S.emailNotConfirmed), findsOneWidget);
+    await tester.tap(find.text(S.confirmWithCode));
+    await tester.pumpAndSettle();
+    expect(auth.codesSent, ['ana@example.com']);
+    await tester.enterText(find.byKey(const Key('code')), FakeAuth.goodCode);
+    await tester.tap(find.widgetWithText(FilledButton, S.signIn));
+    await tester.pumpAndSettle();
+    expect(find.byTooltip(S.scanPlant), findsOneWidget);
   });
 
   testWidgets('an email that already has an account gets a clear message', (tester) async {

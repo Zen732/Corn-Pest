@@ -52,6 +52,25 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
+  /// The account exists but its email was never confirmed: email a code and ask for it.
+  Future<void> _confirmWithCode() async {
+    final email = _email.text.trim();
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      await widget.auth.sendCode(email);
+      if (!mounted) return;
+      await Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => CodeSignInScreen(auth: widget.auth, sentTo: email)));
+    } on AuthFailure catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -100,6 +119,15 @@ class _SignInScreenState extends State<SignInScreen> {
                   if (_error != null) ...[
                     const SizedBox(height: 16),
                     Text(_error!, style: TextStyle(color: theme.colorScheme.error, fontSize: 16)),
+                    if (_error == S.emailNotConfirmed)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          onPressed: _busy ? null : _confirmWithCode,
+                          icon: const Icon(Icons.pin_outlined),
+                          label: const Text(S.confirmWithCode),
+                        ),
+                      ),
                   ],
                   const SizedBox(height: 24),
                   FilledButton(
