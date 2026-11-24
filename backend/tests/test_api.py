@@ -50,7 +50,7 @@ def test_health(client):
     assert r.status_code == 200
     body = r.json()
     assert body["status"] == "ok"
-    assert body["models_loaded"] == ["corn_check", "detector", "health", "pest"]
+    assert body["models_loaded"] == ["corn_check", "detector", "health", "network", "pest"]  # V2: + the image network
     assert body["model_version"] not in (None, "", "unknown")
 
 

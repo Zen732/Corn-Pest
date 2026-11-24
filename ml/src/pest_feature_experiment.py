@@ -22,6 +22,7 @@ Writes ml/results/pest_experiment/summary.txt, results.json, and the computed ve
 reused on later runs).
 """
 import json
+import os
 import time
 from pathlib import Path
 
@@ -41,7 +42,7 @@ RESULTS = ROOT / "ml" / "results"
 OUT = RESULTS / "pest_experiment"
 PEST_AT_LEAST = 0.50
 CATERPILLARS = {"fall_armyworm", "common_cutworm", "armyworm"}
-SCREENSHOTS = Path(r"C:\Users\Kenneth\AppData\Local\Temp\claude\b73920c95834e3bc\d6e1b861-e442-4889-8de3-e08f52e6e8c9\images")
+SCREENSHOTS = Path(os.environ.get("PEST_SCREENSHOTS", "."))  # folder with 7.jpg, 8.jpg, 9.jpg (optional)
 
 
 # ---------------- the photos ----------------

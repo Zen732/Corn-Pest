@@ -35,9 +35,34 @@ that can be switched offline.
 ## How the models get onto the phone
 
 ```
-ml/src/train.py          -> backend/models/*.joblib       (scikit-learn models)
-ml/src/export_models.py  -> assets/models/*.json + *.bin  (numbers the app reads, about 50 MB)
+ml/src/train.py           -> backend/models/*.joblib            (scikit-learn models)
+ml/src/export_models.py   -> assets/models/*.json + *.bin       (numbers the app reads, 66 MB in Version 2)
+ml/src/network_export.py  -> assets/models/network.json + .bin  (Version 2: the image network, 31 MB; once)
 ```
+
+**Version 2:** the models decide on the numbers of a ready-made image network, which the phone
+runs itself in plain Dart ([lib/offline/network.dart](../lib/offline/network.dart)):
+
+- Since 25 Nov 2026 the network is EfficientNet-B2, which gives 1408 numbers per photo. From 23
+  to 24 Nov it was MobileNetV3-Large, with 960.
+- The photo is shrunk to 288 x 288 (OpenCV's INTER_AREA, the same Dart code as before) and
+  scaled like ImageNet.
+- It then goes through the network's 125 steps, with batch-norm already folded into the
+  convolutions.
+
+Each model's `.json` says which numbers it needs (`"features": "cnn"`; `"cnn_mirror"`, the
+average with the mirror image, was used by the MobileNetV3 pest classifier). Version 1 models
+would still work.
+
+Since 25 Nov the `.bin` files store the support vectors as 16-bit floats (`"sv_dtype":
+"float16"`), which halves them. The app widens them to 32-bit floats once, when it loads.
+`export_models.py` rounds the backend's models the same way, so Python and the phone still give
+the same answers. The rounding changed 0 of 7,453 test answers.
+
+All models live in **one background isolate**
+([lib/offline/checker.dart](../lib/offline/checker.dart)) that loads them once when the app
+starts; each scan sends it the decoded photo and gets the answer back, so the screen keeps moving
+and the 100 MB of models are not copied for every scan.
 
 `export_models.py` first recomputes every model's probabilities in plain numpy, following
 scikit-learn and libsvm step by step:
@@ -63,18 +88,24 @@ and scikit-image, then ported line by line to Dart.
 - **Blur:** the 3x3 Gaussian blur.
 - **Features:** GLCM, uniform LBP and HOG.
 
-[test/offline_parity_test.dart](../test/offline_parity_test.dart) runs 903 test photos (100 of
-each kind) through the phone path: Flutter's own photo decoder, then the Dart features, Dart
-models and Dart decision. It compares the results with Python (`ml/src/parity_reference.py`):
+[test/offline_parity_test.dart](../test/offline_parity_test.dart) runs 1,003 test photos (up to
+100 of each kind, incl. other insects) through the phone path: Flutter's own photo decoder, then
+the Dart network (Version 2) or features, Dart models and Dart decision. It compares the results
+with Python (`ml/src/parity_reference.py`). Version 2 with EfficientNet-B2, 25 Nov 2026:
 
 | Check | Agreement with Python |
 |---|---|
-| Features (raw pixels in) | GLCM and LBP exact, HOG within float32 rounding, colour statistics within 0.0001 |
+| Image network (raw pixels in, [test/network_parity_test.dart](../test/network_parity_test.dart)) | within 2.4e-5 of PyTorch's largest number (24 photos; MobileNetV3: 3e-6) |
+| Network numbers from the photo file (Flutter's decoder) | within 0.0002 |
+| Hand-made features (raw pixels in; Version 1) | GLCM and LBP exact, HOG within float32 rounding, colour statistics within 0.0001 |
 | Each model's answer (corn check, detector, healthy-vs-damaged, pest) | 100% |
-| Outcome shown (healthy / damage / pest / not corn / unclear) | **100%** (903/903) |
+| Outcome shown (healthy / damage / pest / not recognized / not corn / unclear) | **100%** (1,003/1,003) |
 | Pest name | **100%** |
 | Plant area found (background, holes) | 100% |
-| Severity grade (Low / Moderate / High) | **98.2%** (271/276; only photos with no insect get a grade since 22 Nov 2026); damage % median difference 0, 90% within 0.4 points |
+| Severity grade (Low / Moderate / High) | **99.7%** (300/301; only photos with no insect get a grade); damage % median difference 0, 90% within 0.5 points |
+
+Version 1, 22 Nov: 903 photos, severity grade 98.2%. MobileNetV3, 23 Nov: the same 100% and
+303/304.
 
 The severity grade is the only thing that can differ. scikit-learn's K-Means picks its starting
 points with Python's random generator, which cannot be reproduced in Dart, so the app uses its
@@ -83,6 +114,16 @@ photos the colour groups come out differently and the grade changes.
 
 ## Speed and size
 
-About 0.3 s per photo on the training PC, run in a background isolate so the screen stays
-responsive. The release APK grows from 51.5 MB to 95.7 MB because of the models; building with
-`flutter build apk --split-per-abi` makes each phone's APK smaller.
+Everything runs in a background isolate, so the screen stays responsive.
+
+**Version 1:** about 0.3 s per photo on the training PC. The release APK grew from 51.5 MB to
+95.7 MB because of the models.
+
+**Version 2 with EfficientNet-B2:**
+
+- The network takes 0.29 s per photo on the training PC, compiled as on the phone. A phone may
+  need about 1-1.5 s; this is still to be measured.
+- There is one network pass per scan.
+- The arm64 APK is 108 MB (MobileNetV3: 124 MB).
+
+Building with `flutter build apk --split-per-abi` makes each phone's APK smaller.

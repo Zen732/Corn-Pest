@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "ml" / "src"
 DEST = ROOT / "backend" / "app" / "services"
-SHARED = ["features.py", "severity.py", "predict.py", "flow.py"]
+SHARED = ["features.py", "severity.py", "predict.py", "flow.py", "network.py"]
 
 
 def _text(path):

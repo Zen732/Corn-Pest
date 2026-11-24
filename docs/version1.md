@@ -69,6 +69,7 @@ Things that were planned or found but not done when work moved to Version 2:
 1. **Supabase update (needed for the app to upload pest results).** Run
    `database/migrations/2026-11-22_pest_name_only.sql` once in the Supabase SQL Editor. Without
    it, pest and "Insect not recognized" scans stay on the phone as "waiting to upload".
+   **Done** (run in Supabase on 22 Nov 2026; Version 2 uses the same database).
 2. **Pest names are often wrong.** The pest classifier names the right pest for only 63% of test
    photos (caterpillars 57%; armyworm 37%). Tried and not better: stronger SVM settings, SIFT
    visual words, moths and caterpillars as separate classes, cropping to the insect

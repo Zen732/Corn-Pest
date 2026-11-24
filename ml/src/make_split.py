@@ -57,7 +57,7 @@ CLASS_TARGET = 5000
 TRAIN_TARGET = round(CLASS_TARGET * SHARES["train"])  # 3500: training photos per corn class after padding
 SEED = 42
 AUG_PREFIX = "aug-"
-NOT_PESTS = {"healthy", "unidentified_damage"}  # corn folders that are not pests: never padded
+NOT_PESTS = {"healthy", "unidentified_damage", "other_insect"}  # corn folders that are not one of the 5 pests: never padded
 
 
 def _rotate15(rgb):

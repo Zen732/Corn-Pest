@@ -17,6 +17,7 @@ archived in `_archive/2_unused_photos/asian_corn_borer/`).
 | corn_planthopper | 2,041 | corn planthopper (*Peregrinus maidis*) 924: iNaturalist first photo of each observation 512 (needs ID 309, research grade 203), other photos of the same observations and casual observations 412 (every openly licensed photo of the species on iNaturalist); look-alike planthoppers (same family, Delphacidae) 1,117: small brown planthopper 785, white-backed planthopper 282, brown planthopper 50 (iNaturalist, credited "(look-alike)") |
 | healthy | 5,000 | Doctor Maiz field photos 4,000, PlantVillage 602, first download 300, CCMT 98 |
 | unidentified_damage | 5,000 | Doctor Maiz field photos 4,000 (lethal necrosis 1,657, northern leaf blight 1,520, gray leaf spot 751, common rust 72), PlantVillage 703 (rust, northern leaf blight, gray leaf spot), CCMT 297 (leaf blight, leaf spot, streak virus) |
+| other_insect (Version 2, 23 Nov 2026) | 5,026 | iNaturalist research grade, at most 2 photos per species, open licences, credited in `inaturalist_credits.csv`: round 1: caterpillars (Asia) 1,000, beetles 600, true bugs 500, grasshoppers 226, other insects 700, spiders 300 (Philippines); round 2: adult moths and butterflies (Asia) 1,000, whiteflies / mealybugs / scale insects / thrips / psyllids (Asia) 400, leafhoppers (Asia) 300. Left out: the genera *Spodoptera*, *Mythimna*, *Rhopalosiphum*, *Peregrinus* and the families Aphididae and Delphacidae (round 2 also the 25 other-pest species of the web test). 150 mite photos were archived (`_archive/2_unused_photos/other_insect_mites_leaf_galls/`, mostly leaf galls). Not one of the five pests: the app shows "Insect not recognized". Not used by the corn check or the healthy-vs-damaged model. `dataset_sorter/fill_other_insects.py` |
 
 Several photos of one iNaturalist observation (`inat_<id>.jpg`, `inat_<id>_p2.jpg`, ...) show
 the same insect, so `ml/src/make_split.py` puts them all in the same set (train, val or test);
@@ -231,3 +232,31 @@ commercial app. The "not corn" sources stay cited because their photos are still
 - **Corn check.** Its only "not corn" examples are rice and banana leaves (see
   `classification_flow.md`).
 - **No field photos from Cabadbaran yet** (`ml/dataset/test_local/corn/` is empty).
+
+## Small objects for the corn check (Version 2, `ml/dataset/not_corn/small_objects/`, 1,600 photos)
+
+Close-ups of small things that are not corn, added 23 Nov 2026 after a grain of rice passed the
+corn check. Kaggle, single files downloaded with the Kaggle API, credited in
+`dataset_credits.csv` (`dataset_sorter/fill_small_objects.py`):
+
+| Photos | What | Source | Licence |
+|---|---|---|---|
+| 600 | single rice grains, 120 of each of 5 varieties | muratkokludataset/rice-image-dataset (Koklu, Cinar & Taspinar 2021, Computers and Electronics in Agriculture 187, 106285) | CC0 |
+| 400 | coffee beans, 100 per roast level | gpiosenka/coffee-bean-dataset-resized-224-x-224 (Ontoum et al. 2022, arXiv:2206.01841) | CC BY-SA 4.0 |
+| 350 | pebbles | vencerlanz09/shells-or-pebbles-an-image-classification-dataset (original source of the photos not stated) | CC BY-SA 4.0 |
+| 250 | shells | same | CC BY-SA 4.0 |
+
+Durum wheat grain photos (muratkokludataset/durum-wheat-dataset) were tried and left out: the
+video-frame .tif files did not open after a single-file download.
+
+## Web test photos (Version 2, `ml/dataset/test_web/`, 300 photos, never used for training)
+
+30 kinds of crop pests, 10 photos each, from iNaturalist (newest open-licence observations not
+already in the dataset; research grade, or "needs ID" only where research-grade photos ran out:
+corn planthopper 10, corn aphid 9, Asian corn borer 7). Credited in
+`ml/dataset/test_web_credits.csv`. The five corn pests should be named; the 25 others should not
+(see [version2.md](version2.md)). `dataset_sorter/fill_web_test.py`, checked by
+`ml/src/web_test.py`. The photos stay on this PC (not on GitHub).
+
+Note on corn_aphid: 3,912 of its 3,981 photos are IP102's "aphids" class, which holds several
+aphid species, not only the corn aphid; the app's "corn aphid" answer means "an aphid".

@@ -1,0 +1,72 @@
+{
+ "detector": {
+  "current": {
+   "val_macro_f1": 0.9467,
+   "C": 10,
+   "class_weight": null,
+   "test_accuracy": 0.9601,
+   "test_macro_f1": 0.9457,
+   "by_class_right": {
+    "no": 0.9121,
+    "yes": 0.9756
+   }
+  },
+  "cnn": {
+   "val_macro_f1": 0.9823,
+   "C": 10,
+   "class_weight": null,
+   "test_accuracy": 0.9816,
+   "test_macro_f1": 0.975,
+   "by_class_right": {
+    "no": 0.9617,
+    "yes": 0.988
+   }
+  },
+  "cnn+current": {
+   "val_macro_f1": 0.9836,
+   "C": 10,
+   "class_weight": null,
+   "test_accuracy": 0.9851,
+   "test_macro_f1": 0.9798,
+   "by_class_right": {
+    "no": 0.969,
+    "yes": 0.9903
+   }
+  }
+ },
+ "health": {
+  "current": {
+   "val_macro_f1": 0.9095,
+   "C": 10,
+   "class_weight": null,
+   "test_accuracy": 0.9082,
+   "test_macro_f1": 0.9067,
+   "by_class_right": {
+    "damaged": 0.9193,
+    "healthy": 0.8939
+   }
+  },
+  "cnn": {
+   "val_macro_f1": 0.9645,
+   "C": 10,
+   "class_weight": null,
+   "test_accuracy": 0.9657,
+   "test_macro_f1": 0.9652,
+   "by_class_right": {
+    "damaged": 0.9669,
+    "healthy": 0.9642
+   }
+  },
+  "cnn+current": {
+   "val_macro_f1": 0.9652,
+   "C": 10,
+   "class_weight": "balanced",
+   "test_accuracy": 0.968,
+   "test_macro_f1": 0.9676,
+   "by_class_right": {
+    "damaged": 0.97,
+    "healthy": 0.9655
+   }
+  }
+ }
+}

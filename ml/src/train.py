@@ -2,7 +2,14 @@
 and the healthy-vs-damaged model (for photos with no insect in view).
 
 Uses the fixed train / val / test sets made by make_split.py (70 / 15 / 15, ml/dataset/split/).
-Run after make_split.py and extract_all.py, from the project root:
+
+Version 2 (23 Nov 2026): the models learn from the ready-made image network's numbers per photo
+(cnn_features.py; EfficientNet-B2's 1408 since 25 Nov 2026, MobileNetV3's 960 before) instead of
+the hand-crafted features (features.py); FEATURES below says
+which set each model uses ("cnn", "current" or "cnn+current" side by side). With network numbers
+only the SVM is tried (it is what the phone runs). The pest classifier also learns
+"other_insect": insects that are not one of the five pests (the app says "Insect not recognized").
+Run after make_split.py, extract_all.py and cnn_features.py, from the project root:
     ml/.venv/Scripts/python.exe ml/src/train.py
     ml/.venv/Scripts/python.exe ml/src/train.py --only corn_check    (just one model)
 
@@ -81,11 +88,38 @@ MODEL_GRID = {
 }
 CUTOFF_GRID = np.round(np.arange(0.20, 0.81, 0.05), 2)
 
+# Version 2: which photo numbers each model learns from (see the top of this file).
+FEATURES = {"corn_check": "cnn", "corn_pest": "cnn", "corn_detector": "cnn", "corn_health": "cnn"}
+# With network numbers: the SVM only (Random Forest and KNN can't run on the phone), a wider C.
+CNN_GRID = {"svm": (SVC(kernel="rbf", cache_size=700, random_state=RANDOM_STATE),
+                    {"C": [1, 3, 10, 30], "gamma": ["scale"], "class_weight": ["balanced", None]})}
+# SVMs trained at the same time. Each one holds its own float64 copy of the photo numbers (about
+# 350 MB for the corn check with 1408 numbers per photo) plus up to cache_size MB: 3 fit in this
+# laptop's free memory (15 GB, about 5 GB free). 4 left 0.2 GB free (24 Nov 2026); too many
+# workers crashed it once (23 Nov 2026).
+JOBS = 3
+OTHER_INSECT = "other_insect"  # insects that are not one of the five pests (fill_other_insects.py)
+# What the app gives a model when it checks a photo, if not the set it learned from. With
+# MobileNetV3 the pest classifier got the average of the photo and its mirror image ("cnn_mirror",
+# flow.py): +0.5 points on validation photos (flip_experiment.py, 23 Nov 2026). With
+# EfficientNet-B2 it adds only +0.05 points (2 of 3,995 validation photos, 25 Nov 2026) and would
+# double the phone's time for insect photos, so no model uses it now.
+PREDICT_WITH = {}
+
+
+def feature_set(kind):
+    """The (N, d) photo numbers for "cnn", "current" or "cnn+current", rows as features_meta.csv."""
+    parts = [np.load(RESULTS_DIR / ("cnn_features.npy" if k == "cnn" else "features.npy")).astype(np.float32)
+             for k in kind.split("+")]
+    return parts[0] if len(parts) == 1 else np.hstack(parts)
+
 
 def load_data():
-    X = np.load(RESULTS_DIR / "features.npy")
+    """{feature kind: (N, d) array} for the kinds in FEATURES, and the photo list."""
+    X = {kind: feature_set(kind) for kind in sorted(set(FEATURES.values()))}
     meta = pd.read_csv(RESULTS_DIR / "features_meta.csv", keep_default_na=False)
-    assert len(X) == len(meta), "features.npy and features_meta.csv are out of sync - rerun extract_all.py"
+    assert all(len(x) == len(meta) for x in X.values()), \
+        "features.npy / cnn_features.npy and features_meta.csv are out of sync - rerun extract_all.py, cnn_features.py"
     if "split" not in meta:
         raise SystemExit("features_meta.csv has no split column - run make_split.py, then extract_all.py")
     # Safety check: photos of one iNaturalist observation (inat_<id>_p2.jpg ...) must share a set.
@@ -130,7 +164,7 @@ def _merged_f1(y_true, y_pred, merge):
     return f1_score(to_class(y_true), to_class(y_pred), average="macro")
 
 
-def select_best_model(X_train, y_train, X_val, y_val, merge=None):
+def select_best_model(X_train, y_train, X_val, y_val, merge=None, grid=None):
     """Every model and setting is trained on the training set and scored (macro F1, on the
     final classes when the labels are sub-classes) on the validation set; the best one is
     retrained on the training set and returned."""
@@ -139,8 +173,8 @@ def select_best_model(X_train, y_train, X_val, y_val, merge=None):
     fold = PredefinedSplit(np.r_[np.full(len(X_train), -1), np.zeros(len(X_val), dtype=int)])
     scoring = make_scorer(_merged_f1, merge=merge) if merge else "f1_macro"
     best, val_scores = None, {}
-    for name, (estimator, grid) in MODEL_GRID.items():
-        search = GridSearchCV(estimator, grid, cv=fold, scoring=scoring, n_jobs=-1, refit=False)
+    for name, (estimator, params) in (grid or MODEL_GRID).items():
+        search = GridSearchCV(estimator, params, cv=fold, scoring=scoring, n_jobs=JOBS, refit=False)
         search.fit(X_both, y_both)
         val_scores[name] = round(float(search.best_score_), 4)
         print(f"      {name:<14} val f1_macro={search.best_score_:.4f}  params={search.best_params_}", flush=True)
@@ -159,7 +193,7 @@ def finalize(name, model, n_classes):
     if name == "svm":
         if n_classes > 2:
             return model.set_params(probability=True)
-        return CalibratedClassifierCV(model, method="sigmoid", cv=5, ensemble=False, n_jobs=-1)
+        return CalibratedClassifierCV(model, method="sigmoid", cv=5, ensemble=False, n_jobs=JOBS)
     if "n_jobs" in model.get_params():
         model.set_params(n_jobs=-1)
     return model
@@ -188,6 +222,7 @@ def scores(y_true, y_pred):
 
 
 def train_task(X, meta, rows, y_col, name, augment, cutoffs_for_short=False, sub_col=None):
+    """X: the photo numbers this model learns from (FEATURES[name])."""
     """sub_col: a column of finer labels to train on (e.g. pest_sub: fall_armyworm and
     fall_armyworm_moth); predictions are added back up into y_col's classes."""
     train_idx, val_idx, test_idx = sets(meta, rows, augment)
@@ -201,7 +236,8 @@ def train_task(X, meta, rows, y_col, name, augment, cutoffs_for_short=False, sub
     scaler = StandardScaler().fit(X[train_idx])
     X_train, X_val, X_test = (scaler.transform(X[i]) for i in (train_idx, val_idx, test_idx))
     best_name, model, val_scores = select_best_model(
-        X_train, meta.loc[train_idx, fit_col].to_numpy(), X_val, meta.loc[val_idx, fit_col].to_numpy(), merge)
+        X_train, meta.loc[train_idx, fit_col].to_numpy(), X_val, meta.loc[val_idx, fit_col].to_numpy(), merge,
+        CNN_GRID if "cnn" in FEATURES[name] else None)
     classes = sorted({merge.get(str(c), str(c)) for c in model.classes_})
     proba_val, proba_test = (merge_proba(model.predict_proba(x), model.classes_, classes, merge)
                              for x in (X_val, X_test))
@@ -249,8 +285,9 @@ def train_task(X, meta, rows, y_col, name, augment, cutoffs_for_short=False, sub
 def save(name, model, scaler, classes, metrics):
     MODELS_DIR.mkdir(parents=True, exist_ok=True)
     METRICS_DIR.mkdir(parents=True, exist_ok=True)
+    metrics["features"] = PREDICT_WITH.get(name, FEATURES[name])  # what the app gives the model
     joblib.dump({"model": model, "scaler": scaler, "classes": classes, "cutoffs": metrics["cutoffs"],
-                 "merge": metrics.get("merge") or {}},
+                 "merge": metrics.get("merge") or {}, "features": metrics["features"]},
                 MODELS_DIR / f"{name}_model.joblib")
     # The backend returns this with every result and the app stores it with each scan, so
     # saved results show which models made them.
@@ -296,14 +333,17 @@ def main():
     only = ap.parse_args().only
     X, meta = load_data()
     in_crop = meta["crop"] == CROP
+    print("photo numbers per model: " + ", ".join(f"{k} {v}" for k, v in FEATURES.items()), flush=True)
 
     # Corn check: every corn photo (healthy, diseased, damaged, and close-ups of the five pests,
     # which farmers photograph too) against other plants. Without the pest photos it rejected
     # three of four pest photos as "not corn" (whole-app test, 11 Nov 2026).
     if only in (None, "corn_check"):
         print("\n=== corn check (corn vs not corn), all corn photos incl. pest close-ups ===", flush=True)
-        rows = in_crop | (meta["crop"] == NOT_CORN)
-        model, scaler, classes, metrics, tr, te, pred = train_task(X, meta, rows, "crop", "corn_check", augment=False)
+        # other_insect photos (iNaturalist, mostly not on corn) are not corn photos: left out.
+        rows = (in_crop & (meta["pest_class"] != OTHER_INSECT)) | (meta["crop"] == NOT_CORN)
+        model, scaler, classes, metrics, tr, te, pred = train_task(X[FEATURES["corn_check"]], meta, rows, "crop",
+                                                                   "corn_check", augment=False)
         metrics["background_check"] = background_check(X, meta, tr, te, pred)
         save("corn_check", model, scaler, classes, metrics)
 
@@ -314,15 +354,16 @@ def main():
         print(f"\n=== {CROP}: pest classifier (insect-visible photos + healthy) ===", flush=True)
         rows = in_crop & ~meta["pest_class"].isin(EXCLUDE_FROM_PEST_TASK) & (
             (meta["bug_visible"] == "yes") | (meta["pest_class"] == "healthy"))
-        model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "pest_class", f"{CROP}_pest", augment=True,
-                                                         cutoffs_for_short=True, sub_col="pest_sub")
+        model, scaler, classes, metrics, *_ = train_task(X[FEATURES[f"{CROP}_pest"]], meta, rows, "pest_class",
+                                                         f"{CROP}_pest", augment=True, cutoffs_for_short=True,
+                                                         sub_col="pest_sub")
         save(f"{CROP}_pest", model, scaler, classes, metrics)
 
     if only in (None, f"{CROP}_detector"):
         print(f"\n=== {CROP}: bug-visible detector (damaged photos only) ===", flush=True)
         rows = in_crop & (meta["pest_class"] != "healthy")
-        model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "bug_visible", f"{CROP}_detector",
-                                                         augment=False)
+        model, scaler, classes, metrics, *_ = train_task(X[FEATURES[f"{CROP}_detector"]], meta, rows,
+                                                         "bug_visible", f"{CROP}_detector", augment=False)
         save(f"{CROP}_detector", model, scaler, classes, metrics)
 
     # Healthy vs damaged, for photos with no insect in view. Replaced "damage % under 5% =
@@ -331,7 +372,8 @@ def main():
     if only in (None, f"{CROP}_health"):
         print(f"\n=== {CROP}: healthy vs damaged (photos with no insect in view) ===", flush=True)
         rows = in_crop & (meta["pest_class"].isin(["healthy", "unidentified_damage"]) | (meta["bug_visible"] == "no"))
-        model, scaler, classes, metrics, *_ = train_task(X, meta, rows, "health", f"{CROP}_health", augment=False)
+        model, scaler, classes, metrics, *_ = train_task(X[FEATURES[f"{CROP}_health"]], meta, rows, "health",
+                                                         f"{CROP}_health", augment=False)
         save(f"{CROP}_health", model, scaler, classes, metrics)
 
     # Summary of every saved model (also those not retrained this run).

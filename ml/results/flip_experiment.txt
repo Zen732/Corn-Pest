@@ -1,0 +1,6 @@
+Mirror-image averaging: macro F1 / accuracy, plain -> averaged
+  val  corn_check  F1 0.9844 -> 0.9850, accuracy 0.9854 -> 0.9860  (6707 photos)
+  val  pest        F1 0.9033 -> 0.9038, accuracy 0.9104 -> 0.9109  (3995 photos)
+  val  detector    F1 0.9864 -> 0.9870, accuracy 0.9903 -> 0.9908  (4217 photos)
+  val  health      F1 0.9728 -> 0.9764, accuracy 0.9733 -> 0.9768  (1724 photos)
+  test pest        F1 0.9034 -> 0.9021, accuracy 0.9082 -> 0.9080  (3999 photos)

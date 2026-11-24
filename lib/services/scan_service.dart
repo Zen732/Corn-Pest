@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart' show AssetBundle, rootBundle;
@@ -9,10 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config.dart';
+import '../offline/checker.dart';
 import '../offline/decode.dart';
-import '../offline/flow.dart';
 import '../offline/image_ops.dart';
-import '../offline/svm_model.dart';
 import '../strings.dart';
 
 /// The backend's answer for one photo (backend/app/routers/predict.py, ml/src/flow.py).
@@ -135,35 +133,40 @@ class BackendScanApi implements ScanApi {
 }
 
 /// Checks the photo on the phone itself (no internet, no server): the same models and decision
-/// as the backend, ported to Dart in lib/offline/ and checked against Python on 903 test photos.
+/// as the backend, ported to Dart in lib/offline/ and checked against Python on 1,003 test photos.
 class OfflineScanApi implements ScanApi {
   OfflineScanApi({AssetBundle? bundle}) : _bundle = bundle ?? rootBundle;
   final AssetBundle _bundle;
-  Future<OfflineModels>? _models;
+  Future<OfflineChecker>? _checker;
 
-  /// Loads the models (about 50 MB) once; call early so the first scan doesn't wait.
-  Future<OfflineModels> load() => _models ??= _load();
+  /// Starts the checker (models and image network loaded once, in a background isolate); call
+  /// early so the first scan doesn't wait. Gives the models' version.
+  Future<String> load() => _start().then((c) => c.version);
 
-  Future<OfflineModels> _load() async {
-    Future<SvmModel> one(String name) async => SvmModel.fromBytes(
-        await _bundle.loadString('assets/models/$name.json', cache: false),
-        await _bundle.load('assets/models/$name.bin'));
-    return OfflineModels(
-      cornCheck: await one('corn_check'),
-      detector: await one('detector'),
-      pest: await one('pest'),
-      health: await one('health'),
-      version: (await _bundle.loadString('assets/models/model_version.txt', cache: false)).trim(),
-    );
-  }
+  Future<OfflineChecker> _start() => _checker ??= () async {
+        final texts = <String, String>{}, bins = <String, ByteData>{};
+        var needsNetwork = false;
+        for (final name in ['corn_check', 'detector', 'pest', 'health']) {
+          texts[name] = await _bundle.loadString('assets/models/$name.json', cache: false);
+          bins[name] = await _bundle.load('assets/models/$name.bin');
+          final features = (jsonDecode(texts[name]!) as Map<String, dynamic>)['features'] as String?;
+          needsNetwork |= (features ?? 'current').contains('cnn');
+        }
+        if (needsNetwork) {
+          texts['network'] = await _bundle.loadString('assets/models/network.json', cache: false);
+          bins['network'] = await _bundle.load('assets/models/network.bin');
+        }
+        final version = (await _bundle.loadString('assets/models/model_version.txt', cache: false)).trim();
+        return OfflineChecker.start(texts, bins, version);
+      }();
 
   @override
   Future<ScanResult> check(Uint8List photo) async {
-    final OfflineModels models;
+    final OfflineChecker checker;
     try {
-      models = await load();
+      checker = await _start();
     } catch (_) {
-      _models = null;
+      _checker = null;
       throw const ScanFailure(S.modelsMissing);
     }
     final Img img;
@@ -173,8 +176,7 @@ class OfflineScanApi implements ScanApi {
       throw const ScanFailure(S.photoUnreadable);
     }
     try {
-      // In a background isolate, so the screen keeps moving while it works.
-      return ScanResult.fromJson(await Isolate.run(() => assessPhoto(img, models)));
+      return ScanResult.fromJson(await checker.check(img));
     } catch (_) {
       throw const ScanFailure(S.checkFailed);
     }

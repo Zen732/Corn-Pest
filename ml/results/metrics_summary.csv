@@ -1,5 +1,5 @@
 model,best_model,val_f1_macro,test_accuracy,test_f1_macro,n_train_original,n_train_augmented,n_val,n_test
-corn_check,svm,0.9084,0.9119,0.9015,30157,0,6467,6459
-corn_pest,svm,0.676,0.7039,0.6681,15113,5881,3241,3245
-corn_detector,svm,0.9432,0.9511,0.9392,16162,0,3463,3458
-corn_health,svm,0.9136,0.9006,0.8981,8039,0,1724,1721
+corn_check,svm,0.9844,0.983,0.9818,31277,0,6707,6699
+corn_pest,svm,0.9033,0.9082,0.9034,18631,5881,3995,3999
+corn_detector,svm,0.9864,0.9874,0.9823,19680,0,4217,4212
+corn_health,svm,0.9728,0.9802,0.9799,8039,0,1724,1721

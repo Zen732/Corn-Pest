@@ -1,0 +1,86 @@
+{
+ "mobilenet_v3_large": {
+  "dims": 960,
+  "C": 10,
+  "class_weight": null,
+  "val_macro_f1": 0.8581,
+  "test_accuracy": 0.862,
+  "test_macro_f1": 0.8519,
+  "test_right_by_class": {
+   "armyworm": 0.706,
+   "common_cutworm": 0.854,
+   "corn_aphid": 0.881,
+   "corn_planthopper": 0.804,
+   "fall_armyworm": 0.829,
+   "healthy": 0.996,
+   "other_insect": 0.83
+  },
+  "web_five_named_right": 0.62,
+  "web_others_not_named": 0.72,
+  "web_all": 0.703,
+  "ms_per_photo_pc": 20.9
+ },
+ "efficientnet_b0": {
+  "dims": 1280,
+  "C": 3,
+  "class_weight": null,
+  "val_macro_f1": 0.8802,
+  "test_accuracy": 0.8892,
+  "test_macro_f1": 0.88,
+  "test_right_by_class": {
+   "armyworm": 0.748,
+   "common_cutworm": 0.895,
+   "corn_aphid": 0.903,
+   "corn_planthopper": 0.846,
+   "fall_armyworm": 0.882,
+   "healthy": 0.995,
+   "other_insect": 0.847
+  },
+  "web_five_named_right": 0.7,
+  "web_others_not_named": 0.732,
+  "web_all": 0.727,
+  "ms_per_photo_pc": 29.0
+ },
+ "efficientnet_b2": {
+  "dims": 1408,
+  "C": 10,
+  "class_weight": null,
+  "val_macro_f1": 0.9017,
+  "test_accuracy": 0.9097,
+  "test_macro_f1": 0.9034,
+  "test_right_by_class": {
+   "armyworm": 0.801,
+   "common_cutworm": 0.905,
+   "corn_aphid": 0.931,
+   "corn_planthopper": 0.873,
+   "fall_armyworm": 0.901,
+   "healthy": 0.997,
+   "other_insect": 0.875
+  },
+  "web_five_named_right": 0.78,
+  "web_others_not_named": 0.74,
+  "web_all": 0.747,
+  "ms_per_photo_pc": 52.1
+ },
+ "dinov2_vits14": {
+  "dims": 768,
+  "C": 3,
+  "class_weight": "balanced",
+  "val_macro_f1": 0.9243,
+  "test_accuracy": 0.933,
+  "test_macro_f1": 0.9278,
+  "test_right_by_class": {
+   "armyworm": 0.853,
+   "common_cutworm": 0.923,
+   "corn_aphid": 0.958,
+   "corn_planthopper": 0.895,
+   "fall_armyworm": 0.932,
+   "healthy": 1.0,
+   "other_insect": 0.905
+  },
+  "web_five_named_right": 0.74,
+  "web_others_not_named": 0.764,
+  "web_all": 0.76,
+  "ms_per_photo_pc": 67.1
+ }
+}

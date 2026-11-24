@@ -12,19 +12,50 @@ see `train.py`) decides whether the photo shows a corn plant.
   plant - check your photo.") instead of forcing a result.
 
 It is trained on every corn photo (healthy, diseased, damaged, and close-ups of the five
-pests) against 15,000 "not corn" photos in `ml/dataset/not_corn/`: 10,000 of other crops (rice,
-banana, tomato, cassava, cashew), 2,500 plants photographed in the Philippines and 2,500
-everyday scenes (rooms, streets, food, people, vehicles). The pest close-ups were added on
+pests) against 16,600 "not corn" photos in `ml/dataset/not_corn/`: 10,000 of other crops (rice,
+banana, tomato, cassava, cashew), 2,500 plants photographed in the Philippines, 2,500
+everyday scenes (rooms, streets, food, people, vehicles) and, since 23 Nov 2026, 1,600 close-ups
+of small objects (rice grains, coffee beans, pebbles, shells). The pest close-ups were added on
 11 November 2026: trained on corn plant photos only, it rejected three of four pest photos as
 "not corn", because a close-up of a caterpillar or aphid doesn't look like a corn plant.
 
-"Corn" needs a probability of at least **60%** (`CORN_AT_LEAST` in `flow.py`), not just the
-more likely of the two answers. The level was chosen on validation photos (22 Nov 2026):
+"Corn" needs a probability of at least **50%** in Version 2 (`CORN_AT_LEAST` in `flow.py`; it
+was 60% in Version 1). **Version 2, 23 Nov 2026:** a grain of rice filling the photo passed the
+corn check and was shown as "Insect not recognized": the check accepts pest close-ups, and had
+never seen close-ups of small things that are not insects. After 1,600 such photos were added,
+on validation photos:
+
+| Corn check | Pest close-ups accepted | All corn accepted | Small objects rejected | Philippine plants rejected | Everyday rejected | Other crops rejected |
+|---|---|---|---|---|---|---|
+| before, at 60% | 96.3% | 97.5% | 56.7% | 93.1% | 100% | 98.7% |
+| new, at 60% | 92.9% | 95.2% | 98.3% | 95.7% | 100% | 99.1% |
+| new, at 55% | 94.5% | 96.4% | 97.9% | 94.7% | 100% | 99.1% |
+| **new, at 50% (used)** | **96.1%** | **97.5%** | **97.9%** | **92.8%** | **100%** | **98.7%** |
+
+On test photos single rice grains passed 67% of the time before and 0% now. At 50% two of the 64
+random phone photos (green garden plants by a wall, 51% and 54% "corn") now pass and are named
+"common cutworm"; at 60% they were just turned away (59%).
+
+**EfficientNet-B2 (25 Nov 2026).** With the new image network the corn check is better at every
+level; 50% (the user's choice) was kept. On validation photos:
+
+| B2 corn check | Pest close-ups accepted | All corn accepted | Small objects rejected | Philippine plants rejected | Everyday rejected | Other crops rejected |
+|---|---|---|---|---|---|---|
+| at 60% | 96.3% | 97.5% | 99.2% | 96.0% | 100% | 99.5% |
+| at 55% | 96.9% | 98.0% | 98.8% | 95.2% | 100% | 99.5% |
+| **at 50% (used)** | **97.7%** | **98.5%** | **98.3%** | **94.9%** | **100%** | **99.3%** |
+
+At 60% it would accept as much corn as the MobileNetV3 check did at 50% and reject a little more
+that is not corn; 50% keeps more real corn. Of the 64 random phone photos, three pass at 50% (a
+variegated leaf plant 63% "corn", a pink flower 59.5%, a floor with slippers and a kitten 52%); at
+60% the last two would be turned away.
+
+The Version 1 level was chosen on validation photos (22 Nov 2026):
 
 | Corn check must be at least | Corn photos accepted | Philippine plants rejected | Everyday scenes rejected |
 |---|---|---|---|
 | 50% | 95.8% | 70.7% | 83.7% |
-| **60% (used)** | **92.1%** | **79.7%** | **89.9%** |
+| **60% (Version 1)** | **92.1%** | **79.7%** | **89.9%** |
 | 70% | 86.4% | 87.5% | 94.4% |
 
 **Why the Philippine plants and everyday scenes were added (22 Nov 2026).** On 64 random
@@ -61,7 +92,7 @@ no treatment advice, no product names, no "what to do" text, anywhere in the app
 | Outcome | When | What the app shows |
 |---|---|---|
 | **Pest** | An insect is visible and the pest classifier is at least 50% sure | Pest name + how sure (no severity) |
-| **Insect not recognized** (`unknown_pest`) | An insect is visible but the pest classifier is less than 50% sure | "An insect was found, but the app can't tell which pest it is. It may not be one of the 5 corn pests this app knows." |
+| **Insect not recognized** (`unknown_pest`) | An insect is visible but the pest classifier is less than 50% sure, or (Version 2) its answer is "other insect" | "An insect was found, but the app can't tell which pest it is. It may not be one of the 5 corn pests this app knows." |
 | **Healthy** | No insect visible, and the healthy-vs-damaged model says healthy | "Healthy" |
 | **Severity only** | No insect visible, and the model says damaged | Severity: Low / Moderate / High (+ damage %) |
 
@@ -72,7 +103,7 @@ the same rules in [lib/offline/flow.dart](../lib/offline/flow.dart)).
 
 ```
 photo -> features.py -> corn_check model
-  -> less than 60% sure it is corn ---> outcome = Message ("doesn't look like corn"), stop
+  -> less than 50% sure it is corn ---> outcome = Message ("doesn't look like corn"), stop
   -> corn ---> continue:
 
   1. Is there an insect? Insect detector (binary classifier: bug_visible yes / no)
@@ -171,20 +202,23 @@ this is stated as a limitation.
 the full decision in `flow.py` and checks what the app would show. Results are in
 `ml/results/flow_test.csv` and `flow_summary.csv`.
 
-| Kind of test photo | Should show | 11 Nov (first) | 12 Nov | 14 Nov | 22 Nov, corn check | 22 Nov, pest rule (now) |
-|---|---|---|---|---|---|---|
-| Fall armyworm (insect in view) | fall armyworm | 12.2% | 50.5% | 49.0% | 46.9% | 35.8% |
-| Common cutworm | common cutworm | 11.1% | 59.4% | 58.1% | 50.2% | 34.2% |
-| Corn aphid | corn aphid | 12.4% | 75.5% | 74.9% | 69.0% | 63.5% |
-| Armyworm | armyworm | 11.8% | 45.4% | 46.1% | 41.2% | 29.7% |
-| Corn planthopper | corn planthopper | 3.9% | 63.1% | 69.9% | 68.0% | 56.2% |
-| Damaged corn, no insect | Severity only | 59.6% | 60.2% | 84.9% | 82.8% | 82.8% |
-| Healthy corn | Healthy | 41.8% | 41.5% | 83.0% | 82.5% | 82.5% |
-| Other crops | Not corn | 96.4% | 90.8% | 90.8% | 93.4% | 93.4% |
-| **All of the above (5,709)** | | **45.6%** | **65.7%** | **75.4%** | **73.4%** | **68.5%** |
-| Philippine plants (375, new) | Not corn | | | 2.1%* | 76.3% | 76.3% |
-| Everyday scenes (375, new) | Not corn | | | 4.0%* | 89.6% | 89.6% |
-| **All test photos (6,459)** | | | | | **74.5%** | **70.2%** |
+| Kind of test photo | Should show | 11 Nov (first) | 12 Nov | 14 Nov | 22 Nov, corn check | 22 Nov, pest rule (V1) | 23 Nov, V2 MobileNetV3 | **25 Nov, V2 EfficientNet-B2** |
+|---|---|---|---|---|---|---|---|---|
+| Fall armyworm (insect in view) | fall armyworm | 12.2% | 50.5% | 49.0% | 46.9% | 35.8% | 78.8% | **84.8%** |
+| Common cutworm | common cutworm | 11.1% | 59.4% | 58.1% | 50.2% | 34.2% | 81.7% | **88.3%** |
+| Corn aphid | corn aphid | 12.4% | 75.5% | 74.9% | 69.0% | 63.5% | 84.9% | **89.9%** |
+| Armyworm | armyworm | 11.8% | 45.4% | 46.1% | 41.2% | 29.7% | 67.0% | **76.8%** |
+| Corn planthopper | corn planthopper | 3.9% | 63.1% | 69.9% | 68.0% | 56.2% | 80.1% | **84.6%** |
+| Damaged corn, no insect | Severity only | 59.6% | 60.2% | 84.9% | 82.8% | 82.8% | 95.3% | **96.5%** |
+| Healthy corn | Healthy | 41.8% | 41.5% | 83.0% | 82.5% | 82.5% | 93.9% | **96.8%** |
+| Other crops | Not corn | 96.4% | 90.8% | 90.8% | 93.4% | 93.4% | 99.3% | **99.3%** |
+| **All of the above (5,709)** | | **45.6%** | **65.7%** | **75.4%** | **73.4%** | **68.5%** | **89.4%** | **92.7%** |
+| Philippine plants (375, new) | Not corn | | | 2.1%* | 76.3% | 76.3% | 92.8% | **94.1%** |
+| Everyday scenes (375, new) | Not corn | | | 4.0%* | 89.6% | 89.6% | 99.7% | **99.7%** |
+| **All test photos (6,459)** | | | | | **74.5%** | **70.2%** | **90.2%** | **93.2%** |
+| Other insects (754, Version 2) | not a pest name | | | | | | 87.1% | **90.5%** |
+| Small objects (240, Version 2) | Not corn | | | | | | 97.1% | **99.6%** |
+| **All test photos (7,453)** | | | | | | | **90.1%** | **93.1%** |
 
 \* the 14 Nov corn check on these photos (measured on 22 Nov; they were not in the test then).
 
@@ -205,7 +239,18 @@ What changed:
   27% of pest photos are now "not recognized", but wrong pest names fall from 1,013 to 483 and a
   shown pest name is right 69.5% of the time (was 57.9%). See "The outcomes" above.
 
-Remaining weak spots, for the paper:
+- 23 Nov (Version 2): every model learns from the image network's 960 numbers instead of the
+  hand-crafted features, and the pest classifier also learns "other insect" (5,026 photos). A
+  shown pest name is right 89.2% of the time; 9.5% of pest photos are "not recognized"; 2.5% of
+  corn photos are turned away. Details and the web test (30 kinds of pests never seen):
+  [version2.md](version2.md).
+- 25 Nov (Version 2, EfficientNet-B2): the image network is now EfficientNet-B2 (1408 numbers per
+  photo) instead of MobileNetV3-Large; every model was retrained. A shown pest name is right 91.9%
+  of the time (was 89.1%), the right name is shown for 86.1% of photos of the five pests (was
+  79.8%), 9.5% of other insects are named as one of the five (was 12.9%) and 1.9% of corn photos
+  are turned away (was 2.6%).
+
+Remaining weak spots (Version 1; see [version2.md](version2.md) for Version 2's), for the paper:
 - **Caterpillar pest names** (46-58%): fall armyworm, common cutworm and armyworm are confused
   with each other most. Stronger SVM settings and SIFT features were tried and did not help
   (see "Caterpillars and moths are learned separately").

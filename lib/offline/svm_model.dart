@@ -5,6 +5,27 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
+/// Every float16 bit pattern's value as a float32 (exact), made once.
+final Float32List _halfValues = () {
+  final t = Float32List(65536);
+  for (var h = 0; h < 65536; h++) {
+    final sign = (h & 0x8000) != 0 ? -1.0 : 1.0;
+    final e = (h >> 10) & 0x1f, f = h & 0x3ff;
+    final double v;
+    if (e == 0) {
+      v = f * math.pow(2.0, -24).toDouble(); // subnormal
+    } else if (e == 31) {
+      v = f == 0 ? double.infinity : double.nan;
+    } else {
+      v = (1 + f / 1024) * math.pow(2.0, e - 15).toDouble();
+    }
+    t[h] = sign * v;
+  }
+  return t;
+}();
+
+Float32List _halfTable() => _halfValues;
+
 class Prediction {
   const Prediction(this.label, this.confidence, this.probabilities);
   final String label;
@@ -29,6 +50,7 @@ class SvmModel {
     required this.sv,
     required this.dualCoef,
     required this.featureLength,
+    required this.features,
   });
 
   /// [meta] is the model's .json file, [bin] its .bin file.
@@ -38,9 +60,18 @@ class SvmModel {
     final nSupport = (m['n_support'] as List).cast<int>();
     final nSv = nSupport.fold<int>(0, (a, b) => a + b);
     final k = nSupport.length;
-    // Phones are little-endian like the file, so the support vectors can be used in place.
+    // Support vectors: float16 since 25 Nov 2026 (half the app size; export_models.py rounds the
+    // backend's models the same way), widened to float32 here once. float32 files are read too;
+    // phones are little-endian like the file, so those can be used in place.
+    final half = m['sv_dtype'] == 'float16';
     final Float32List sv;
-    if (Endian.host == Endian.little && bin.offsetInBytes % 4 == 0) {
+    if (half) {
+      final table = _halfTable();
+      sv = Float32List(nSv * dims);
+      for (var i = 0; i < sv.length; i++) {
+        sv[i] = table[bin.getUint16(i * 2, Endian.little)];
+      }
+    } else if (Endian.host == Endian.little && bin.offsetInBytes % 4 == 0) {
       sv = bin.buffer.asFloat32List(bin.offsetInBytes, nSv * dims);
     } else {
       sv = Float32List(nSv * dims);
@@ -48,7 +79,7 @@ class SvmModel {
         sv[i] = bin.getFloat32(i * 4, Endian.little);
       }
     }
-    final coefOffset = sv.length * 4;
+    final coefOffset = sv.length * (half ? 2 : 4);
     final dual = Float64List((k - 1) * nSv);
     for (var i = 0; i < dual.length; i++) {
       dual[i] = bin.getFloat64(coefOffset + i * 8, Endian.little);
@@ -71,6 +102,7 @@ class SvmModel {
       sv: sv,
       dualCoef: dual,
       featureLength: dims,
+      features: (m['features'] as String?) ?? 'current',
     );
   }
 
@@ -84,6 +116,10 @@ class SvmModel {
   final Float32List sv;
   final Float64List dualCoef;
   final int featureLength;
+
+  /// Which photo numbers the model learned from: "cnn" (the image network, network.dart),
+  /// "current" (the hand-made features, features.dart) or "cnn+current" (both, side by side).
+  final String features;
 
   /// Probabilities in [classes] order (after merging sub-classes).
   List<double> probabilities(Float32List features) {

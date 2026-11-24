@@ -1,0 +1,11 @@
+V2 EXPERIMENT: hand-crafted (current) vs ready-made network (cnn) features, same SVM
+
+== detector: train 18490, val 3962, test 3957
+  current  accuracy 96.0%, macro F1 0.946; no 91.2%, yes 97.6%
+  cnn      accuracy 98.2%, macro F1 0.975; no 96.2%, yes 98.8%
+  cnn+current accuracy 98.5%, macro F1 0.980; no 96.9%, yes 99.0%
+
+== health: train 8039, val 1724, test 1721
+  current  accuracy 90.8%, macro F1 0.907; damaged 91.9%, healthy 89.4%
+  cnn      accuracy 96.6%, macro F1 0.965; damaged 96.7%, healthy 96.4%
+  cnn+current accuracy 96.8%, macro F1 0.968; damaged 97.0%, healthy 96.5%

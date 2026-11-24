@@ -58,8 +58,9 @@ backend/.venv/Scripts/python.exe -m pip install -r backend/requirements.txt
 The package versions in `requirements.txt` must match the ones the models were trained with
 (`ml/.venv`); the model files don't load with other scikit-learn versions.
 
-The model files (`backend/models/*.joblib`, about 100 MB) aren't on GitHub. They're made by
-`ml/src/train.py`; copy them over if you set this up on another computer.
+The model files (`backend/models/*.joblib` and, since Version 2, `network.json` + `network.bin`)
+aren't on GitHub. They're made by `ml/src/train.py` and `ml/src/network_export.py`; copy them
+over if you set this up on another computer.
 
 ## Running it
 
@@ -101,8 +102,10 @@ training PC; elsewhere it's skipped.
 
 ## After retraining or changing the shared code
 
-`app/services/` holds exact copies of `ml/src/features.py`, `severity.py`, `predict.py` and
-`flow.py`. Never edit them here. After changing them in `ml/src`, or after retraining:
+`app/services/` holds exact copies of `ml/src/features.py`, `severity.py`, `predict.py`,
+`flow.py` and `network.py` (Version 2: runs the image network, EfficientNet-B2 since 25 Nov
+2026, with numpy, no PyTorch needed).
+Never edit them here. After changing them in `ml/src`, or after retraining:
 
 ```
 backend/.venv/Scripts/python.exe backend/sync_shared.py

@@ -1,0 +1,21 @@
+corn_check / current
+    C=1   class_weight=None      val macro F1 0.8938
+    C=1   class_weight=balanced  val macro F1 0.8950
+    C=10  class_weight=None      val macro F1 0.9093
+    C=10  class_weight=balanced  val macro F1 0.9062
+  current  accuracy 91.2%, macro F1 0.903; corn 93.6%, not_corn 86.8%
+      need 50%: corn accepted 93.6%, rejected: other crops 91.0%, PH plants 71.7%, everyday 85.1%, your photos 35/64, bowl accepted (corn 92%)
+      need 60%: corn accepted 91.8%, rejected: other crops 93.1%, PH plants 76.3%, everyday 88.5%, your photos 36/64, bowl accepted (corn 92%)
+      need 70%: corn accepted 89.1%, rejected: other crops 95.1%, PH plants 82.9%, everyday 92.5%, your photos 40/64, bowl accepted (corn 92%)
+corn_check / cnn
+    C=1   class_weight=None      val macro F1 0.9725
+    C=1   class_weight=balanced  val macro F1 0.9709
+    C=10  class_weight=None      val macro F1 0.9765
+    C=10  class_weight=balanced  val macro F1 0.9767
+  cnn      accuracy 98.1%, macro F1 0.979; corn 98.5%, not_corn 97.3%
+      need 50%: corn accepted 98.5%, rejected: other crops 98.4%, PH plants 90.9%, everyday 99.5%, your photos 56/64, bowl rejected (corn 36%)
+      need 60%: corn accepted 98.0%, rejected: other crops 98.9%, PH plants 92.0%, everyday 99.7%, your photos 60/64, bowl rejected (corn 36%)
+      need 70%: corn accepted 97.5%, rejected: other crops 99.2%, PH plants 92.8%, everyday 99.7%, your photos 60/64, bowl rejected (corn 36%)
+detector / current
+    C=1   class_weight=None      val macro F1 0.9439
+    C=1   class_weight=balanced  val macro F1 0.9379

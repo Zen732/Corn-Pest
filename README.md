@@ -6,7 +6,12 @@ planthopper, corn aphid, armyworm and common cutworm. No treatment
 recommendations are shown anywhere in the app.
 See [docs/classification_flow.md](docs/classification_flow.md) for the full decision logic.
 
-**Versions:** Version 1 (hand-crafted features + SVM) is saved as the branch `version-1` / tag `v1.0`;
+**Versions:** this is **Version 2** (23 Nov 2026; app 2.1.0 since 25 Nov): the photo is turned
+into 1408 numbers by a ready-made image network (EfficientNet-B2, run on the phone; MobileNetV3-Large
+on 23-24 Nov) and the same kind of SVMs decide; an "other insect" class catches insects that are
+not one of the five pests. See [docs/version2.md](docs/version2.md) for what changed, the scores
+and how to retrain.
+Version 1 (hand-crafted features + SVM) is saved as the branch `version-1` / tag `v1.0`;
 see [docs/version1.md](docs/version1.md) for how to go back to it and what it still needs.
 
 ## Layout
@@ -35,13 +40,13 @@ History uploads to Supabase when there is internet (see [docs/offline_checking.m
 
 ```
 Login -> Photo tips -> Take/pick photo
-      -> Corn check: is this a corn plant? (at least 60% sure)
+      -> Corn check: is this a corn plant? (at least 50% sure; 60% in Version 1)
            - No / unsure  -> Message ("doesn't look like a corn plant"), stop
            - Yes          -> continue
       -> Is there an insect?
            - Yes -> Which pest?
                       - at least 50% sure  -> Pest name (no severity)
-                      - less sure          -> "Insect not recognized"
+                      - less sure, or "other insect" -> "Insect not recognized"
            - No  -> Healthy, or Severity only (Low/Moderate/High; K-Means damage %)
       -> Saved to History
 ```
@@ -52,7 +57,8 @@ No field questions and no recommendations. Severity is computed from the photo a
 
 1. Project skeleton
 2. Dataset collection and checking (target 5,000 photos per pest)
-3. Feature extraction (`ml/src/features.py`, shared with backend)
+3. Feature extraction (`ml/src/features.py`, shared with backend; Version 2: the image network,
+   `ml/src/cnn_features.py`, `network_export.py`, `network.py`, `lib/offline/network.dart`)
 4. Label each photo as insect-visible or damage-only (`ml/dataset/labels.csv`)
 5. Train the corn check, insect detector and pest classifier; compare models
 6. Severity (K-Means damage %), healthy/damage cutoff
@@ -62,9 +68,14 @@ No field questions and no recommendations. Severity is computed from the photo a
 10. Testing with photos from Cabadbaran corn fields
 
 Rice and banana were removed from the project on 15 October 2026. Their photos are kept in
-`_archive/2_unused_photos/rice_banana_project/` (not used). `ml/dataset/not_corn/` holds 15,000 photos that
+`_archive/2_unused_photos/rice_banana_project/` (not used). `ml/dataset/not_corn/` holds 16,600 photos that
 teach the corn check what is not corn: 10,000 of other crops (rice, banana, tomato, cassava, cashew),
-2,500 plants photographed in the Philippines and 2,500 everyday scenes; see
-[docs/dataset_sources.md](docs/dataset_sources.md). Whole-app test: 70.2% of 6,459 test photos
-shown correctly; a pest name, when shown, is right 69.5% of the time (see
-[docs/classification_flow.md](docs/classification_flow.md)).
+2,500 plants photographed in the Philippines, 2,500 everyday scenes and (Version 2) 1,600 close-ups of
+small objects (rice grains, coffee beans, pebbles, shells); see
+[docs/dataset_sources.md](docs/dataset_sources.md). `ml/dataset/raw/corn/other_insect/` holds
+5,026 photos of insects and spiders that are not one of the five pests. Whole-app test
+(Version 2, EfficientNet-B2): 93.1% of 7,453 test photos shown correctly (Version 1: 70.2% of
+6,459; Version 2 on those same 6,459: 93.2%); a pest name, when shown, is right 91.9% of the
+time (Version 1: 69.5%). On 300 web photos of 30 kinds of pests the app never saw: 76.7% right
+(Version 1: 51.7%; MobileNetV3: 74.7%). See [docs/version2.md](docs/version2.md) and
+[docs/classification_flow.md](docs/classification_flow.md).

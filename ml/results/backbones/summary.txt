@@ -1,0 +1,14 @@
+PEST CLASSIFIER with different ready-made networks (same photos, same SVM)
+
+network              numbers ms/photo  val F1 test acc test F1 web: 5 pests web: others web: all
+mobilenet_v3_large       960     20.9   0.858    86.2%   0.852          62%         72%    70.3%
+efficientnet_b0         1280     29.0   0.880    88.9%   0.880          70%         73%    72.7%
+efficientnet_b2         1408     52.1   0.902    91.0%   0.903          78%         74%    74.7%
+dinov2_vits14            768     67.1   0.924    93.3%   0.928          74%         76%    76.0%
+
+Test photos named right, by class:
+network                  armyworm common_cutwo   corn_aphid corn_plantho fall_armywor      healthy other_insect
+mobilenet_v3_large          70.6%        85.4%        88.1%        80.4%        82.9%        99.6%        83.0%
+efficientnet_b0             74.8%        89.5%        90.3%        84.6%        88.2%        99.5%        84.7%
+efficientnet_b2             80.1%        90.5%        93.1%        87.3%        90.1%        99.7%        87.5%
+dinov2_vits14               85.3%        92.3%        95.8%        89.5%        93.2%       100.0%        90.5%

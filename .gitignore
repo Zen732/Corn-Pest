@@ -61,11 +61,13 @@ _archive/
 
 # Trained models and datasets (large files)
 backend/models/*.joblib
+backend/models/network.*
 backend/models/archive_*/
 ml/dataset/raw/*/*/*
 ml/dataset/not_corn/*/*
 ml/dataset/test_local/*/*/*
 ml/dataset/test_random/
+ml/dataset/test_web/
 ml/dataset/split/
 ml/results/archive_*/
 ml/results/features.npy
@@ -90,3 +92,6 @@ assets/models/*
 
 # Experiment vectors (large, rebuilt by the experiment scripts)
 ml/results/**/*.npy
+
+ml/results/cnn_features_keys.csv
+ml/results/cnn_flip_keys.csv

@@ -8,7 +8,8 @@ Run after export_models.py, from the project root:
 Writes build/parity/ (not on GitHub):
     raw/<n>.rgb + raw.json   40 test photos already decoded by OpenCV (raw RGB bytes) with
                              Python's features: checks the Dart image steps and features exactly
-    e2e.json                 800 test photos (100 of each kind): path, Python's features and each
+    e2e.json                 test photos (up to 100 of each kind): path, Python's features (hand-made
+                             and, V2, the network's numbers "cnn") and each
                              model's probabilities; the Dart test decodes the JPEG itself with
                              Flutter's decoder, as the phone does
 """
@@ -21,7 +22,7 @@ import pandas as pd
 from joblib import Parallel, delayed
 
 from features import decode_image, extract_features
-from flow import assess_photo, load_models
+from flow import assess_photo, load_models, photo_numbers
 from severity import assess
 from make_split import SPLIT_DIR
 from predict import predict_proba
@@ -40,9 +41,12 @@ def _flow_and_severity(path, features):
         _models.update(load_models(ROOT / "backend" / "models"))
     rgb = decode_image(np.fromfile(path, dtype=np.uint8).tobytes())
     result = assess_photo(rgb, _models, features)
+    numbers = photo_numbers(rgb, _models, features)  # fills `features` with every set the models use
+    for b in (_models[k] for k in MODELS):
+        numbers(b)
     sev = assess(rgb)
     keep = ("damage_percent", "level", "plant_share", "green_share")
-    return result, {k: sev.get(k) for k in keep}
+    return result, {k: sev.get(k) for k in keep}, features
 
 
 def group(row):
@@ -55,6 +59,7 @@ def group(row):
 
 def main():
     X = np.load(ROOT / "ml/results/features.npy")
+    C = np.load(ROOT / "ml/results/cnn_features.npy")
     meta = pd.read_csv(ROOT / "ml/results/features_meta.csv", keep_default_na=False)
     test = meta[(meta["split"] == "test") & (meta["aug"] == "") & meta["path"].str.lower().str.endswith(".jpg")].copy()
     test["group"] = test.apply(group, axis=1)
@@ -64,9 +69,14 @@ def main():
         picks.extend(rng.choice(g.index.to_numpy(), min(100, len(g)), replace=False))
     picks = np.array(sorted(picks))
     bundles = {k: joblib.load(ROOT / "backend/models" / f"{v}_model.joblib") for k, v in MODELS.items()}
-    probs = {k: predict_proba(b, X[picks]) for k, b in bundles.items()}
-    full = Parallel(n_jobs=-1)(delayed(_flow_and_severity)(str(SPLIT_DIR / "test" / meta.loc[i, "path"]), X[i])
+    # 6 workers: each one loads every model (about 230 MB in Version 2) and the network
+    full = Parallel(n_jobs=6)(delayed(_flow_and_severity)(str(SPLIT_DIR / "test" / meta.loc[i, "path"]),
+                                                           {"current": X[i], "cnn": C[i]})
                                for i in picks)
+    # V2: each model's own numbers (incl. "cnn_mirror", computed in the workers above)
+    numbers = [f[2] for f in full]
+    probs = {k: predict_proba(b, np.array([nums[b.get("features", "current")] for nums in numbers]))
+             for k, b in bundles.items()}
 
     OUT.mkdir(parents=True, exist_ok=True)
     rows = []
@@ -75,6 +85,9 @@ def main():
             "path": str(SPLIT_DIR / "test" / meta.loc[i, "path"]),
             "group": test.loc[i, "group"],
             "features": [float(v) for v in X[i]],
+            "cnn": [float(v) for v in C[i]],
+            **({"cnn_mirror": [float(v) for v in numbers[n]["cnn_mirror"]]} if "cnn_mirror" in numbers[n] else {}),
+            "model_features": {k: b.get("features", "current") for k, b in bundles.items()},
             "probs": {k: [float(v) for v in probs[k][n]] for k in MODELS},
             "classes": {k: list(b["classes"]) for k, b in bundles.items()},
             "flow": full[n][0],

@@ -39,6 +39,8 @@ def _run(path, features):
 
 
 def expected(row):
+    if row["pest_class"] == "other_insect":  # right if not named as one of the five pests
+        return "unknown_pest", "other insect (not one of the 5)"
     if row["crop"] == "not_corn":
         return "not_corn", "other plant"
     if row["pest_class"] == "healthy":
@@ -49,12 +51,13 @@ def expected(row):
 
 
 def main():
-    X = np.load(RESULTS_DIR / "features.npy")
+    X = {"current": np.load(RESULTS_DIR / "features.npy"), "cnn": np.load(RESULTS_DIR / "cnn_features.npy")}
     meta = pd.read_csv(RESULTS_DIR / "features_meta.csv", keep_default_na=False)
     test = meta[(meta["split"] == "test") & (meta["aug"] == "")].copy()
     print(f"{len(test)} test photos", flush=True)
-    results = Parallel(n_jobs=-1, verbose=2)(
-        delayed(_run)(SPLIT_DIR / "test" / p, X[i]) for i, p in zip(test.index, test["path"]))
+    # 6 workers: each loads every model (about 230 MB in Version 2); 12 ran out of memory (23 Nov)
+    results = Parallel(n_jobs=6, verbose=2)(
+        delayed(_run)(SPLIT_DIR / "test" / p, {k: v[i] for k, v in X.items()}) for i, p in zip(test.index, test["path"]))
 
     out = pd.concat([test[["path", "crop", "pest_class", "bug_visible"]].reset_index(drop=True),
                      pd.DataFrame(results)], axis=1)
@@ -62,6 +65,8 @@ def main():
     out["shown"] = np.where(out["outcome"] == "pest", out["pest"], out["outcome"])
     out["correct"] = (out["outcome"] == out["expected"]) & (
         (out["expected"] != "pest") | (out["pest"] == out["pest_class"]))
+    other = out["pest_class"] == "other_insect"
+    out.loc[other, "correct"] = out.loc[other, "outcome"] != "pest"  # "not corn" is fine too
     out.to_csv(RESULTS_DIR / "flow_test.csv", index=False)
 
     table = pd.crosstab(out["group"], out["shown"], normalize="index").mul(100).round(1)

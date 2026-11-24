@@ -1,0 +1,53 @@
+WEB TEST: 30 kinds of crop pests from iNaturalist, never used for training
+
+The app's five corn pests (should be named)
+kind                        n  V2 pest step / whole app  V1 pest step / whole app
+fall_armyworm              10     80% /    80%              30% /    20%         
+common_cutworm             10     70% /    70%              40% /    40%         
+armyworm                   10     70% /    70%              10% /     0%         
+corn_aphid                 10     30% /    20%              20% /    20%         
+corn_planthopper           10     50% /    50%              40% /    40%         
+ALL                        50   60.0% /  58.0%          28.0% /  24.0%       
+
+Other crop pests (should NOT be named as one of the five)
+kind                        n  V2 pest step / whole app  V1 pest step / whole app
+cotton_bollworm            10     30% /    30%              80% /    80%         
+black_cutworm              10     10% /    10%              40% /    50%         
+green_stink_bug            10     60% /    60%              40% /    40%         
+rice_bug                   10     70% /    80%              40% /    40%         
+silverleaf_whitefly        10     30% /    40%              50% /    60%         
+diamondback_moth           10     40% /    40%              20% /    30%         
+eggplant_fruit_borer       10     20% /    20%              40% /    40%         
+oriental_fruit_fly         10    100% /   100%              60% /    60%         
+melon_fly                  10     80% /    80%              60% /    60%         
+migratory_locust           10     70% /    70%              20% /    30%         
+javanese_grasshopper       10     90% /    90%              60% /    70%         
+yellow_stem_borer          10     50% /    50%              50% /    70%         
+rice_leaffolder            10    100% /   100%              60% /    80%         
+rhinoceros_beetle          10    100% /   100%              20% /    30%         
+red_palm_weevil            10     90% /    90%              40% /    40%         
+pumpkin_beetle             10    100% /   100%              50% /    60%         
+28_spotted_ladybird        10     90% /   100%              30% /    50%         
+red_cotton_stainer         10    100% /   100%              40% /    70%         
+cabbage_white              10    100% /   100%              80% /   100%         
+lime_swallowtail           10     90% /    90%              50% /    70%         
+two_spotted_spider_mite    10     40% /    40%              70% /    70%         
+papaya_mealybug            10     60% /    60%              30% /    60%         
+banana_weevil              10     80% /    80%              30% /    40%         
+banana_skipper             10     80% /    80%              40% /    70%         
+asian_corn_borer           10     40% /    40%              60% /    60%         
+ALL                       250   68.8% /  70.0%          46.4% /  57.2%       
+
+V2: pest step right on 67.3% of 300 photos; whole app right on 68.0%
+    other pests named as one of the five: armyworm 21, corn_aphid 21, common_cutworm 14, fall_armyworm 14, corn_planthopper 8
+    whole-app outcomes: unknown_pest 139, pest 109, not_corn 47, severity_only 5
+V1: pest step right on 43.3% of 300 photos; whole app right on 51.7%
+    other pests named as one of the five: common_cutworm 56, corn_planthopper 28, armyworm 18, fall_armyworm 16, corn_aphid 16
+    whole-app outcomes: pest 130, unknown_pest 108, not_corn 58, severity_only 4
+
+V2: your 64 random photos: not_corn 61, unknown_pest 2, severity_only 1
+V2: screenshot: bowl -> not_corn (corn 55%)
+V2: screenshot: beetle -> unknown_pest (corn 99%, pest 74%)
+V1: your 64 random photos: not_corn 36, pest 16, unknown_pest 8, severity_only 4
+V1: screenshot: bowl -> unknown_pest (corn 81%, pest 36%)
+V1: screenshot: beetle -> pest corn_aphid (corn 97%, pest 94%)

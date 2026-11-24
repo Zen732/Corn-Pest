@@ -11,6 +11,7 @@ import 'package:pest_assessment/offline/decode.dart';
 import 'package:pest_assessment/offline/features.dart';
 import 'package:pest_assessment/offline/flow.dart';
 import 'package:pest_assessment/offline/image_ops.dart';
+import 'package:pest_assessment/offline/network.dart';
 import 'package:pest_assessment/offline/severity.dart';
 import 'package:pest_assessment/offline/svm_model.dart';
 import 'package:pest_assessment/services/scan_service.dart';
@@ -22,6 +23,14 @@ const groups = {'color': (0, 44), 'glcm': (44, 54), 'lbp': (54, 82), 'hog': (82,
 SvmModel loadModel(String name) => SvmModel.fromBytes(
     File('${modelsDir.path}/$name.json').readAsStringSync(),
     ByteData.sublistView(File('${modelsDir.path}/$name.bin').readAsBytesSync()));
+
+Network? loadNetwork() => File('${modelsDir.path}/network.bin').existsSync()
+    ? Network.fromBytes(File('${modelsDir.path}/network.json').readAsStringSync(),
+        ByteData.sublistView(File('${modelsDir.path}/network.bin').readAsBytesSync()))
+    : null;
+
+Float32List floats(Object? list) =>
+    Float32List.fromList((list as List).map((v) => (v as num).toDouble()).toList());
 
 int argmax(List<double> p) {
   var b = 0;
@@ -62,13 +71,31 @@ void main() {
   test('real path: Flutter decoder + Dart features + Dart models vs Python', () async {
     final refs = (jsonDecode(File('${parity.path}/e2e.json').readAsStringSync()) as List).cast<Map<String, dynamic>>();
     final models = {for (final k in ['corn_check', 'detector', 'health', 'pest']) k: loadModel(k)};
+    final network = loadNetwork();
+    var maxCnn = 0.0;
     final same = {for (final k in models.keys) k: 0}, sameFromPyFeatures = {for (final k in models.keys) k: 0};
     var maxFeat = 0.0, maxProbFromPy = 0.0, decodeSamePixels = 0;
     final byGroup = <String, List<int>>{};
     for (final r in refs) {
       final img = await decodePhoto(File(r['path'] as String).readAsBytesSync());
       final f = extractFeatures(img);
-      final py = Float32List.fromList((r['features'] as List).map((v) => (v as num).toDouble()).toList());
+      final py = floats(r['features']);
+      // V2: Python's numbers per kind, and the phone's (network run on the Flutter-decoded photo).
+      final pyNumbers = PhotoNumbers(img, network, {
+        'current': py,
+        if (r['cnn'] != null) 'cnn': floats(r['cnn']),
+        if (r['cnn_mirror'] != null) 'cnn_mirror': floats(r['cnn_mirror']),
+      });
+      final ourNumbers = PhotoNumbers(img, network, {'current': f});
+      if (r['cnn'] != null && network != null) {
+        final a = ourNumbers.of(models['corn_check']!), b = floats(r['cnn']);
+        if (models['corn_check']!.features == 'cnn') {
+          for (var i = 0; i < b.length; i++) {
+            final dd = (a[i] - b[i]).abs();
+            if (dd > maxCnn) maxCnn = dd;
+          }
+        }
+      }
       var d = 0.0;
       for (var i = 0; i < featureLength; i++) {
         d = (f[i] - py[i]).abs() > d ? (f[i] - py[i]).abs() : d;
@@ -78,13 +105,13 @@ void main() {
       var allSame = true;
       for (final e in models.entries) {
         final pyProbs = ((r['probs'] as Map)[e.key] as List).map((v) => (v as num).toDouble()).toList();
-        final fromPy = e.value.probabilities(py); // Dart model on Python's features
+        final fromPy = e.value.probabilities(pyNumbers.of(e.value)); // Dart model on Python's numbers
         for (var j = 0; j < pyProbs.length; j++) {
           final diff = (fromPy[j] - pyProbs[j]).abs();
           if (diff > maxProbFromPy) maxProbFromPy = diff;
         }
         if (argmax(fromPy) == argmax(pyProbs)) sameFromPyFeatures[e.key] = sameFromPyFeatures[e.key]! + 1;
-        final ours = e.value.probabilities(f); // Dart model on Dart's features (the phone)
+        final ours = e.value.probabilities(ourNumbers.of(e.value)); // Dart model on Dart's numbers (the phone)
         if (argmax(ours) == argmax(pyProbs)) {
           same[e.key] = same[e.key]! + 1;
         } else {
@@ -101,7 +128,8 @@ void main() {
     print('$n photos. Dart models on Python features: max probability difference $maxProbFromPy, '
         'same answer ${sameFromPyFeatures.map((k, v) => MapEntry(k, pct(v)))}\n'
         'Full phone path (Flutter decoder + Dart features): same answer ${same.map((k, v) => MapEntry(k, pct(v)))}; '
-        'features within 0.001 of Python on ${pct(decodeSamePixels)} of photos (largest difference $maxFeat)\n'
+        'features within 0.001 of Python on ${pct(decodeSamePixels)} of photos (largest difference $maxFeat); '
+        'network numbers largest difference $maxCnn\n'
         'all four models agree with Python, by kind: ${byGroup.map((k, v) => MapEntry(k, '${v[1]}/${v[0]}'))}');
     for (final k in models.keys) {
       expect(sameFromPyFeatures[k], n, reason: '$k: Dart model math must match Python exactly');
@@ -125,7 +153,7 @@ void main() {
     final refs = (jsonDecode(File('${parity.path}/e2e.json').readAsStringSync()) as List).cast<Map<String, dynamic>>();
     final models = OfflineModels(
         cornCheck: loadModel('corn_check'), detector: loadModel('detector'), pest: loadModel('pest'),
-        health: loadModel('health'), version: 'test');
+        health: loadModel('health'), version: 'test', network: loadNetwork());
     var sameOutcome = 0, samePest = 0, sameLevel = 0, levelCompared = 0, samePlantShare = 0;
     final damageDiffs = <double>[];
     final levelMisses = <String>[];

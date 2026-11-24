@@ -25,7 +25,7 @@ class _MainShellState extends State<MainShell> {
   Key _homeKey = UniqueKey();
   Timer? _syncTimer;
   late final Future<String?>? _modelVersion = widget.services.api is OfflineScanApi
-      ? (widget.services.api as OfflineScanApi).load().then<String?>((m) => m.version).catchError((_) => null)
+      ? (widget.services.api as OfflineScanApi).load().then<String?>((version) => version).catchError((_) => null)
       : null;
 
   @override
